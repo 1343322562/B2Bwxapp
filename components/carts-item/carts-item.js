@@ -18,7 +18,7 @@ Component({
     selectNum: 0,
     selectTypeNum: 0,
     partnerCode: app.data.partnerCode,
-    currentPromotion: [], // 当前所选择的促销 
+    currentPromotion: ["NO"], // 当前所选择的促销 
     transDateObj: {
       isShow: false,
       date: '',
@@ -386,7 +386,7 @@ Component({
     
     // 商品中添加当前所选择的促销字段 currentPromotion
     addCurrentSelectedPromotion(goodsData = this.data.goods) {
-      let currentPromotion = []  // 当前购物车商品的所选择促销数组 
+      let currentPromotion = this.data.currentPromotion  // 当前购物车商品的所选择促销数组 
       const sourceType = Number(goodsData.sourceType)  // 0: 统配, 1: 直配
 
       goodsData.data.forEach(item => {
@@ -397,11 +397,11 @@ Component({
           switch(sourceType) {
             case 0:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
-              currentPromotion.push(item['currentPromotionNo'].slice(0, 2))
+              currentPromotion.unshift(item['currentPromotionNo'].slice(0, 2))
               break;
             case 1:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 3)
-              currentPromotion.push(item['currentPromotionNo'].slice(0, 3))
+              currentPromotion.unshift(item['currentPromotionNo'].slice(0, 3))
               break;
           }
         }
