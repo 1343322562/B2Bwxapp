@@ -102,6 +102,6 @@ Page({
     this.refreshCarts()
   },
   onReachBottom () {
-    console.log(this.data.cartsObj)
+    console.log(this.data.cartsObj, this.data)
   }
 })

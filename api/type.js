@@ -39,7 +39,7 @@ export default {
   '1031': 'https://xcx.xz-jx.cn/zksrb2b-web/', //  拉萨见喜商贸   图片  erp.xz-jx.cn (隐藏直供。统配需要改成选品)
   '1032': 'https://mp.huidt.tech/zksrb2b-web/', //  武汉黄石   图片   erp.huidt.tech
   '1033': 'https://xcx.rhbh.net.cn/zksrb2b-web/', //  清河   图片   erp.rhbh.net.cn
-  '1034': 'https://xcx.xlsp168.com/zksrb2b-web/', //  广州闲聊食品   图片   39.100.103.135:8080 （隐藏直配，统配改成商城）
+  '1034': 'https://xcx.xlsp168.com/zksrb2b-web/', //  广州闲聊食品   图片   39.100.103.135:8080 （隐藏直配，统配改成商城）13533549113 123456
   '1035': 'https://app.huayanghuimin.com/zksrb2b-web/', //  邢台华海惠民   图片 erp.huayanghuimin.com  (隐藏： 订货额度、信用额度、待返利、授信明细)
   '1036': 'https://xcx.yhfws.cn/zksrb2b-web/', //  唐山一合   图片   erp.yhfws.cn  （统配改名分类）
   '1037': 'https://wx.gapin24.cn/zksrb2b-web/', //  西安嘉品云市   图片   erp.gapin24.cn
@@ -57,6 +57,7 @@ export default {
   '1049': 'https://wx.hongrinongye.com/zksrb2b-web/', //  新红日  erp.hongrinongye.com  wx5d91e1c91a9a3848 (1. 价格在商品列表页不显示 2. 隐藏直配，统配改分类)
   '1050': 'https://xcx.wgjnh.com/zksrb2b-web/', // 重庆旺购  图片 erp.wgjnh.com    wxb1a96fdeb3dae970  (1. 隐藏直配 2. 统配改自营分类)
   '1051': 'http://192.168.2.96:8080/zksrb2b-web/', // 文艺
+  '10511': 'http://192.168.2.223:8080/zksrb2b-web/', // 肖硕凯
   '1052': 'https://zjj.tqls.cn/' // 绵阳鸭子  zksr   1234   (隐藏直配，隐藏购物车配送中心type/常温/低温) 
   // 样式配置：1. app.wxss配置 2. app.js配置tabbar 3. 结算页 json 配置 导航栏颜色
 }

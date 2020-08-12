@@ -131,7 +131,7 @@ export const getGoodsImgSize = (url,type = 0) => { // 获取多规格的图片�
   return name.substring(0,name.indexOf('-')+1) + type + name.substr(name.indexOf('.'))
 }
 export const setTabBarNum = (num) => { // 设置底部购物车数量
-  const cartsIndex = 2
+  const cartsIndex = 3
   if (num) {
     wx.setTabBarBadge({
       index: cartsIndex,

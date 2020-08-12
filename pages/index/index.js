@@ -143,6 +143,7 @@ Page({
           keyList = new Array(),
             nowDate = new Date().getDate(),
             categoryList = [];
+            console.log(JSON.parse(JSON.stringify(res.data)))
           for (let i = 0; i < list.length; i++) {
             let type = list[i].templetType;
             let moduleName = list[i].anchorText;
@@ -307,5 +308,9 @@ Page({
   onHide(){
     this.pageLoading = false
       clearTimeout(this.getAllPromotionTimer, this.getCartsDataTimer)
+  },
+  onReachBottom() {
+    console.log(this.data.pageObj)
   }
+  
 })

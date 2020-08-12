@@ -217,6 +217,7 @@ Page({
     API.Liquidation.getSupplierSettlementPromotion({
       data:{ branchNo, token, username, platform, supplierNo, dbranchNo, data: itemList },
       success: res => {
+        console.log('直配满减数据' ,res)
         if (res.code == 0 && res.data) {
           let obj = {}
           let giftList = []
@@ -712,6 +713,7 @@ Page({
     payWayList[1].show = wxPay == '1' //&& obj.items[0].sourceType == '0'
     payWayList[2].show = codPay == '1'
     let goodsList = obj.items[0].datas
+    console.log('goodsList', goodsList)
     const sourceType = obj.items[0].sourceType
     this.supcustNo = obj.items[0].sourceNo
     let requestItemList = []
@@ -776,6 +778,8 @@ Page({
       const supplierNo = obj.items[0].sourceNo
       this.getSupplierMjMz(requestItemList, supplierNo)
     }
+    
+    console.log('goodsListddd', goodsList)
   },
   onReady () {
   },

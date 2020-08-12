@@ -36,6 +36,7 @@ const actions = {
       })
     }
   },
+
   [types.GET_ALL_PROMOTION](param) {
     const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = getApp().data['userObj'] || wx.getStorageSync('userObj')
     let obj = {
@@ -222,6 +223,7 @@ const actions = {
       param.success && param.success(beforeObj)
     }
   },
+
   // （直配）今日促销商品，达到最大值停止添加商品
   maxLimitAdd(goods, type, cartsObjs) {  // goods：当前 ADD 的商品对象; type：当前增添的 type; 若有 cartsObj ，则是在采页面增加\
     if (cartsObjs == 0) { // 0: 在结算页添加商品 ； 1：在商品采购页添加商品
@@ -242,6 +244,7 @@ const actions = {
       return 0 // 没达到限购值
     }
   },
+  
   [types.CHANGE_CARTS](param, cartsObjs = 0) { // add delete minus； cartsObj 为促销信息，主要用来实现直配的限时促销，达到限购值，停止加购
     console.log(param)
   // 直配中商品数量若满足限时促销中的 限购值，则停止加购
@@ -346,6 +349,7 @@ const actions = {
     const newTime = +new Date()
     items = JSON.stringify(updateCarts?items:[])
     if (!param.format||updateCarts || !beforeTime || (newTime - beforeTime) >= (1000 * 60 * 5)) {
+      console.log('购物车参数', items)
       API.Carts.getShoppingCartInfo({
         data: { items, platform, token, username, branchNo },
         success: (res) => {

@@ -176,9 +176,11 @@ Component({
       let items = []
       cartsObj.keyArr.forEach(itemNo => items.push(cartsObj[itemNo]))
       items = JSON.stringify(updateCarts ? items : [])
+      console.log(items, itemNos)
       API.Carts.getSettlementPageInfo({
         data: { branchNo, token, username, platform, items, itemNos},
         success: res => {
+          console.log(res)
           if (res.code == 0) {
             if(res.msg) {
               alert(res.msg,{
@@ -243,6 +245,7 @@ Component({
       
     },
     saveLiquidationObj(data, replenish) {
+      console.log('保存购物车 data 数据' ,data)
       const { zhGoodsUrl, goodsUrl, zcGoodsUrl } = getApp().data
       const sourceType = data.items[0].sourceType
       const replenishNo = this.data.isReplenish
@@ -253,6 +256,9 @@ Component({
         goods.itemType = goods.promotionType =='BD'?'0': '1'
       })
       wx.setStorageSync('liquidationObj', data)
+      console.log('保存购物车 data 数据之后的' ,data)
+      console.log('this.data.goods.cartsType' ,this.data.goods.cartsType)
+      console.log(replenish,replenishNo)
       goPage('liquidation', { cartsType: this.data.goods.cartsType, replenish, replenishNo })
     },
     goGoodsDetails(e) {
@@ -311,7 +317,7 @@ Component({
         branchNo: cartsObj.branchNo
       }
       // if ((type === 'minus' && (goods.realQty === 1 || goods.realQty === goods.minSupplyQty)) || type === 'delete'  ) {
-        if ((type === 'minus' && (goods.realQty == goods.minSupplyQty)) || type === 'delete'  ) {
+      if ((type === 'minus' && (goods.realQty == goods.minSupplyQty)) || type === 'delete'  ) {
         alert('您确定要删除此商品吗？', {
           showCancel: true,
           confirmColor: '#e60012',
@@ -380,6 +386,7 @@ Component({
   },
   
   attached() {
+    console.log(this)
     this.countMoney()
     this.getCommonSetting() // 获取送货开始和结束时间
     const { ww } = getApp().data
