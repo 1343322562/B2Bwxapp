@@ -18,6 +18,7 @@ Component({
     selectNum: 0,
     selectTypeNum: 0,
     partnerCode: app.data.partnerCode,
+    currentPromotion: [], // 当前所选择的促销 
     transDateObj: {
       isShow: false,
       date: '',
@@ -364,7 +365,6 @@ Component({
             let supplierPromotion = data[promKey]
             goodsData.data.forEach(item => {
               console.log(item)
-              console.log(goods)
               if ('promotionCollections' in goods && item.promotionCollections.includes('RMJ')) item['RMJ'] = '满减商品'
               if ('promotionCollections' in goods && item.promotionCollections.includes('RBF')) item['RBF'] = '满赠商品'
               if ('promotionCollections' in goods && item.promotionCollections.includes('RSD')) item['RSD'] = '限时抢购'
@@ -384,7 +384,16 @@ Component({
       })
     }
   },
-  
+  // 商品中添加当前所选择的促销字段 currentPromotion
+  addCurrentSelectedPromotion(goodsData = this.data.goods) {
+    let renderGoodsData // 
+    goodsData.data.forEach(item => {
+      // 首次加载，默认选第一个促销
+      let currentPromotionNo = item.promotionCollections
+      item.currentPromotionNo && (item.currentPromotionNo = item.promotionCollections)
+    })
+    return goodsData
+  },
   attached() {
     console.log(this)
     this.countMoney()
@@ -392,6 +401,8 @@ Component({
     const { ww } = getApp().data
     this.ww = ww
     let goodsData = this.data.goods
+    console.log('这是 goods(cars-item):', goodsData)
+    // goodsData = this.addCurrentSelectedPromotion(goodsData) // 添加当前所选择的促销字段
     if (goodsData.sourceType == 1) {
       let supplierPromotion = wx.getStorageSync('supplierPromotion')
       // 缓存中无直配促销信息，请求促销接口。有促销信息则直接使用
