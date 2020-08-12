@@ -382,17 +382,34 @@ Component({
           this.setData({ goods: goodsData })
         }
       })
+    },
+    
+    // 商品中添加当前所选择的促销字段 currentPromotion
+    addCurrentSelectedPromotion(goodsData = this.data.goods) {
+      let currentPromotion = []  // 当前购物车商品的所选择促销数组 
+      const sourceType = Number(goodsData.sourceType)  // 0: 统配, 1: 直配
+
+      goodsData.data.forEach(item => {
+        // 首次加载，默认选第一个促销
+        if (item['promotionCollections']) {
+          item['currentPromotionNo'] = item['promotionCollections'].indexOf(',') ? item['promotionCollections'].slice(0, item['promotionCollections'].indexOf(',')) : item['promotionCollections']
+
+          switch(sourceType) {
+            case 0:
+              item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
+              currentPromotion.push(item['currentPromotionNo'].slice(0, 2))
+              break;
+            case 1:
+              item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 3)
+              currentPromotion.push(item['currentPromotionNo'].slice(0, 3))
+              break;
+          }
+        }
+      })
+      console.log('currentPromotion', currentPromotion)
+      this.setData({ currentPromotion })
+      return goodsData
     }
-  },
-  // 商品中添加当前所选择的促销字段 currentPromotion
-  addCurrentSelectedPromotion(goodsData = this.data.goods) {
-    let renderGoodsData // 
-    goodsData.data.forEach(item => {
-      // 首次加载，默认选第一个促销
-      let currentPromotionNo = item.promotionCollections
-      item.currentPromotionNo && (item.currentPromotionNo = item.promotionCollections)
-    })
-    return goodsData
   },
   attached() {
     console.log(this)
@@ -401,8 +418,8 @@ Component({
     const { ww } = getApp().data
     this.ww = ww
     let goodsData = this.data.goods
+    goodsData = this.addCurrentSelectedPromotion(goodsData) // 首次加载时，添加当前所选择的促销字段
     console.log('这是 goods(cars-item):', goodsData)
-    // goodsData = this.addCurrentSelectedPromotion(goodsData) // 添加当前所选择的促销字段
     if (goodsData.sourceType == 1) {
       let supplierPromotion = wx.getStorageSync('supplierPromotion')
       // 缓存中无直配促销信息，请求促销接口。有促销信息则直接使用
