@@ -111,6 +111,76 @@
     </view>
     <view class='deleteAll' catchtap='deleteAll'><image class="icon" src="../../images/search_icon_clear.png" mode="widthFix" /> 	</view>
   </view>
+<!-- 促销分类 -->
+  <view class="promoBox" wx:for="{{currentPromotion}}" wx:key="ind" wx:for-index="ind">
+    <view class="promotionType" wx:if="{{item.type && item.type != ''}}">
+      <view class="typeTag">
+        <view class="tag">{{item.type}}</view>
+        <view class="promoInfo">这是备注</view>
+      </view>
+      <view class="typeInfo">
+        <text class="content">促销的附属信息</text>
+        <text class="go">去凑单 ></text>
+      </view>
+    </view>
+
+    <view 
+      class="li" 
+      wx:if="{{item.currentPromotionNo == goods.currentPromotionNo || (goods.currentPromotionNo == '' && item == 'NO')}}" 
+      wx:for="{{goods.data}}" 
+      wx:for-item="goods"  
+      wx:key="index" 
+    >
+      <view class="goods{{leftAnimation?' act':''}}"  data-index="{{index}}" style="left:-{{(goods.goodsLeft||0)}}px" bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" bindtouchcancel="touchend">
+        <view  class="checkbox{{!goods.cancelSelected?' act':''}}" data-index="{{index}}"  bindtap="selectGoods">
+          <image class="icon" src="../../images/hook.png" />
+        </view>
+        <view class="img" data-index="{{index}}" bindtap="goGoodsDetails">
+          <image class="icon" src="{{goods.goodsImgUrl}}" />
+          <image wx:if="{{goods.RSD}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image> 
+          <view wx:if="{{goods.enReturnGoods=='0'||goods.isProhibit=='1'}}" class="noReturn">不可退</view>
+        </view>
+        <view class="info">
+          <text class="name">{{goods.itemName}}</text>
+          <view class='size'>{{goods.itemSize}} <view class="switchPromotiom" wx:if="{{goods.promotionCollectionsArr.length>1}}">换促销</view> </view>
+          <view class="price">
+            <text class="now">￥{{goods.price}}/{{goods.deliveryUnit}}</text>
+            <text class="before" wx:if="{{goods.orgiPrice!=goods.price}}">￥{{goods.orgiPrice}}</text>
+          </view>
+          <view class='tag'>
+          <!-- 统配 -->
+            <text wx:if="{{goods.currentPromotionType == 'BF'}}">买满赠</text>
+            <text wx:if="{{goods.currentPromotionType == 'FS'}}">首单特价</text>
+            <text wx:if="{{goods.currentPromotionType == 'BG'}}">买赠</text>
+            <text wx:if="{{goods.currentPromotionType == 'SD'}}">单日限购</text>
+            <text wx:if="{{goods.currentPromotionType == 'MQ'}}">数量满减</text>
+            <text wx:if="{{goods.currentPromotionType == 'SZ'}}">首赠</text> 
+            <text wx:if="{{goods.currentPromotionType == 'MJ'}}">满减</text>
+            <text wx:if="{{goods.currentPromotionType == 'MS'}}">秒杀</text>
+            <text wx:if="{{goods.currentPromotionType.ZK}}">{{goods.discount}}</text>
+          <!-- 直配 -->
+          <text wx:if="{{goods.RBF}}">买满赠</text>
+          <text wx:if="{{goods.RMJ}}">满减</text>
+          <text wx:if="{{goods.RSD}}">限时促销</text>
+            <!-- <text>{{(goods.enReturnGoods=='0'||goods.isProhibit=='1')?'不可退':'可退'}}</text> -->
+          </view>
+        </view>
+        <view class='btn'>
+          <view class='minus item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="minus"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_sub.png':'../../images/goodsList_minus_carts.png'}}" /></view>
+          <!-- <text class='num'>{{goods.realQty}}</text> -->
+          <input class='num' data-index="{{index}}" type="number" bindblur="inputConfirm"  value="{{goods.realQty}}" />
+          <!-- <view class='add item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'':'Null')+'.png'}}" /></view> -->
+          <view class='add item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'Null':'')+'.png'}}" /></view>
+        </view>
+
+        <view class="delete" data-index="{{index}}" data-type="delete" catchtap="changeGoodsNum">删除</view>
+      </view>
+    </view>
+  </view>
+  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+
 
   <view class="li" wx:for="{{goods.data}}" wx:for-item="goods"  wx:key="index" >
     <view class="goods{{leftAnimation?' act':''}}"  data-index="{{index}}" style="left:-{{(goods.goodsLeft||0)}}px" bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" bindtouchcancel="touchend">
@@ -124,22 +194,22 @@
       </view>
       <view class="info">
         <text class="name">{{goods.itemName}}</text>
-        <view class='size'>{{goods.itemSize}}</view>
+        <view class='size'>{{goods.itemSize}} <view class="switchPromotiom" wx:if="{{goods.promotionCollectionsArr.length>1}}">换促销</view> </view>
         <view class="price">
 	        <text class="now">￥{{goods.price}}/{{goods.deliveryUnit}}</text>
 	        <text class="before" wx:if="{{goods.orgiPrice!=goods.price}}">￥{{goods.orgiPrice}}</text>
 		    </view>
         <view class='tag'>
         <!-- 统配 -->
-          <text wx:if="{{goods.BF}}">买满赠</text>
-          <text wx:if="{{goods.FS}}">首单特价</text>
-          <text wx:if="{{goods.BG}}">买赠</text>
-          <text wx:if="{{goods.SD}}">单日限购</text>
-          <text wx:if="{{goods.MQ}}">数量满减</text>
-          <text wx:if="{{goods.SZInfo.length}}">首赠</text> 
-          <text wx:if="{{goods.MJ}}">满减</text>
-          <text wx:if="{{goods.promotionType =='MS'||goods.MS}}">秒杀</text>
-          <text wx:if="{{goods.ZK}}">{{goods.discount}}</text>
+          <text wx:if="{{goods.currentPromotionType == 'BF'}}">买满赠</text>
+          <text wx:if="{{goods.currentPromotionType == 'FS'}}">首单特价</text>
+          <text wx:if="{{goods.currentPromotionType == 'BG'}}">买赠</text>
+          <text wx:if="{{goods.currentPromotionType == 'SD'}}">单日限购</text>
+          <text wx:if="{{goods.currentPromotionType == 'MQ'}}">数量满减</text>
+          <text wx:if="{{goods.currentPromotionType == 'SZ'}}">首赠</text> 
+          <text wx:if="{{goods.currentPromotionType == 'MJ'}}">满减</text>
+          <text wx:if="{{goods.currentPromotionType == 'MS'}}">秒杀</text>
+          <text wx:if="{{goods.currentPromotionType.ZK}}">{{goods.discount}}</text>
         <!-- 直配 -->
         <text wx:if="{{goods.RBF}}">买满赠</text>
         <text wx:if="{{goods.RMJ}}">满减</text>

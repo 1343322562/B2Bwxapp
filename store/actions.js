@@ -257,7 +257,7 @@ const actions = {
       return 
     }
     let cartsObj = commit[types.GET_CARTS]()
-    if (cartsObj.keyArr.length>=300){
+    if (cartsObj.keyArr.length>=500){
       toast('购物车已达到最大商品数量!')
       return
     }

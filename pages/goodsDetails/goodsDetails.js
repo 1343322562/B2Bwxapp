@@ -265,6 +265,7 @@ Page({
     })
   },
   getAllPromotion(zhItemNo) {
+    console.log('zhItemNo', zhItemNo)
     let nowGoods = this.data.goods
     let promotionList = []
     dispatch[types.GET_ALL_PROMOTION]({

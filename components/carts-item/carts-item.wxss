@@ -15,7 +15,8 @@
 .goods>.info .before{color:#999;text-decoration:line-through;}
 .goods>.info .tag text{display: inline-block;line-height: 30rpx;font-size: 22rpx;border: 1px solid red;color: red;margin-left: 10rpx;border-radius: 10rpx;padding: 0 6rpx;}
 .goods>.delete{position:absolute;top:0;right:-180rpx;background-color:#e60012;color:#fff;height:180rpx;line-height:180rpx;width:180rpx;text-align:center;}
-
+.switchPromotiom{color: #666;background-color: #eee;display: inline-block;font-size: 25rpx;border-radius: 20rpx;width: 100rpx;padding: 2rpx 10rpx;margin-left: 15rpx;position: relative;}
+.switchPromotiom:after{position: absolute;content: ' ';width: 12rpx;height: 12rpx;border-bottom: 2rpx solid #333;border-right: 2rpx solid #333;transform: rotate(45deg);top: 8rpx;right: 13rpx;}
 .goods>.btn{position: absolute;right: 10rpx;bottom: 10rpx;width: 230rpx;height: 80rpx;text-align: center}
 .goods>.btn .item{height: 100%;width: 80rpx;position: absolute;top: 0}
 .goods>.btn .item>.icon{width: 50rpx;height: 50rpx;margin-top: 15rpx;background-color:#fff;}
@@ -47,6 +48,16 @@
 .cartsType>.info .startPrice .text{color: #e60012}
 .cartsType>.deleteAll{position: absolute;top: 0;right: 0;text-align: center;height: 100%;width: 100rpx;}
 .cartsType>.deleteAll .icon{width: 45rpx;height: 45rpx;margin-top:27rpx;}
+.promotionType {width: 100%;background-color: #fff;padding-top: 15rpx;}
+.promotionType .typeTag{width: 85%;display: flex;justify-content: f;padding: 0 5% 0 10%;font-size: 26rpx;}
+.promotionType .tag{background-color: #FF0000;color: #f5f5f5;padding: 1rpx 15rpx;border-radius: 5rpx;}
+.promotionType .promoInfo{margin-left: 20rpx;padding: 2rpx;}
+.promotionType .typeInfo{width: 85%;display: flex;justify-content: space-between;padding: 0 5% 0 10%;font-size: 25rpx;line-height: 40rpx;align-items: center;}
+.promotionType .content{
+  color: #f3a310;
+}
+.promotionType .go{color: #913e71;font-size: 27rpx;}
+.promoBox {margin-bottom: 22rpx;border-radius: 40rpx;width: 100%;padding-bottom: 25rpx;background-color: #fff;}
 .timeLimitSales{
   width: 50rpx;
   height: 45rpx;
