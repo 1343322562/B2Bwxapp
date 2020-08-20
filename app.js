@@ -1,21 +1,27 @@
 App({
   data: { 
-    // partnerCode: '1053',
+    // partnerCode: '1013',
+    // baseImgUrl:'http://erp.365wdyp.com',
     // partnerCode: '1043',
     //    baseImgUrl:'http://erp.jhdd.cn/',
     //  partnerCode: '1029',
     //  baseImgUrl:'http://39.98.164.194:8081/',
      partnerCode: '1000', 
      baseImgUrl: 'http://mmj.zksr.cn:8888/',
-    //  partnerCode: '10511', 
     // 15576615400 
     // partnerCode: '1036',
     // baseImgUrl: 'http://erp.yhfws.cn/',
+    // partnerCode: '1007',
+    // baseImgUrl: 'http://erp.zfyxok.com/',
     // lttest001
     // partnerCode: '1034',
     // baseImgUrl:'https://39.100.103.135:8080/',
+    // partnerCode: '10522',
+    // partnerCode: '10511',
+    // partnerCode: '1034',
+    // baseImgUrl:'https://39.100.103.135:8080/',
 
-    // partnerCode: '1052',
+    // partnerCode: '1053',
 
     // partnerCode: '1039',
     

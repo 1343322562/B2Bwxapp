@@ -177,7 +177,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
   if (BG) obj.BG = BG
   if (BF) obj.BF = true
   promotionObj.SZ['stockType'].map((item, index) => {
-    if (  // 判断库存类型
+    if (  
       item == 0
       || (item == 2 && goods['stockType'] != 0 )
       || (item == '1' && goods['stockType'] == '0')
@@ -187,7 +187,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
       const SZFilterArr = 'filterArr' in promotionObj['SZ'] ? promotionObj['SZ'].filterArr : false
       const SZName= 'giftName' in promotionObj['SZ'] ? promotionObj['SZ'].giftName : false
       SZFilterArr.forEach((t, ind) => {
-        if (goods.itemNo == t || goods.itemClsno == t) {
+        if (goods.itemNo == t || goods.itemClsno == t[0] || goods.itemClsno == t[1]) {
           if (SZInfo) {obj.SZInfo=[]; obj.SZInfo.push(SZInfo[ind])}                  // SZ配送信息
           if (SZName) { obj.SZName=[];  obj.SZName.push(SZName[ind])}                // SZ赠品名称
           if (SZStockType) { obj.SZStockType=[]; obj.SZStockType.push(SZStockType[ind])}   // SZ配送种类

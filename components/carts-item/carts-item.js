@@ -19,7 +19,7 @@ Component({
     selectTypeNum: 0,
     partnerCode: app.data.partnerCode,
     currentPromotion: ["NO"], // 当前所选择的促销 
-    allPromotion: [], // 所有促销
+    allPromotion: {}, // 所有促销
     transDateObj: {
       isShow: false,
       date: '',
@@ -392,23 +392,35 @@ Component({
       let currentPromotionNo = ['']  // 当前购物车商品的所选择促销单据数组 
       const sourceType = Number(goodsData.sourceType)  // 0: 统配, 1: 直配
 
-      goodsData.data.forEach(item => {
+      goodsData.data.forEach((item, i) => {
         // 首次加载，默认选第一个促销
         if (item['promotionCollections']) {
-          if (item['promotionCollections'].indexOf(',')) item['promotionCollectionsArr'] = item['promotionCollections'].split(',')
+          if (item['promotionCollections'].indexOf(',')) {
+            item['promotionCollectionsArr'] = item['promotionCollections'].split(',')
+          } else if (item['promotionCollections'] == '') {
+            item['promotionCollectionsArr'] = [item['promotionCollections']]
+          }
           
-          item['currentPromotionNo'] = item['promotionCollections'].indexOf(',') ? item['promotionCollections'].slice(0, item['promotionCollections'].indexOf(',')) : item['promotionCollections']
+          item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
           
+          
+          let backSign
+          currentPromotion.length && currentPromotion.forEach((t, index) => {
+            if (t.currentPromotionNo == item.currentPromotionNo) backSign = 'return'
+          })
+          console.log(item, 'backSign')
           let promoObj = {} 
           switch(sourceType) { // 0: 统配, 1: 直配
             case 0:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
+              if (backSign == 'return') return   // 不保留重复的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 2)
               promoObj.currentPromotionNo = item['currentPromotionNo']
               currentPromotion.unshift(promoObj)
               break;
             case 1:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 3)
+              if (backSign == 'return') return   // 不保留重复的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 3)
               promoObj.currentPromotionNo = item['currentPromotionNo']
               currentPromotion.unshift(promoObj)
@@ -416,8 +428,8 @@ Component({
           }
         }
       })
-      console.log('currentPromotion', currentPromotion)
-      console.log('addCurrentSelectedPromotion', goodsData)
+      // console.log('currentPromotion', currentPromotion)
+      // console.log('addCurrentSelectedPromotion', goodsData)
 
       this.data.currentPromotion = currentPromotion
       this.data.currentPromotionNo = currentPromotionNo
@@ -455,128 +467,145 @@ Component({
     // 对所有促销信息进行处理
     allPromotionHandle(res, nowGoods, _this) {
       // console.log(nowGoods)
-          const tag = getGoodsTag(nowGoods, res)
-            const itemNo = nowGoods.itemNo
-            const brandNo = nowGoods.itemBrandno || nowGoods.itemBrandNo
-            const itemClsno = nowGoods.itemClsno
-            let promotionList = []
-            let BFpromotionList = []
-            if (tag.FS || tag.SD || tag.ZK) {
-              nowGoods.orgiPrice = nowGoods.price
-              nowGoods.price = tag.price
-              promotionList.push({
-                name: tag.FS ? '首单特价' : (tag.SD ? '单日限购' : (tag.zkType + '折扣')),
-                msg: [(tag.FS ? ('活动期间,首次下单且购买数量不超过 '+ tag.sdMaxQty + nowGoods.unit +' 享受优惠价格￥'+tag.sdPrice) : (tag.SD ? ('购买数量不超过 ' + tag.drMaxQty + nowGoods.unit + ' 参与促销活动，特价￥' + tag.drPrice) : ('当前' + tag.zkType + '下单立即享受' + tag.discount + '优惠')))],
-                promotionNo: _this.addPromotionNo(nowGoods, ((tag.FS && 'FS') || (tag.SD && 'SD') || (tag.ZK && 'ZK')))
-              })
-            }
-            if ('SZInfo' in tag && tag.SZInfo.length) {
-              console.log(tag)
-              console.log(tag.SZInfo)
-              if ('SZFilterArr' in tag && tag['SZFilterArr'].length > 0) {
-                tag['SZFilterArr'].forEach(t => {
-                  if (t == nowGoods.itemNo || t == nowGoods.itemClsno) {
-                    
-                  }
-                })
-              }
-              let realArr = tag.SZInfo.sort((a, b) => a - b)
-              let msg
-              if (tag['SZInfo'].length > 1) {
-                msg = tag['SZInfo'].map((item, index) => {
-                  return `${index + 1}. 满￥${realArr[index]} 赠1样赠品：`,` ${tag['SZName'][index]}` 
-                })
-              } else {
-                msg = [`满￥${realArr[0]}，赠1样赠品：`, `${tag['SZName'][0]}`] 
-              }
+      const tag = getGoodsTag(nowGoods, res)
+      const itemNo = nowGoods.itemNo
+      const brandNo = nowGoods.itemBrandno || nowGoods.itemBrandNo
+      const itemClsno = nowGoods.itemClsno
+      let promotionList = []
+      let BFpromotionList = []
+      console.log('这是tag SZZZZZZZZZZZZZZZZZZZZZZZZZZZ', tag)
+      if (tag.FS || tag.SD || tag.ZK) {
+        nowGoods.orgiPrice = nowGoods.price
+        nowGoods.price = tag.price
+        promotionList.push({
+          name: tag.FS ? '首单特价' : (tag.SD ? '单日限购' : (tag.zkType + '折扣')),
+          msg: [(tag.FS ? ('活动期间,首次下单且购买数量不超过 '+ tag.sdMaxQty + nowGoods.unit +' 享受优惠价格￥'+tag.sdPrice) : (tag.SD ? ('购买数量不超过 ' + tag.drMaxQty + nowGoods.unit + ' 参与促销活动，特价￥' + tag.drPrice) : ('当前' + tag.zkType + '下单立即享受' + tag.discount + '优惠')))],
+          promotionNo: _this.addPromotionNo(nowGoods, ((tag.FS && 'FS') || (tag.SD && 'SD') || (tag.ZK && 'ZK')))
+        })
+      }
+      if ('SZInfo' in tag && tag.SZInfo.length) {
+        console.log(tag)
+        console.log(tag.SZInfo)
+        if ('SZFilterArr' in tag && tag['SZFilterArr'].length > 0) {
+          tag['SZFilterArr'].forEach(t => {
+            if (t == nowGoods.itemNo || t == nowGoods.itemClsno) {
               
-              promotionList.push({
-                name: '首单满赠',
-                msg: msg,
-                promotionNo: _this.addPromotionNo(nowGoods, 'SZ')
+            }
+          })
+        }
+        let realArr = tag.SZInfo.sort((a, b) => a - b)
+        let msg
+        if (tag['SZInfo'].length > 1) {
+          msg = tag['SZInfo'].map((item, index) => {
+            return `${index + 1}. 满￥${realArr[index]} 赠1样赠品：`,` ${tag['SZName'][index]}` 
+          })
+        } else {
+          msg = [`满￥${realArr[0]}，赠1样赠品：`, `${tag['SZName'][0]}`] 
+        }
+        
+        promotionList.push({
+          name: '首单满赠',
+          msg: msg,
+          promotionNo: _this.addPromotionNo(nowGoods, 'SZ')
+        })
+      }
+      if (tag.MS) {
+        promotionList.push({
+          name: '秒杀促销',
+          msg: [('购买数量不超过 ' + tag.msMaxQty+ nowGoods.unit + ' 参与秒杀活动，特价￥' + tag.msPrice)],
+          promotionNo: _this.addPromotionNo(nowGoods, 'MS')
+        })
+      }
+      if(tag.BG) {
+        console.log(tag, nowGoods, res)
+        let msg = { name: ((tag.BG == 'cls' ? '类别' : (tag.BG == 'brand' ? '品牌' : '')) + '买赠'),msg:[] }
+        const arr = res.BG[tag.BG][tag.BG == 'cls' ? itemClsno : (tag.BG == 'brand' ? brandNo : itemNo)]
+        for (let i in arr) {
+          const giftInfo = res.BG.giftGoods[arr[i]][i]
+          msg.msg.push(giftInfo.explain ||  '满 ' + giftInfo.buyQty + nowGoods.unit + '送' + giftInfo.giftQty + nowGoods.unit + ' [' + giftInfo.giftName +']')
+        }
+        msg.promotionNo = _this.addPromotionNo(nowGoods, 'BG')
+        promotionList.push(msg)
+      }
+      if('MQ' in tag) {
+        const msg = `购买数量满${tag.MQ['buyQty'] + nowGoods.unit}减${tag.MQ['subMoney']}元`
+        promotionList.push({
+          name: '数量满减',
+          msg: [msg],
+          promotionNo: _this.addPromotionNo(nowGoods, 'MQ')
+        })
+      }
+      if (tag.MJ) {
+        console.log(tag, 'sadasdass')
+        let msg = { name: (tag.MJ == 'fullReduction' ? '全场' : (tag.MJ == 'cls' ? '类别' : (tag.MJ == 'brand' ? '品牌' : '商品'))) + '满减',msg:[] }
+        const arr = tag.MJ == 'fullReduction' ? res.MJ[tag.MJ] : res.MJ[tag.MJ][tag.MJ == 'cls' ? itemClsno : (tag.MJ == 'brand' ? brandNo : itemNo)]
+        arr.forEach(info => {
+          msg.msg.push(info.explain || '满'+info.reachVal +'减'+info.subMoney)
+        })
+        msg.msg = [msg.msg.join('，')]
+        console.log(tag, 'sadasdass')
+        msg.promotionNo = _this.addPromotionNo(nowGoods, 'MJ')
+        promotionList.push(msg)
+        console.log(msg, 'sadasdass')
+      }
+      if (tag.BF) {
+        const itemNo = nowGoods.itemNo
+        const brandNo = nowGoods.itemBrandno
+        const itemClsno = nowGoods.itemClsno
+        const infoArr = [res.BF.all, res.BF.cls[itemClsno], res.BF.brand[brandNo], res.BF.goods[itemNo]]
+        infoArr.forEach((item,i) => {
+          if (item && item.length) {
+            let name = (i==0?'全场':(i==1?'类别':(i==2?'品牌':'单品')))+'满赠'
+            item.forEach(info => {
+              BFpromotionList.push({
+                name,
+                msg: [info.explain || ('满￥' + info.reachVal+',赠'+info.data.length+'样赠品')],
+                data: info.data,
+                promotionNo: _this.addPromotionNo(nowGoods, 'BF')
               })
-            }
-            if (tag.MS) {
-              promotionList.push({
-                name: '秒杀促销',
-                msg: [('购买数量不超过 ' + tag.msMaxQty+ nowGoods.unit + ' 参与秒杀活动，特价￥' + tag.msPrice)],
-                promotionNo: _this.addPromotionNo(nowGoods, 'MS')
-              })
-            }
-            if(tag.BG) {
-              console.log(tag, nowGoods, res)
-              let msg = { name: ((tag.BG == 'cls' ? '类别' : (tag.BG == 'brand' ? '品牌' : '')) + '买赠'),msg:[] }
-              const arr = res.BG[tag.BG][tag.BG == 'cls' ? itemClsno : (tag.BG == 'brand' ? brandNo : itemNo)]
-              for (let i in arr) {
-                const giftInfo = res.BG.giftGoods[arr[i]][i]
-                msg.msg.push(giftInfo.explain ||  '满 ' + giftInfo.buyQty + nowGoods.unit + '送' + giftInfo.giftQty + nowGoods.unit + ' [' + giftInfo.giftName +']')
-              }
-              msg.promotionNo = _this.addPromotionNo(nowGoods, 'BG')
-              promotionList.push(msg)
-            }
-            if('MQ' in tag) {
-              const msg = `购买数量满${tag.MQ['buyQty'] + nowGoods.unit}减${tag.MQ['subMoney']}元`
-              promotionList.push({
-                name: '数量满减',
-                msg: [msg],
-                promotionNo: _this.addPromotionNo(nowGoods, 'MQ')
-              })
-            }
-            if (tag.MJ) {
-              console.log(tag, 'sadasdass')
-              let msg = { name: (tag.MJ == 'fullReduction' ? '全场' : (tag.MJ == 'cls' ? '类别' : (tag.MJ == 'brand' ? '品牌' : '商品'))) + '满减',msg:[] }
-              const arr = tag.MJ == 'fullReduction' ? res.MJ[tag.MJ] : res.MJ[tag.MJ][tag.MJ == 'cls' ? itemClsno : (tag.MJ == 'brand' ? brandNo : itemNo)]
-              arr.forEach(info => {
-                msg.msg.push(info.explain || '满'+info.reachVal +'减'+info.subMoney)
-              })
-              msg.msg = [msg.msg.join('，')]
-              console.log(tag, 'sadasdass')
-              msg.promotionNo = _this.addPromotionNo(nowGoods, 'MJ')
-              console.log(msg, 'sadasdass')
-            }
-            if (tag.BF) {
-              const itemNo = nowGoods.itemNo
-              const brandNo = nowGoods.itemBrandno
-              const itemClsno = nowGoods.itemClsno
-              const infoArr = [res.BF.all, res.BF.cls[itemClsno], res.BF.brand[brandNo], res.BF.goods[itemNo]]
-              infoArr.forEach((item,i) => {
-                if (item && item.length) {
-                  let name = (i==0?'全场':(i==1?'类别':(i==2?'品牌':'单品')))+'满赠'
-                  item.forEach(info => {
-                    BFpromotionList.push({
-                      name,
-                      msg: [info.explain || ('满￥' + info.reachVal+',赠'+info.data.length+'样赠品')],
-                      data: info.data,
-                      promotionNo: _this.addPromotionNo(nowGoods, 'BF')
-                    })
-                  })
-                }
-              })
-            }
-            nowGoods = Object.assign(nowGoods, tag)
-            // this.setData({ promotionList, goods: nowGoods, BFpromotionList})
-            this.promotionListLoaidng = true
-            // this.countPrice()
-          if (nowGoods.rewardPoint > 0) {
-            promotionList.push({
-              name: '积分',
-              msg: ['每买' + nowGoods.buyQty + nowGoods.unit + '获得' + nowGoods.rewardPoint + '积分']
             })
-            // this.setData({ promotionList })
+            item.forEach(info => {
+              promotionList.push({
+                name,
+                msg: [info.explain || ('满￥' + info.reachVal+',赠'+info.data.length+'样赠品')],
+                data: info.data,
+                promotionNo: _this.addPromotionNo(nowGoods, 'BF')
+              })
+            })
           }
-          console.log('promotionList', promotionList)
-          console.log(nowGoods)
-          console.log('nowGoodstag', tag)
+        })
+      }
+      nowGoods = Object.assign(nowGoods, tag)
+      // this.setData({ promotionList, goods: nowGoods, BFpromotionList})
+      this.promotionListLoaidng = true
+      // this.countPrice()
+      if (nowGoods.rewardPoint > 0) {
+        promotionList.push({
+          name: '积分',
+          msg: ['每买' + nowGoods.buyQty + nowGoods.unit + '获得' + nowGoods.rewardPoint + '积分']
+        })
+        // this.setData({ promotionList })
+      }
+      console.log('promotionList', promotionList)
+      console.log(nowGoods)
+      console.log('nowGoodstag', tag)
+
+      return promotionList
     },
+    // 获取所有促销
     getAllPromotions(goodsData = this.data.goods) {
       const _this = this
       dispatch[types.GET_ALL_PROMOTION]({
         success: (res) => {
           console.log('res', res)
+          let allPromotion = _this.data.allPromotion // 所有促销挂载在此对象中，以促销单号作为键名
           goodsData.data.forEach(nowGoods => {
-            _this.allPromotionHandle(res, nowGoods, _this)
+            const promotionList = _this.allPromotionHandle(res, nowGoods, _this)
+            promotionList.length && promotionList.forEach((item, index) => {
+              allPromotion[item.promotionNo] = item
+            })
           })
-          
+          _this.setData({ allPromotion })
         }
       })
     },
@@ -584,7 +613,6 @@ Component({
   
   attached() {
     console.log(this)
-    let allPromotion = wx.getStorageSync('allPromotion')
     this.countMoney()
     this.getCommonSetting() // 获取送货开始和结束时间
     const { ww } = getApp().data
@@ -594,8 +622,7 @@ Component({
     this.getAllPromotion(goodsData) // 获取所有促销信息
     goodsData = this.addCurrentSelectedPromotion(goodsData) // 首次加载时，添加当前所选择的促销字段
     console.log(this)
-    this.getAllPromotions(goodsData)
-    // allPromotion = this.allPromotiomHandle(allPromotion)    // 处理所有促销(直配)
+    this.getAllPromotions(goodsData) // 处理所有促销(直配)
     console.log('这是 goods(cars-item):', goodsData)
     if (goodsData.sourceType == 1) {
       let supplierPromotion = wx.getStorageSync('supplierPromotion')
@@ -620,8 +647,7 @@ Component({
         })
       }
     }
-    this.setData({ goods: goodsData, allPromotion })
-    console.log(' wx.getStorageSync(allPromotion) ',  wx.getStorageSync('allPromotion') )
+    this.setData({ goods: goodsData })
     setTimeout(() => console.log(this.data.goods, this), 1200)
   }
 })

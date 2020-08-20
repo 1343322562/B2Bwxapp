@@ -115,11 +115,11 @@
   <view class="promoBox" wx:for="{{currentPromotion}}" wx:key="ind" wx:for-index="ind">
     <view class="promotionType" wx:if="{{item.type && item.type != ''}}">
       <view class="typeTag">
-        <view class="tag">{{item.type}}</view>
+        <view class="tag">{{allPromotion[item.currentPromotionNo].name}}</view>
         <view class="promoInfo">这是备注</view>
       </view>
       <view class="typeInfo">
-        <text class="content">促销的附属信息</text>
+        <text class="content">{{allPromotion[item.currentPromotionNo].msg[0]}}</text>
         <text class="go">去凑单 ></text>
       </view>
     </view>
