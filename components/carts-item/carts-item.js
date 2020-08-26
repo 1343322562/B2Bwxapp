@@ -40,7 +40,19 @@ Component({
 
       return { nowH, nowM, startH, startM, endH, endM }
     },
-
+    // 
+    goAddGoodsClick(e) {
+      const promotionNo = e.currentTarget.dataset.items.promotionNo
+      const { platform, username, branchNo, token } = wx.getStorageSync('userObj')
+      // API.Public.searchItemByPromotionNo({
+      //   data: { platform, username, branchNo, token, promotionNo, pageIndex: 1, pageSize: 500 },
+      //   success(res) {
+      //     console.log(res)
+      //   }
+      // })
+      goPage('p_goods', { promotionNo })
+      console.log(promotionNo)
+    },
     // 获取系统配置(送货开始和结束时间)
     getCommonSetting() {
       const _this = this

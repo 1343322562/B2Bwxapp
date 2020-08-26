@@ -120,7 +120,7 @@
       </view>
       <view class="typeInfo">
         <text class="content">{{allPromotion[item.currentPromotionNo].msg[0]}}</text>
-        <text class="go">去凑单 ></text>
+        <text class="go" bindtap="goAddGoodsClick" data-items="{{allPromotion[item.currentPromotionNo]}}">去凑单 ></text>
       </view>
     </view>
 
