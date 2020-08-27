@@ -160,6 +160,14 @@
 					"id": -1,
 					"name": "pages/myList/myList",
 					"pathName": "pages/myList/myList",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/carts/carts",
+					"pathName": "pages/carts/carts",
+					"query": "",
 					"scene": null
 				}
 			]

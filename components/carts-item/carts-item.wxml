@@ -116,21 +116,22 @@
     <view class="promotionType" wx:if="{{item.type && item.type != ''}}">
       <view class="typeTag">
         <view class="tag">{{allPromotion[item.currentPromotionNo].name}}</view>
-        <view class="promoInfo">这是备注</view>
+        <view class="promoInfo">{{allPromotion[item.currentPromotionNo].msg[0]}}</view>
       </view>
       <view class="typeInfo">
-        <text class="content">{{allPromotion[item.currentPromotionNo].msg[0]}}</text>
-        <text class="go" bindtap="goAddGoodsClick" data-items="{{allPromotion[item.currentPromotionNo]}}">去凑单 ></text>
+        <text class="content">{{allPromotion[item.currentPromotionNo].pInfo || 0}}</text>
+        <text class="go" bindtap="goAddGoodsClick" data-items="{{allPromotion[item.currentPromotionNo]}}">再逛逛 ></text>
       </view>
     </view>
 
     <view 
       class="li" 
-      wx:if="{{item.currentPromotionNo == goods.currentPromotionNo || (goods.currentPromotionNo == '' && item == 'NO')}}" 
+      wx:if="{{item.currentPromotionNo == goods.currentPromotionNo || (goods.currentPromotionNo == '' && item == 'NO') || (goods.currentPromotionType == 'BG' && item == 'NO')}}" 
       wx:for="{{goods.data}}" 
       wx:for-item="goods"  
       wx:key="index" 
     >
+    <!-- {{goods.currentPromotionType}} -->
       <view class="goods{{leftAnimation?' act':''}}"  data-index="{{index}}" style="left:-{{(goods.goodsLeft||0)}}px" bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" bindtouchcancel="touchend">
         <view  class="checkbox{{!goods.cancelSelected?' act':''}}" data-index="{{index}}"  bindtap="selectGoods">
           <image class="icon" src="../../images/hook.png" />

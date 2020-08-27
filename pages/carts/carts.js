@@ -100,6 +100,8 @@ Page({
   },
   onPullDownRefresh() {
     this.refreshCarts()
+    // this.onLoad()
+    // this.onShow()
   },
   onReachBottom () {
     console.log(this.data.cartsObj, this.data)
