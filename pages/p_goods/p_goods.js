@@ -117,6 +117,7 @@ Page({
       },
       success: (res) => {
         console.log(res)
+        if (!res.data) return
         this.loadingIndex = loadingIndex
         let goodsList = []
         let fineGoodsList = []

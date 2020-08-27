@@ -34,7 +34,8 @@ Page({
     API.Public.getPopup({
       data: { branchNo, token, platform, username },
       success(obj) {
-				 console.log(obj)
+         console.log(obj)
+         if (!obj.data) return
 				 let getPopupObj = _this.data.getPopupObj
          getPopupObj.popupType = obj.data.popupType
 				 if (getPopupObj.popupType != 0 && getPopupObj.popupType != 1) return 
