@@ -120,7 +120,7 @@
       </view>
       <view class="typeInfo">
         <text class="content">{{allPromotion[item.currentPromotionNo].pInfo || 0}}</text>
-        <text class="go" bindtap="goAddGoodsClick" data-items="{{allPromotion[item.currentPromotionNo]}}">再逛逛 ></text>
+        <text class="go" bindtap="goAddGoodsClick" data-items="{{allPromotion[item.currentPromotionNo]}}">{{allPromotion[item.currentPromotionNo].pInfo == '已满足'?'再逛逛 >':'去凑单 >'}}</text>
       </view>
     </view>
 
