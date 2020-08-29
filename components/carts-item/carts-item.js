@@ -90,6 +90,9 @@ Component({
       this.setData({ goods })
     },
     inputConfirm(e) {
+      const currentPromotionNo = e.currentTarget.dataset.currentpromotionno
+      const allPromotion = this.data.allPromotion
+      const currentProObj = allPromotion[currentPromotionNo]
       const value = Number(e.detail.value.trim()) || 0
       const index = e.currentTarget.dataset.index
       let cartsObj = this.data.goods
@@ -117,7 +120,7 @@ Component({
         dispatch[types.CHANGE_CARTS]({ goods, type, config })
         if (cartsObj.data.length) {
           this.setData({ goods: cartsObj })
-          this.countMoney()
+          this.countMoney(currentProObj)
         } else {
           this.triggerEvent('deleteCarts', cartsObj.type)
         }
@@ -127,7 +130,7 @@ Component({
           cartsObj.data[index].realQty = newCarts[goods.itemNo].realQty
           MsAndDrCount(goods, newCarts[goods.itemNo], type)
           this.setData({ goods: cartsObj })
-          this.countMoney()
+          this.countMoney(currentProObj)
         } else {
           this.inputBlur()
         }
@@ -285,13 +288,12 @@ Component({
         supcustNo: cartsObj.cartsType == 'sup' ? cartsObj.sourceNo:''
       })
     },
-    countMoney() {
+    countMoney(currentProObj) {
       let cartsMoney = 0
       let selectNum = 0
       let selectTypeNum = 0
       let isSelectAll = this.data.isSelectAll
       const cartsObj = this.data.goods
-      const allPromotion = this.data.allPromotion
       console.log(cartsObj)
       cartsObj.data.map(goods => {
         if (!goods.cancelSelected) {
@@ -299,35 +301,91 @@ Component({
           selectNum += goods.realQty
           if (String(selectNum).includes('.')) selectNum = Number(Number(selectNum).toFixed(1))
           selectTypeNum += 1
+        } else {
+
         }
       })
-      cartsObj.data.length === selectTypeNum && (isSelectAll = true)
-      this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll })
+
+      // 若是有促销单据，计算商品是否满足促销条件， 并修改当前差异价格
+      if (currentProObj) {
+        const promotionNo = currentProObj['promotionNo']
+        const differPrice = cartsMoney - this.data.cartsMoney
+        let allPromotion = this.data.allPromotion
+        currentProObj.price = currentProObj.price + differPrice
+        currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj}) // 促销信息对象计算处理
+        allPromotion = Object.assign(allPromotion, currentProObj)
+        console.log(currentProObj)
+        console.log(allPromotion)
+        this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll, allPromotion })
+      } else {
+        cartsObj.data.length === selectTypeNum && (isSelectAll = true)
+        this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll })
+      }
+      console.log({ cartsMoney, selectNum, selectTypeNum, isSelectAll })
+      // this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll })
     },
     selectAllGoods() {
       let goods = this.data.goods
       let selectObj = {}
       const isSelectAll = !this.data.isSelectAll
+      console.log(isAllPromotion)
       goods.data.forEach(item => {
         item.cancelSelected = !isSelectAll
       })
-      this.setData({ isSelectAll, goods })
+      console.log(isSelectAll)
+      
+      const allPromotion = this.data.allPromotion
+      const isAllPromotion = Object.keys(allPromotion).length // 长度为 0 则无促销单据
+      switch(isSelectAll) {
+        case true:
+          for(let key in allPromotion) {
+            let selectPrice = 0 // 全选时,促销单据的商品价格
+            goods.data.forEach(item => {
+              if (key == item['currentPromotionNo'] && item.cancelSelected != true) {
+                selectPrice += item.price * item.realQty
+              }
+            })
+            allPromotion[key].price = selectPrice
+          }
+          break;
+        case false:
+          for(let key in allPromotion) {
+            const t = allPromotion[key]
+            t.price = 0
+          }
+          break;
+      }
+      this.isSatisfyPromotion(allPromotion)
+      
+      console.log(allPromotion)
+      this.setData({ isSelectAll, goods, allPromotion })
       this.countMoney()
     },
     selectGoods(e) {
+      console.log(e)
+      const currentPromotionNo = e.currentTarget.dataset.currentpromotionno
+      const allPromotion = this.data.allPromotion
+      const currentProObj = allPromotion[currentPromotionNo]
+      
       const index = e.currentTarget.dataset.index
       let { goods, isSelectAll } = this.data
       const is = !goods.data[index].cancelSelected
       goods.data[index].cancelSelected = is
       if (is) isSelectAll = false
       this.setData({ goods, isSelectAll })
-      this.countMoney()
+      console.log(currentProObj)
+      this.countMoney(currentProObj)
     },
     changeGoodsNum(e) {
+      console.log(e)
+      const currentPromotionNo = e.currentTarget.dataset.currentpromotionno
+      const allPromotion = this.data.allPromotion
+      const currentProObj = allPromotion[currentPromotionNo]
       const index = e.currentTarget.dataset.index
       const type = e.currentTarget.dataset.type
       let cartsObj = this.data.goods
       const goods = cartsObj.data[index]
+      console.log(allPromotion[currentPromotionNo])
       const config = {
         sourceType: cartsObj.sourceType,
         sourceNo: cartsObj.sourceNo,
@@ -344,7 +402,7 @@ Component({
               dispatch[types.CHANGE_CARTS]({ goods, type, config })
               if (cartsObj.data.length) {
                 this.setData({ goods: cartsObj })
-                this.countMoney()
+                this.countMoney(currentProObj)
               } else {
                 this.triggerEvent('deleteCarts', cartsObj.type)
               }
@@ -357,7 +415,7 @@ Component({
           cartsObj.data[index].realQty = newCarts[goods.itemNo].realQty
           MsAndDrCount(goods, newCarts[goods.itemNo], type)
           this.setData({ goods: cartsObj })
-          this.countMoney()
+          this.countMoney(currentProObj)
         } else {
           return
         }
@@ -420,21 +478,26 @@ Component({
           
           let backSign
           currentPromotion.length && currentPromotion.forEach((t, index) => {
-            if (t.currentPromotionNo == item.currentPromotionNo || item.currentPromotionNo.includes('BG')) backSign = 'return'
+            if (
+              t.currentPromotionNo == item.currentPromotionNo 
+              || item.currentPromotionNo.includes('BG') 
+              || item.currentPromotionNo.includes('SD') 
+              || item.currentPromotionNo.includes('MS')
+            ) backSign = 'return'   
           })
           // console.log(item, 'backSign')
           let promoObj = {} 
           switch(sourceType) { // 0: 统配, 1: 直配
             case 0:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
-              if (backSign == 'return') return   // 不保留重复的单据（BG）
+              if (backSign == 'return') return   // 不保留重复的单据,并过滤无需凑单的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 2)
               promoObj.currentPromotionNo = item['currentPromotionNo']
               currentPromotion.unshift(promoObj)
               break;
             case 1:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 3)
-              if (backSign == 'return') return   // 不保留重复的单据（BG）
+              if (backSign == 'return') return   // 不保留重复的单据, 并过滤无需凑单的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 3)
               promoObj.currentPromotionNo = item['currentPromotionNo']
               currentPromotion.unshift(promoObj)
@@ -645,23 +708,12 @@ Component({
     },
     // 计算是否满足促销条件
     isSatisfyPromotion(allPromotion) {
-      for(const key in allPromotion) {
+      for(let key in allPromotion) {
         console.log(key)
         const t = allPromotion[key]
         if(key.includes('MJ') || key.includes('BF')) {
           const realDifference = t.reachVal - t.price // 设置的满减(买满赠)值 - 当前单据价格（结果为负数则满足促销条件）
-          switch(realDifference > 0) {
-            case true:
-              t.pInfo = `未满足，金额差￥${(realDifference).toFixed(2)}`
-              break;
-            case false:
-              t.pInfo = '已满足'
-              break;
-          }
-        } else if (key.includes('BF')){
-          console.log(t)
-          const realDifference = t.reachVal - t.price // 设置的满减值 - 当前单据价格（结果为负数则满足促销条件）
-          console.log('realDifference', realDifference)
+          console.log(realDifference, t.reachVal, t.price)
           switch(realDifference > 0) {
             case true:
               t.pInfo = `未满足，金额差￥${(realDifference).toFixed(2)}`
