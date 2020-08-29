@@ -40,18 +40,19 @@ Component({
 
       return { nowH, nowM, startH, startM, endH, endM }
     },
-    // 
+    // 显示促销 Dialog
+    showSwitchPromotionDialog() {
+      const pages = getCurrentPages(),
+            currentPageObj = pages[pages.length-1], 
+            cpnObj = currentPageObj.selectComponent('.spDialog') // 获取组件实例
+      cpnObj.showClick()
+      console.log()
+    },
+    // 跳转凑单页 
     goAddGoodsClick(e) {
       const promotionNo = e.currentTarget.dataset.items.promotionNo
       const { platform, username, branchNo, token } = wx.getStorageSync('userObj')
-      // API.Public.searchItemByPromotionNo({
-      //   data: { platform, username, branchNo, token, promotionNo, pageIndex: 1, pageSize: 500 },
-      //   success(res) {
-      //     console.log(res)
-      //   }
-      // })
       goPage('p_goods', { promotionNo })
-      // console.log(promotionNo)
     },
     // 获取系统配置(送货开始和结束时间)
     getCommonSetting() {
@@ -765,6 +766,6 @@ Component({
       }
     }
     this.setData({ goods: goodsData })
-    setTimeout(() => console.log(this.data.goods, this), 1200)
+    setTimeout(() => console.log(this.data.goods, this, getCurrentPages()), 1200)
   }
 })

@@ -72,7 +72,7 @@
   bottom: 0rpx;
   background-color: #333333;
   white-space: nowrap;
-  color: rgb(230, 187, 49);
+  color: #e6bb31;
   font-size: 19rpx;
   letter-spacing: 2rpx;
   padding: 8rpx 10rpx;

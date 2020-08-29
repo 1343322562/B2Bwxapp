@@ -10,3 +10,5 @@
   </view>
   <recommend-goods bindgetCartsData="getCartsData" />
 </block>
+
+<select-promotion class="spDialog" />
