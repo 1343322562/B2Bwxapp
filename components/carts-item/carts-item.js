@@ -44,16 +44,32 @@ Component({
       console.log(e)
       const { currentPromotionNo, itemNo } = e.detail,
             goods = this.data.goods,
-            allPromotion = this.data.allPromotion
+            currentPromotion = this.data.currentPromotion,
+            currentPromotionType = goods.cartsType == 'cw' ? currentPromotionNo.slice(0, 2) : currentPromotionNo.slice(0, 3)
+
+      
       goods.data.forEach((item, index) => {
         if(itemNo == item.itemNo) {
+          let isAddType = true // 是否添加新的商品类型
+          currentPromotion.forEach(t => {
+            if (
+              currentPromotionType == 'BG' 
+              || currentPromotionType == 'MS' 
+              || currentPromotionType == 'SD' 
+              || t == currentPromotionType
+            ) isAddType = false
+            if (!isAddType) t.num += 1 
+          })
+          if (isAddType)  currentPromotion.unshift({type: currentPromotionType, currentPromotionNo, num:1})
+
+
           goods.data[index].currentPromotionNo = currentPromotionNo
-          goods.data[index].currentPromotionType = goods.cartsType == 'cw' ? currentPromotionNo.slice(0, 2) : currentPromotionNo.slice(0, 3)
+          goods.data[index].currentPromotionType = currentPromotionType
         }
       })
       // this.addCurrentSelectedPromotion(goods)
-      this.setData({ goods })
-      console.log(goods)
+      this.setData({ goods, currentPromotion })
+      console.log(goods, currentPromotion)
     },
     // 显示促销 Dialog
     showSwitchPromotionDialog(e) {
@@ -505,7 +521,7 @@ Component({
           
           item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
           
-          
+          // 不参与促销计算
           let backSign
           currentPromotion.length && currentPromotion.forEach((t, index) => {
             if (
@@ -516,13 +532,18 @@ Component({
             ) backSign = 'return'   
           })
           // console.log(item, 'backSign')
-          let promoObj = {} 
+          let promoObj = {
+            currentPromotionNo: '', // 编号
+            type: '',               // 促销类型
+            num: 0                  // 商品种类数量
+          } 
           switch(sourceType) { // 0: 统配, 1: 直配
             case 0:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
               if (backSign == 'return') return   // 不保留重复的单据,并过滤无需凑单的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 2)
               promoObj.currentPromotionNo = item['currentPromotionNo']
+              promoObj.num += 1 
               currentPromotion.unshift(promoObj)
               break;
             case 1:
@@ -530,6 +551,7 @@ Component({
               if (backSign == 'return') return   // 不保留重复的单据, 并过滤无需凑单的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 3)
               promoObj.currentPromotionNo = item['currentPromotionNo']
+              promoObj.num += 1 
               currentPromotion.unshift(promoObj)
               break;
           }

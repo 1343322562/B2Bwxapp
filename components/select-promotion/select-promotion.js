@@ -13,7 +13,7 @@ Component({
     isShow: false,
     data: {},   // 选择框数据
     itemNo: '', // 商品编号
-    good: ''    // 店铺类型
+    good: ''   
   },
 
   /**
