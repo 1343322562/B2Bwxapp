@@ -1,9 +1,20 @@
 <view class="selecter-time-conainer" wx:if="{{isShow}}" catchtouchmove>
   <view style="height:65vh;width:100%;" catchtap="close"/>
   <view class="selecter-time-box">
-    <view class="promo-box">
-      <view class="tag">类别满赠</view>
-      <view class="info">拉拉顺利打开手机~~~</view>
+    <view class="promo-box" wx:for="{{data}}" wx:key="index">
+      <view class="tag">{{item.name}}</view>
+      <view class="info-box">
+        <view 
+          class="info" 
+          wx:for="{{item.msg}}" 
+          wx:for-item="t"
+          wx:for-index="zIndex"
+          wx:key="zIndex" 
+        >
+          {{zIndex+1}}. {{t}}
+        </view>
+      </view>
+      
     </view>
     <!-- <view class="btn-box">
       <text catchtap="close">取消</text>

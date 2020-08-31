@@ -41,12 +41,24 @@ Component({
       return { nowH, nowM, startH, startM, endH, endM }
     },
     // 显示促销 Dialog
-    showSwitchPromotionDialog() {
+    showSwitchPromotionDialog(e) {
+      console.log(e)
       const pages = getCurrentPages(),
             currentPageObj = pages[pages.length-1], 
             cpnObj = currentPageObj.selectComponent('.spDialog') // 获取组件实例
       cpnObj.showClick()
-      console.log()
+        
+      const promotionNoArr = e.currentTarget.dataset.promotionnoarr,
+            promotionNo = promotionNoArr[0],
+            allPromotion = this.data.allPromotion
+      let promotionNoObj = {}
+      promotionNoArr.forEach((item, index) => {
+        promotionNoObj[item] = allPromotion[item]
+      })
+
+      currentPageObj.setData({ promotionDialogObj: promotionNoObj })
+      console.log(promotionNoArr, promotionNo, this.data.allPromotion)
+      console.log('promotionDialogObj', promotionNoObj)
     },
     // 跳转凑单页 
     goAddGoodsClick(e) {

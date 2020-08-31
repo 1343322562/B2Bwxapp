@@ -17,6 +17,7 @@ const actions = {
               platform: '3'
             },
             success: (res) => {
+              console.log(res)
               let id = ''
               if (res.code == 0) {
                 id = res.data
@@ -36,7 +37,6 @@ const actions = {
       })
     }
   },
-
   [types.GET_ALL_PROMOTION](param) {
     const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = getApp().data['userObj'] || wx.getStorageSync('userObj')
     let obj = {
@@ -206,6 +206,7 @@ const actions = {
                     })
                   }
                 })
+                console.log(obj, 'BF')
               }
             }
             wx.setStorage({ key: 'promotionTime', data: +new Date() })
@@ -223,7 +224,6 @@ const actions = {
       param.success && param.success(beforeObj)
     }
   },
-
   // （直配）今日促销商品，达到最大值停止添加商品
   maxLimitAdd(goods, type, cartsObjs) {  // goods：当前 ADD 的商品对象; type：当前增添的 type; 若有 cartsObj ，则是在采页面增加\
     if (cartsObjs == 0) { // 0: 在结算页添加商品 ； 1：在商品采购页添加商品
@@ -244,7 +244,6 @@ const actions = {
       return 0 // 没达到限购值
     }
   },
-  
   [types.CHANGE_CARTS](param, cartsObjs = 0) { // add delete minus； cartsObj 为促销信息，主要用来实现直配的限时促销，达到限购值，停止加购
     console.log(param)
   // 直配中商品数量若满足限时促销中的 限购值，则停止加购
@@ -257,7 +256,7 @@ const actions = {
       return 
     }
     let cartsObj = commit[types.GET_CARTS]()
-    if (cartsObj.keyArr.length>=500){
+    if (cartsObj.keyArr.length>=300){
       toast('购物车已达到最大商品数量!')
       return
     }
@@ -324,7 +323,12 @@ const actions = {
         cartsObj.num += Number(count); if(String(cartsObj.num).includes('.')) cartsObj.num = Number(Number(cartsObj.num).toFixed(1))
        
       }
-      if (sourceType == '0' && param.type != 'minus' && (item.realQty > maxSupplyQty || (item.realQty > (deliveryType == '3' ? 9999 : stockQty)))) {
+      // if (sourceType == '0' && param.type != 'minus' && (item.realQty > maxSupplyQty || (item.realQty > (deliveryType == '3' ? 9999 : stockQty)))) {
+      //   toast(item.realQty > maxSupplyQty ? '已达到最大购买数量' :'库存不足')
+      //   return
+      // }
+      // 判断了直配和统配都判断了库存, 上面是没判断的
+      if (param.type != 'minus' && (item.realQty > maxSupplyQty || (item.realQty > (deliveryType == '3' ? 9999 : stockQty)))) {
         toast(item.realQty > maxSupplyQty ? '已达到最大购买数量' :'库存不足')
         return
       }
@@ -349,7 +353,6 @@ const actions = {
     const newTime = +new Date()
     items = JSON.stringify(updateCarts?items:[])
     if (!param.format||updateCarts || !beforeTime || (newTime - beforeTime) >= (1000 * 60 * 5)) {
-      console.log('购物车参数', items)
       API.Carts.getShoppingCartInfo({
         data: { items, platform, token, username, branchNo },
         success: (res) => {

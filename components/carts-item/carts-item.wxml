@@ -144,7 +144,15 @@
         <view class="info">
           <text class="name">{{goods.itemName}}</text>
           <view class='size'>{{goods.itemSize}} 
-            <view class="switchPromotiom" bindtap="showSwitchPromotionDialog" wx:if="{{goods.promotionCollectionsArr.length>1}}">换促销</view> 
+            <view 
+              class="switchPromotiom" 
+              bindtap="showSwitchPromotionDialog" 
+              wx:if="{{goods.promotionCollectionsArr.length>1}}"
+              data-promotionNoArr="{{goods.promotionCollectionsArr}}"
+              data-promotionNo="{{goods.currentPromotionNo}}"
+            >
+              换促销
+            </view> 
           </view>
           <view class="price">
             <text class="now">￥{{goods.price}}/{{goods.deliveryUnit}}</text>

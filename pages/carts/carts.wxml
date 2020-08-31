@@ -11,4 +11,4 @@
   <recommend-goods bindgetCartsData="getCartsData" />
 </block>
 
-<select-promotion class="spDialog" />
+<select-promotion class="spDialog" data="{{promotionDialogObj}}" />
