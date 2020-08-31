@@ -1,7 +1,7 @@
 <view class="selecter-time-conainer" wx:if="{{isShow}}" catchtouchmove>
   <view style="height:65vh;width:100%;" catchtap="close"/>
   <view class="selecter-time-box">
-    <view class="promo-box" wx:for="{{data}}" wx:key="index">
+    <view class="promo-box" wx:for="{{data}}" wx:key="index" bindtap="onParentEvent" data-promotion="{{item.promotionNo}}">
       <view class="tag">{{item.name}}</view>
       <view class="info-box">
         <view 

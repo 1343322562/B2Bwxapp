@@ -149,7 +149,7 @@
               bindtap="showSwitchPromotionDialog" 
               wx:if="{{goods.promotionCollectionsArr.length>1}}"
               data-promotionNoArr="{{goods.promotionCollectionsArr}}"
-              data-promotionNo="{{goods.currentPromotionNo}}"
+              data-itemNo="{{goods.itemNo}}"
             >
               换促销
             </view> 
@@ -267,3 +267,5 @@
   </view>
 
 </view>
+
+<select-promotion class="spDialog" bind:switchPromotiom='onParentEvent' />

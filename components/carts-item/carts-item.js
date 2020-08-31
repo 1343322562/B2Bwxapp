@@ -40,25 +40,41 @@ Component({
 
       return { nowH, nowM, startH, startM, endH, endM }
     },
+    onParentEvent(e) {
+      console.log(e)
+      const { currentPromotionNo, itemNo } = e.detail,
+            goods = this.data.goods,
+            allPromotion = this.data.allPromotion
+      goods.data.forEach((item, index) => {
+        if(itemNo == item.itemNo) {
+          goods.data[index].currentPromotionNo = currentPromotionNo
+          goods.data[index].currentPromotionType = goods.cartsType == 'cw' ? currentPromotionNo.slice(0, 2) : currentPromotionNo.slice(0, 3)
+        }
+      })
+      // this.addCurrentSelectedPromotion(goods)
+      this.setData({ goods })
+      console.log(goods)
+    },
     // 显示促销 Dialog
     showSwitchPromotionDialog(e) {
+      // 显示框
       console.log(e)
-      const pages = getCurrentPages(),
-            currentPageObj = pages[pages.length-1], 
-            cpnObj = currentPageObj.selectComponent('.spDialog') // 获取组件实例
+      const cpnObj = this.selectComponent('.spDialog') // 获取组件实例
       cpnObj.showClick()
-        
+      // 数据对象处理
       const promotionNoArr = e.currentTarget.dataset.promotionnoarr,
             promotionNo = promotionNoArr[0],
-            allPromotion = this.data.allPromotion
-      let promotionNoObj = {}
+            allPromotion = this.data.allPromotion,
+            itemNo = e.currentTarget.dataset.itemno
+      let promotionNoObj = {},
+          goods = this.data.goods
       promotionNoArr.forEach((item, index) => {
         promotionNoObj[item] = allPromotion[item]
       })
-
-      currentPageObj.setData({ promotionDialogObj: promotionNoObj })
+      cpnObj.setData({ data: promotionNoObj, itemNo, goods })
       console.log(promotionNoArr, promotionNo, this.data.allPromotion)
       console.log('promotionDialogObj', promotionNoObj)
+      console.log('type', goods)
     },
     // 跳转凑单页 
     goAddGoodsClick(e) {
@@ -478,6 +494,7 @@ Component({
       const sourceType = Number(goodsData.sourceType)  // 0: 统配, 1: 直配
 
       goodsData.data.forEach((item, i) => {
+        if (item['currentPromotionNo']) return
         // 首次加载，默认选第一个促销
         if (item['promotionCollections']) {
           if (item['promotionCollections'].indexOf(',')) {
@@ -749,7 +766,7 @@ Component({
     this.ww = ww
     let goodsData = this.data.goods
     // console.log('jsongoodsData', JSON.parse(JSON.stringify(goodsData)))
-    this.getAllPromotion(goodsData) // 获取所有促销信息
+    // this.getAllPromotion(goodsData) // 获取所有促销信息
     goodsData = this.addCurrentSelectedPromotion(goodsData) // 首次加载时，添加当前所选择的促销字段
     // console.log(this)
     this.getAllPromotions(goodsData) // 处理所有促销(直配)

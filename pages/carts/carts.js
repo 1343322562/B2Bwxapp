@@ -4,7 +4,7 @@ import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
 Page({
   data: {
-    promotionDialogObj: [], // 换促销数据
+    // promotionDialogObj: [], // 换促销数据
     pageLoading: false,
     cartsObj: {},
     cartsList: [],
