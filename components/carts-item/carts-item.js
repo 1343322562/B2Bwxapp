@@ -61,8 +61,6 @@ Component({
             if (!isAddType) t.num += 1 
           })
           if (isAddType)  currentPromotion.unshift({type: currentPromotionType, currentPromotionNo, num:1})
-
-
           goods.data[index].currentPromotionNo = currentPromotionNo
           goods.data[index].currentPromotionType = currentPromotionType
         }
@@ -354,20 +352,25 @@ Component({
       // 若是有促销单据，计算商品是否满足促销条件， 并修改当前差异价格
       console.log('currentProObj', currentProObj)
       if (currentProObj) {
-        const promoType = currentProObj.promotionNo.slice(0, 2)
-        if (promoType == 'MJ' || promoType == 'BF') { 
-          const promotionNo = currentProObj['promotionNo']
+        const promoType = currentProObj.promotionNo.slice(0, 2),
+              promotionNo = currentProObj['promotionNo']
+        let allPromotion = this.data.allPromotion
+
+        if (promoType == 'MJ' || promoType == 'BF') {
           const differPrice = cartsMoney - this.data.cartsMoney
-          let allPromotion = this.data.allPromotion
           currentProObj.price = currentProObj.price + differPrice
           currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj}) // 促销信息对象计算处理
           allPromotion = Object.assign(allPromotion, currentProObj)
           console.log(currentProObj)
-          console.log(allPromotion)
-          this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll, allPromotion })
         } else if (promoType == 'MQ') {
-          console.log()
+          const differQty = selectNum - this.data.selectNum
+          currentProObj.qty = currentProObj.qty + differQty
+          currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj }) // 促销信息对象计算处理
+          allPromotion = Object.assign(allPromotion, currentProObj)
+          console.log(currentProObj)
         }
+        console.log(allPromotion)
+        this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll, allPromotion })
       } else {
         cartsObj.data.length === selectTypeNum && (isSelectAll = true)
         this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll })
