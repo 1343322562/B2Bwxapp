@@ -48,13 +48,12 @@ Component({
             currentPromotion = this.data.currentPromotion,
             currentPromotionType = goods.cartsType == 'cw' ? currentPromotionNo.slice(0, 2) : currentPromotionNo.slice(0, 3)
 
+      let allPromotion = this.data.allPromotion,
+          nowGoods
       goods.data.forEach((item, index) => {
-        // currentPromotion.forEach(t => {
-        //   if (item['currentPromotionNo'] == t['currentPromotionNo']) {
-
-        //   }
-        // })
+        // 当前商品
         if(item['currentPromotionNo'] && itemNo == item.itemNo) {
+          nowGoods = item
           console.log('gooditem', item)
           let currentPromotionObj = {}
           let currentPromotionIndex
@@ -80,6 +79,9 @@ Component({
             && currentPromotionType != 'BG'
             && currentPromotionType != 'MS'
             && currentPromotionType != 'SD'
+            && currentPromotionType != 'ZK'
+            && currentPromotionType != 'BD'
+            && currentPromotionType != 'FS'
           ) {
             currentPromotion.unshift({type: currentPromotionType, currentPromotionNo, typeNum:1});
             currentPromotionIndex++
@@ -94,14 +96,22 @@ Component({
             currentPromotion[currentPromotionIndex].typeNum -= 1
           }
           console.log(currentPromotion)
-          console.log(currentPromotionObj, currentPromotionIndex)
+          if (currentPromotionType == 'MQ' && !nowGoods.cancelSelected) {
+            allPromotion[currentPromotionNo].qty += nowGoods.realQty
+            allPromotion = this.isSatisfyPromotion(allPromotion) 
+          } else if (currentPromotionObj.type == 'MQ' && !nowGoods.cancelSelected){
+            allPromotion[currentPromotionObj.currentPromotionNo].qty -= nowGoods.realQty
+            allPromotion = this.isSatisfyPromotion(allPromotion) 
+          }
 
+          
           goods.data[index].currentPromotionNo = currentPromotionNo
           goods.data[index].currentPromotionType = currentPromotionType
         }
       })
-      // this.addCurrentSelectedPromotion(goods)
-      this.setData({ goods, currentPromotion })
+
+      toast('已切换')
+      this.setData({ goods, currentPromotion, allPromotion })
       console.log(goods, currentPromotion)
     },
     // 显示促销 Dialog
@@ -575,6 +585,10 @@ Component({
               // t.currentPromotionNo == item.currentPromotionNo 
               item.currentPromotionNo.includes('BG') 
               || item.currentPromotionNo.includes('SD') 
+              || item.currentPromotionNo.includes('MS')
+              || item.currentPromotionNo.includes('FS')
+              || item.currentPromotionNo.includes('SD')
+              || item.currentPromotionNo.includes('ZK')
               || item.currentPromotionNo.includes('MS')
             ) backSign = 'return'   
           })
