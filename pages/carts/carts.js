@@ -29,6 +29,7 @@ Page({
         hideLoading()
         let obj = { pageLoading: true}
         if (ret.code == 0 ) {
+          console.log(JSON.parse(JSON.stringify(ret)))
           let list = ret.data||[]
           let cartsList = []
           let cartsObj = {}
@@ -60,6 +61,7 @@ Page({
           obj.cartsObj = cartsObj
         }
         this.setData(obj)
+        console.log(obj)
       }
     })
   },

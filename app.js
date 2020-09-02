@@ -38,7 +38,8 @@ App({
     zhGoodsUrl: '', // 组合商品图片 
     indexImgUrl: '', // 首页活动图
     userObj: '',
-    phoneType:'',// 手机系统
+    phoneType:'', // 手机系统
+    // goodsData: {} // 新版购物车的数据对象OBJ
   },
   editData (key ,val) {
     this.setData({

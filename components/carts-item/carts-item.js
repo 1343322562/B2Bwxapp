@@ -884,6 +884,7 @@ Component({
     // console.log('jsongoodsData', JSON.parse(JSON.stringify(goodsData)))
     // this.getAllPromotion(goodsData) // 获取所有促销信息
     goodsData = this.addCurrentSelectedPromotion(goodsData) // 首次加载时，添加当前所选择的促销字段
+    console.log('goodsData', goodsData)
     // console.log(this)
     this.getAllPromotions(goodsData) // 处理所有促销(直配)
     // console.log('这是 goods(cars-item):', goodsData)
