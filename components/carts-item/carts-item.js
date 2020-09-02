@@ -18,7 +18,7 @@ Component({
     selectNum: 0,
     selectTypeNum: 0,
     partnerCode: app.data.partnerCode,
-    currentPromotion: ["NO"], // 当前所选择的促销 
+    currentPromotion: ["NO"], // 当前所选择的促销
     allPromotion: {}, // 所有促销
     transDateObj: {
       isShow: false,
@@ -49,18 +49,48 @@ Component({
             currentPromotionType = goods.cartsType == 'cw' ? currentPromotionNo.slice(0, 2) : currentPromotionNo.slice(0, 3)
 
       goods.data.forEach((item, index) => {
-        if(itemNo == item.itemNo) {
-          let isAddType = true // 是否添加新的商品类型
-          currentPromotion.forEach(t => {
-            if (
-              currentPromotionType == 'BG' 
-              || currentPromotionType == 'MS' 
-              || currentPromotionType == 'SD' 
-              || t == currentPromotionType
-            ) isAddType = false
-            if (!isAddType) t.num += 1 
+        // currentPromotion.forEach(t => {
+        //   if (item['currentPromotionNo'] == t['currentPromotionNo']) {
+
+        //   }
+        // })
+        if(item['currentPromotionNo'] && itemNo == item.itemNo) {
+          console.log('gooditem', item)
+          let currentPromotionObj = {}
+          let currentPromotionIndex
+          let isPromotion = true // 是否添加新促销类型
+          currentPromotion.forEach((t, i) => {
+            // console.log(t['currentPromotionNo'], currentPromotionNo, currentPromotionNo == t['currentPromotionNo'])
+            console.log('切换前判断', item['currentPromotionNo'] == t['currentPromotionNo'])
+            if (item['currentPromotionNo'] == t['currentPromotionNo']) {
+              currentPromotionObj = t       // 切换前的促销对象
+              currentPromotionIndex = i // 切换前的促销对象下标
+            }
+            if (currentPromotionNo == t['currentPromotionNo']) {
+              isPromotion = false;
+              t.typeNum += 1
+            }
+            console.log(isPromotion)
           })
-          if (isAddType)  currentPromotion.unshift({type: currentPromotionType, currentPromotionNo, num:1})
+          console.log(currentPromotionNo, isPromotion)
+          // console.log(currentPromotionObj, currentPromotionIndex)
+          console.log(currentPromotion, isPromotion, currentPromotionObj['type'])
+          if (isPromotion && currentPromotionType != 'BG') {
+            currentPromotion.unshift({type: currentPromotionType, currentPromotionNo, typeNum:1});
+            currentPromotionIndex++
+          }
+          /* 
+           * 切换前促销对象数量种类 == 1 ; 则删除此促销单据对象
+           * 数量种类 > 1 ;则此单据促销对象数量 - 1
+           */
+          if (currentPromotionObj.typeNum == 1) {
+            currentPromotion.splice(currentPromotionIndex, 1)
+          } else if (currentPromotionObj.typeNum > 1){
+            currentPromotion[currentPromotionIndex].typeNum -= 1
+          }
+          console.log(currentPromotion)
+          console.log(currentPromotionObj, currentPromotionIndex)
+
           goods.data[index].currentPromotionNo = currentPromotionNo
           goods.data[index].currentPromotionType = currentPromotionType
         }
