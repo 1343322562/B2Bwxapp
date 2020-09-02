@@ -75,7 +75,12 @@ Component({
           console.log(currentPromotionNo, isPromotion)
           // console.log(currentPromotionObj, currentPromotionIndex)
           console.log(currentPromotion, isPromotion, currentPromotionObj['type'])
-          if (isPromotion && currentPromotionType != 'BG') {
+          if (
+            isPromotion 
+            && currentPromotionType != 'BG'
+            && currentPromotionType != 'MS'
+            && currentPromotionType != 'SD'
+          ) {
             currentPromotion.unshift({type: currentPromotionType, currentPromotionNo, typeNum:1});
             currentPromotionIndex++
           }
