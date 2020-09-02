@@ -1,4 +1,4 @@
-// components/select-promotiom/select-promotion.js
+import { toast } from '../../tool/index.js'
 Component({
   /**
    * 组件的属性列表
@@ -13,14 +13,14 @@ Component({
     isShow: false,
     data: {},   // 选择框数据
     itemNo: '', // 商品编号
-    good: ''   
+    promotionNo: '' // 当前所选促销
   },
 
   /**
    * 组件的方法列表
    */
   attached(){
-    console.log(this.data.data)
+    console.log(this.data)
   },
   methods: {
     close() { this.setData({ isShow: false }) },    // 关闭促销选择框
@@ -39,14 +39,14 @@ Component({
             
     },
     onParentEvent(e){
-      const promotionNo = e.currentTarget.dataset.promotion,
-            itemNo = this.data.itemNo,
-            pages = getCurrentPages(),
-            currentPageObj = pages[pages.length-1],
-            type = this.data.type
-      this.triggerEvent('switchPromotiom', {itemNo, currentPromotionNo: promotionNo})
-      console.log(currentPageObj, itemNo, promotionNo)
+      const currentPromotionNo = e.currentTarget.dataset.promotion // 当前所选促销号
+      const { itemNo, promotionNo } = this.data
+      if (currentPromotionNo == promotionNo) return toast('请勿选择相同促销')
+            // type = this.data.type
+      this.triggerEvent('switchPromotiom', { itemNo, currentPromotionNo })
+      console.log(itemNo, promotionNo)
       console.log(this)
+      this.close()
     }
   }
 })

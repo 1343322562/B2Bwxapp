@@ -150,6 +150,7 @@
               wx:if="{{goods.promotionCollectionsArr.length>1}}"
               data-promotionNoArr="{{goods.promotionCollectionsArr}}"
               data-itemNo="{{goods.itemNo}}"
+              data-cpnPromotionNo="{{goods.currentPromotionNo}}"
             >
               换促销
             </view> 

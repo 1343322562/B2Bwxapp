@@ -1,4 +1,4 @@
-import { toast, alert, setFilterDataSize, goPage, showLoading, hideLoading, getGoodsImgSize, MsAndDrCount, getGoodsTag } from '../../tool/index.js'
+import { toast, alert, filterArr, setFilterDataSize, goPage, showLoading, hideLoading, getGoodsImgSize, MsAndDrCount, getGoodsTag } from '../../tool/index.js'
 import dispatch from '../../store/actions.js'
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
@@ -40,6 +40,7 @@ Component({
 
       return { nowH, nowM, startH, startM, endH, endM }
     },
+    // 换促销子组件绑定事件
     onParentEvent(e) {
       console.log(e)
       const { currentPromotionNo, itemNo } = e.detail,
@@ -47,7 +48,6 @@ Component({
             currentPromotion = this.data.currentPromotion,
             currentPromotionType = goods.cartsType == 'cw' ? currentPromotionNo.slice(0, 2) : currentPromotionNo.slice(0, 3)
 
-      
       goods.data.forEach((item, index) => {
         if(itemNo == item.itemNo) {
           let isAddType = true // 是否添加新的商品类型
@@ -77,7 +77,7 @@ Component({
       cpnObj.showClick()
       // 数据对象处理
       const promotionNoArr = e.currentTarget.dataset.promotionnoarr,
-            promotionNo = promotionNoArr[0],
+            promotionNo = e.currentTarget.dataset.cpnpromotionno,
             allPromotion = this.data.allPromotion,
             itemNo = e.currentTarget.dataset.itemno
       let promotionNoObj = {},
@@ -85,10 +85,11 @@ Component({
       promotionNoArr.forEach((item, index) => {
         promotionNoObj[item] = allPromotion[item]
       })
-      cpnObj.setData({ data: promotionNoObj, itemNo, goods })
-      console.log(promotionNoArr, promotionNo, this.data.allPromotion)
-      console.log('promotionDialogObj', promotionNoObj)
-      console.log('type', goods)
+      // console.log(promotionNo)
+      cpnObj.setData({ data: promotionNoObj, itemNo, goods, promotionNo })
+      // console.log(promotionNoArr, promotionNo, this.data.allPromotion)
+      // console.log('promotionDialogObj', promotionNoObj)
+      // console.log('type', goods)
     },
     // 跳转凑单页 
     goAddGoodsClick(e) {
@@ -519,23 +520,25 @@ Component({
       const sourceType = Number(goodsData.sourceType)  // 0: 统配, 1: 直配
 
       goodsData.data.forEach((item, i) => {
-        if (item['currentPromotionNo']) return
+        // if (item['currentPromotionNo']) return
         // 首次加载，默认选第一个促销
         if (item['promotionCollections']) {
-          if (item['promotionCollections'].indexOf(',')) {
-            item['promotionCollectionsArr'] = item['promotionCollections'].split(',')
-          } else if (item['promotionCollections'] == '') {
-            item['promotionCollectionsArr'] = [item['promotionCollections']]
+          if (!item['currentPromotionNo']) {
+            if (item['promotionCollections'].indexOf(',')) {
+              item['promotionCollectionsArr'] = item['promotionCollections'].split(',')
+            } else if (item['promotionCollections'] == '') {
+              item['promotionCollectionsArr'] = [item['promotionCollections']]
+            }
+            
+            item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
           }
-          
-          item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
           
           // 不参与促销计算
           let backSign
           currentPromotion.length && currentPromotion.forEach((t, index) => {
             if (
-              t.currentPromotionNo == item.currentPromotionNo 
-              || item.currentPromotionNo.includes('BG') 
+              // t.currentPromotionNo == item.currentPromotionNo 
+              item.currentPromotionNo.includes('BG') 
               || item.currentPromotionNo.includes('SD') 
               || item.currentPromotionNo.includes('MS')
             ) backSign = 'return'   
@@ -544,15 +547,16 @@ Component({
           let promoObj = {
             currentPromotionNo: '', // 编号
             type: '',               // 促销类型
-            num: 0                  // 商品种类数量
+            typeNum: 0              // 商品种类数量
           } 
+          console.log(promoObj)
           switch(sourceType) { // 0: 统配, 1: 直配
             case 0:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
+              if (item['currentPromotionType'] =='MJ') console.log(item,  promoObj.typeNum)
               if (backSign == 'return') return   // 不保留重复的单据,并过滤无需凑单的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 2)
               promoObj.currentPromotionNo = item['currentPromotionNo']
-              promoObj.num += 1 
               currentPromotion.unshift(promoObj)
               break;
             case 1:
@@ -560,7 +564,6 @@ Component({
               if (backSign == 'return') return   // 不保留重复的单据, 并过滤无需凑单的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 3)
               promoObj.currentPromotionNo = item['currentPromotionNo']
-              promoObj.num += 1 
               currentPromotion.unshift(promoObj)
               break;
           }
@@ -568,6 +571,17 @@ Component({
       })
       // console.log('currentPromotion', currentPromotion)
       // console.log('addCurrentSelectedPromotion', goodsData)
+      
+      // 计算每个单据的类别数量, 并去除了重复单据
+      currentPromotion.forEach(item => {
+        if (item == 'NO') return
+        currentPromotion.forEach(t => {
+          if (t == 'NO') return
+          if (t.currentPromotionNo == item.currentPromotionNo) item.typeNum++
+        })
+      })
+      currentPromotion = filterArr(currentPromotion)
+      console.log(currentPromotion)
 
       this.data.currentPromotion = currentPromotion
       this.data.currentPromotionNo = currentPromotionNo
