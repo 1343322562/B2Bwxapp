@@ -244,6 +244,14 @@ const actions = {
       return 0 // 没达到限购值
     }
   },
+  // 增加(改变)当前促销至购物车中
+  [types.CHANGE_CPROMOTION_CARTS](param) { // goods
+    let { itemNo, currentPromotionNo, promotionCollections } = param.goods
+    let cartsObj = commit[types.GET_CARTS]()
+    cartsObj[itemNo].currentPromotionNo = currentPromotionNo
+    commit[types.SAVE_CARTS](cartsObj) // 缓存 cartsObj
+  },
+
   [types.CHANGE_CARTS](param, cartsObjs = 0) { // add delete minus； cartsObj 为促销信息，主要用来实现直配的限时促销，达到限购值，停止加购
     console.log(param)
   // 直配中商品数量若满足限时促销中的 限购值，则停止加购
@@ -256,6 +264,7 @@ const actions = {
       return 
     }
     let cartsObj = commit[types.GET_CARTS]()
+    console.log(JSON.parse(JSON.stringify(cartsObj)))
     if (cartsObj.keyArr.length>=300){
       toast('购物车已达到最大商品数量!')
       return
@@ -272,8 +281,11 @@ const actions = {
       orgiPrice = 0,
       specType = '0',
       isBind = '0',
-      parentItemNo
+      parentItemNo,
+      currentPromotionNo,
+      promotionCollections
     } = param.goods
+    currentPromotionNo || (currentPromotionNo = promotionCollections && promotionCollections.length > 0 && promotionCollections.slice(0, 18))
     stockQty || (stockQty=0)
     maxSupplyQty || (maxSupplyQty = 9999)
     minSupplyQty || (minSupplyQty = 1)
@@ -309,7 +321,8 @@ const actions = {
         branchNo: branchNo,
         sourceType: sourceType,
         sourceNo: sourceNo,
-        parentItemNo: parentItemNo
+        parentItemNo: parentItemNo,
+        currentPromotionNo: cartsObj[itemNo].currentPromotionNo || currentPromotionNo
       }
       if (param.type == 'input') {
         let num2 = param.value - minSupplyQty;
@@ -363,8 +376,11 @@ const actions = {
           if (res.code == 0 && res.data) {
             res.data.forEach(config => {
               config.datas.forEach(goods => {
-                const itemNo = goods.itemNo
+                const itemNo = goods.itemNo,
+                      currentPromotionNo = (`${itemNo}` in cartsObj && cartsObj[itemNo].currentPromotionNo) || goods.currentPromotionNo || goods.promotionCollections.slice(0, 18)
                 newCartsObj.keyArr.push(itemNo)
+                console.log(cartsObj, goods)
+                console.log(cartsObj.itemNo)
                 newCartsObj[itemNo] = {
                   itemNo: itemNo,
                   realQty: goods.realQty,
@@ -374,11 +390,13 @@ const actions = {
                   branchNo: config.branchNo,
                   sourceType: config.sourceType,
                   sourceNo: config.sourceNo,
-                  parentItemNo: goods.parentItemNo
+                  parentItemNo: goods.parentItemNo,
+                  currentPromotionNo
                 }
                 newCartsObj.num += goods.realQty
               })
             })
+            console.log(newCartsObj)
             commit[types.SAVE_CARTS](newCartsObj)
             wx.setStorage({ key: 'updateCarts', data: false })
             wx.setStorage({ key: 'updateCartsTime', data: +new Date() })
@@ -388,6 +406,7 @@ const actions = {
             newCartsObj = cartsObj
             if (res.code == 0) wx.setStorage({ key: 'updateCarts', data: true })
           }
+          console.log(param.format, Boolean(param.format))
           param.success(param.format ? newCartsObj : res )
         },
         error: () => {

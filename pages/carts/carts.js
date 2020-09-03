@@ -2,6 +2,7 @@ import { showLoading, hideLoading, getGoodsImgSize, getGoodsTag } from '../../to
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
+import commit from '../../store/mutations.js'
 Page({
   data: {
     // promotionDialogObj: [], // 换促销数据
@@ -25,6 +26,7 @@ Page({
     const promotionObj = wx.getStorageSync('allPromotion')
     dispatch[types.GET_CHANGE_CARTS]({
       success: (ret) => {
+        console.log(ret)
         wx.stopPullDownRefresh()
         hideLoading()
         let obj = { pageLoading: true}
@@ -33,6 +35,8 @@ Page({
           let list = ret.data||[]
           let cartsList = []
           let cartsObj = {}
+          let S_cartObj = commit[types.GET_CARTS]()
+          console.log(S_cartObj)
           list.forEach(config => {
             config.datas.forEach(goods => {
               const type = config.sourceType == '0' ? (goods.stockType == '0' ? 'cw' : 'dw') : config.sourceNo
@@ -51,6 +55,7 @@ Page({
                 }
               }
               goods.carstBasePrice =  goods.orgiPrice
+              goods.currentPromotionNo = S_cartObj[goods.itemNo].currentPromotionNo || ''
               const tag = getGoodsTag(goods, promotionObj,true)
               goods = Object.assign(goods, tag)
               goods.goodsImgUrl = (config.sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl): zcGoodsUrl) + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)

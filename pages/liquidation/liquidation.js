@@ -1,5 +1,6 @@
 import { showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, toast, alert, getTime,goPage } from '../../tool/index.js'
 import API from '../../api/index.js'
+// import commit from '../../store/mutations.js'
 Page({
   data: {
     goodsList: [], // 商品列表
@@ -33,6 +34,7 @@ Page({
     ],
     isUseBlendWay: false, // 是否使用混合支付
     payWay: '', // 支付方式 0货到付款 1在线支付 2储值支付 4混合支付
+    allPromotion: {} // 促销单据满足情况对象
   },
   // 设置备注
   getMemo (e) {
@@ -248,6 +250,9 @@ Page({
     
     console.log(this.data.goodsList)
     const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = this.userObj
+    // const cartsObj = commit[types.GET_CARTS]()
+    const allPromotion = this.data.allPromotion
+    console.log('allPromotion',allPromotion)
     API.Liquidation.getSettlementPromotion({
       data: { branchNo, token, platform, username, dbranchNo, data: itemList },
       success: res => {
@@ -257,10 +262,11 @@ Page({
           let giftList = []
           let mjList = []
           res.data.forEach(item => {
+            const promoNo = item.promotionSheetNo
             const type = item.promotionType
-            if (type == 'MJ') {
+            if (type == 'MJ' && allPromotion[promoNo].pInfo == '已满足') {
               mjList.push(item)
-            } else if (type == 'SZ') {
+            } else if (type == 'SZ' && allPromotion[promoNo].pInfo == '已满足') {
               let goodsList = this.data.goodsList
               console.log(goodsList, item)
               let data = res.data
@@ -273,7 +279,7 @@ Page({
                   giftList.push(item)
                 }
               })
-            } else if (type == 'MQ') {
+            } else if (type == 'MQ' && allPromotion[promoNo].pInfo == '已满足') {
               mjList.push(item)
               // goodsList.push({ promotionType: type })
             } else if (type == 'BG') {
@@ -304,7 +310,7 @@ Page({
               })
               obj.BGnum = BGnum
               obj.goodsList = goodsList
-            } else if (type == 'BF') {
+            } else if (type == 'BF' && allPromotion[promoNo].pInfo == '已满足') {
               giftList.push(item)
             }
             
@@ -683,7 +689,8 @@ Page({
   onLoad (opt) {
     const partnerCode = getApp().data.partnerCode
     if (partnerCode == 1052) wx.setNavigationBarColor({ backgroundColor: '#e6c210', frontColor: '#ffffff' })
-
+    this.data.allPromotion = JSON.parse(opt.allPromotion)
+    console.log(opt, JSON.parse(opt.allPromotion))
     const obj = wx.getStorageSync('liquidationObj')
     this.promotionObj = wx.getStorageSync('allPromotion')
     this.userObj = wx.getStorageSync('userObj')
