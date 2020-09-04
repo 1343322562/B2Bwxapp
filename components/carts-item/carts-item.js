@@ -457,21 +457,40 @@ Component({
       const allPromotion = this.data.allPromotion
       const isAllPromotion = Object.keys(allPromotion).length // 长度为 0 则无促销单据
       switch(isSelectAll) {
-        case true:
+        case true: // 全选
           for(let key in allPromotion) {
             let selectPrice = 0 // 全选时,促销单据的商品价格
+            let selectQty = 0
             goods.data.forEach(item => {
-              if (key == item['currentPromotionNo'] && item.cancelSelected != true) {
-                selectPrice += item.price * item.realQty
+              if (key == item['currentPromotionNo']) {
+                const type = item['currentPromotionType']
+
+                if (item.cancelSelected != true && (type == 'MJ' || type == 'BF' || type == 'SZ')) {
+                  selectPrice += item.price * item.realQty
+                } else if (type == 'MQ') {
+                  selectQty += item.realQty
+                }
               }
             })
-            allPromotion[key].price = selectPrice
+
+            if (allPromotion[key].promotionNo.includes('MQ')) {
+              allPromotion[key].qty = selectQty
+            } else {
+              allPromotion[key].price = selectPrice
+            }
           }
           break;
-        case false:
+        case false: // 取消全选
           for(let key in allPromotion) {
             const t = allPromotion[key]
-            t.price = 0
+            if('price' in t) t.price = 0
+            if('qty' in t) t.qty = 0
+            
+            // goods.data.forEach(item => {
+            //   if (key == item['currentPromotionNo'] && item['currentPromotionType'] == 'MQ') {
+
+            //   }
+            // })
           }
           break;
       }
