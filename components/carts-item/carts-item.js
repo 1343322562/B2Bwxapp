@@ -96,21 +96,24 @@ Component({
             currentPromotion[currentPromotionIndex].typeNum -= 1
           }
           // console.log(currentPromotion)
-          if (currentPromotionType == 'MQ' && !nowGoods.cancelSelected) {
-            allPromotion[currentPromotionNo].qty += nowGoods.realQty
-            allPromotion = this.isSatisfyPromotion(allPromotion) 
-          } else if (currentPromotionObj.type == 'MQ' && !nowGoods.cancelSelected){
-            allPromotion[currentPromotionObj.currentPromotionNo].qty -= nowGoods.realQty
-            allPromotion = this.isSatisfyPromotion(allPromotion) 
+          if ( !nowGoods.cancelSelected) {
+            if (currentPromotionType == 'MQ') {
+              allPromotion[currentPromotionNo].qty += nowGoods.realQty
+              allPromotion = this.isSatisfyPromotion(allPromotion) 
+            } else if (currentPromotionObj.type == 'MQ'){
+              allPromotion[currentPromotionObj.currentPromotionNo].qty -= nowGoods.realQty
+              allPromotion = this.isSatisfyPromotion(allPromotion) 
+            }
+  
+            if (currentPromotionType == 'SZ' || currentPromotionType == 'BF') {
+              allPromotion[currentPromotionNo].price += nowGoods.price * nowGoods.realQty
+              allPromotion = this.isSatisfyPromotion(allPromotion) 
+            } else if (currentPromotionObj.type == 'SZ' || currentPromotionType == 'BF'){
+              allPromotion[currentPromotionObj.currentPromotionNo].price -= nowGoods.price * nowGoods.realQty
+              allPromotion = this.isSatisfyPromotion(allPromotion) 
+            }
           }
-
-          if (currentPromotionType == 'SZ' && !nowGoods.cancelSelected) {
-            allPromotion[currentPromotionNo].price += nowGoods.price * nowGoods.realQty
-            allPromotion = this.isSatisfyPromotion(allPromotion) 
-          } else if (currentPromotionObj.type == 'SZ' && !nowGoods.cancelSelected){
-            allPromotion[currentPromotionObj.currentPromotionNo].price -= nowGoods.price * nowGoods.realQty
-            allPromotion = this.isSatisfyPromotion(allPromotion) 
-          }
+          
 
           
           goods.data[index].currentPromotionNo = currentPromotionNo
