@@ -105,10 +105,10 @@ Component({
               allPromotion = this.isSatisfyPromotion(allPromotion) 
             }
   
-            if (currentPromotionType == 'SZ' || currentPromotionType == 'BF') {
+            if (currentPromotionType == 'SZ' || currentPromotionType == 'MJ'  || currentPromotionType == 'BF') {
               allPromotion[currentPromotionNo].price += nowGoods.price * nowGoods.realQty
               allPromotion = this.isSatisfyPromotion(allPromotion) 
-            } else if (currentPromotionObj.type == 'SZ' || currentPromotionType == 'BF'){
+            } else if (currentPromotionObj.type == 'SZ'|| currentPromotionObj.type == 'MJ' || currentPromotionObj.type == 'BF'){
               allPromotion[currentPromotionObj.currentPromotionNo].price -= nowGoods.price * nowGoods.realQty
               allPromotion = this.isSatisfyPromotion(allPromotion) 
             }
