@@ -285,7 +285,7 @@ const actions = {
       currentPromotionNo,
       promotionCollections
     } = param.goods
-    currentPromotionNo || (currentPromotionNo = promotionCollections && promotionCollections.length > 0 && promotionCollections.slice(0, 18))
+    // currentPromotionNo || (currentPromotionNo = promotionCollections && promotionCollections.length > 0 && promotionCollections.slice(0, 18))
     stockQty || (stockQty=0)
     maxSupplyQty || (maxSupplyQty = 9999)
     minSupplyQty || (minSupplyQty = 1)
@@ -312,6 +312,10 @@ const actions = {
         String(cartsObj.num).includes('.') && (cartsObj.num = cartsObj.num.toFixed(1))
       }
     } else {
+      console.log(param.goods)
+      console.log(cartsObj, itemNo)
+      console.log(cartsObj[itemNo])
+      // console.log(currentPromotionNo)
       let item = {
         itemNo: itemNo,
         realQty: nowNum,
@@ -322,7 +326,7 @@ const actions = {
         sourceType: sourceType,
         sourceNo: sourceNo,
         parentItemNo: parentItemNo,
-        currentPromotionNo: cartsObj[itemNo].currentPromotionNo || currentPromotionNo
+        currentPromotionNo: (`${itemNo}` in cartsObj && cartsObj[itemNo].currentPromotionNo) || currentPromotionNo || ''
       }
       if (param.type == 'input') {
         let num2 = param.value - minSupplyQty;
@@ -378,6 +382,7 @@ const actions = {
               config.datas.forEach(goods => {
                 const itemNo = goods.itemNo,
                       currentPromotionNo = (`${itemNo}` in cartsObj && cartsObj[itemNo].currentPromotionNo) || goods.currentPromotionNo || goods.promotionCollections.slice(0, 18)
+                console.log(currentPromotionNo)
                 newCartsObj.keyArr.push(itemNo)
                 console.log(cartsObj, goods)
                 console.log(cartsObj.itemNo)

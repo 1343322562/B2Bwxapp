@@ -425,6 +425,7 @@ Component({
         if (promoType == 'MJ' || promoType == 'BF' || promoType == 'SZ') {
           const differPrice = cartsMoney - this.data.cartsMoney
           currentProObj.price = currentProObj.price + differPrice
+          console.log(differPrice, cartsMoney , this.data.cartsMoney)
           currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj}) // 促销信息对象计算处理
           allPromotion = Object.assign(allPromotion, currentProObj)
           console.log(currentProObj)
@@ -512,7 +513,7 @@ Component({
       goods.data[index].cancelSelected = is
       if (is) isSelectAll = false
       this.setData({ goods, isSelectAll })
-      console.log(currentProObj)
+      console.log(JSON.parse(JSON.stringify(currentProObj)))
       this.countMoney(currentProObj)
     },
     changeGoodsNum(e) {
@@ -637,7 +638,7 @@ Component({
             type: '',               // 促销类型
             typeNum: 0              // 商品种类数量
           } 
-          console.log(promoObj)
+          // console.log(promoObj)
           switch(sourceType) { // 0: 统配, 1: 直配
             case 0:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
@@ -657,7 +658,7 @@ Component({
           }
         }
         dispatch[types.CHANGE_CPROMOTION_CARTS]({ goods: item })
-        console.log(item)
+        // console.log(item)
       })
       // console.log('currentPromotion', currentPromotion)
       // console.log('addCurrentSelectedPromotion', goodsData)
@@ -709,14 +710,14 @@ Component({
     },
     // 对所有促销信息进行处理
     allPromotionHandle(res, nowGoods, _this) {
-      // console.log(nowGoods)
       const tag = getGoodsTag(nowGoods, res)
       const itemNo = nowGoods.itemNo
       const brandNo = nowGoods.itemBrandno || nowGoods.itemBrandNo
       const itemClsno = nowGoods.itemClsno
+      console.log(nowGoods)
       let promotionList = []
       let BFpromotionList = []
-      console.log('这是tag SZZZZZZZZZZZZZZZZZZZZZZZZZZZ', tag)
+      // console.log('这是tag SZZZZZZZZZZZZZZZZZZZZZZZZZZZ', tag)
       if (tag.FS || tag.SD || tag.ZK) {
         nowGoods.orgiPrice = nowGoods.price
         nowGoods.price = tag.price
@@ -788,20 +789,25 @@ Component({
       if (tag.MJ) {
         // console.log(tag, 'sadasdass')
         // console.log('nowGoods', nowGoods)
-        // console.log('resMJtag', res.MJ[tag.MJ])
+        // console.log('resMJtag', res.MJ[tag.MJ], res)
         let msg = { name: (tag.MJ == 'fullReduction' ? '全场' : (tag.MJ == 'cls' ? '类别' : (tag.MJ == 'brand' ? '品牌' : '商品'))) + '满减',msg:[]}
         const arr = tag.MJ == 'fullReduction' ? res.MJ[tag.MJ] : res.MJ[tag.MJ][tag.MJ == 'cls' ? itemClsno : (tag.MJ == 'brand' ? brandNo : itemNo)]
+        console.log(arr)
+        msg.promotionNo = _this.addPromotionNo(nowGoods, 'MJ')
         arr.forEach(info => {
           msg.msg.push(info.explain || '满'+info.reachVal +'减'+info.subMoney)
+          console.log('s' , info, nowGoods)
           if (info.sheetNo == nowGoods.currentPromotionNo) {
+            msg.reachVal = info.reachVal
+          }
+          if (msg.promotionNo == info.sheetNo) {
             msg.reachVal = info.reachVal
           }
         })
         msg.msg = [msg.msg.join('，')]
         console.log(tag, 'sadasdass')
-        msg.promotionNo = _this.addPromotionNo(nowGoods, 'MJ')
         promotionList.push(msg)
-        // console.log(msg, 'sadasdass')
+        console.log(msg, 'sadasdass')
       }
       if (tag.BF) {
         const itemNo = nowGoods.itemNo
@@ -854,18 +860,25 @@ Component({
     getAllPromotions(goodsData = this.data.goods) {
       const _this = this
       let allPromotion = _this.data.allPromotion // 所有促销挂载在此对象中，以促销单号作为键名
+      console.log(goodsData)
       dispatch[types.GET_ALL_PROMOTION]({
         success: (res) => {
-          // console.log('res', res)
+          console.log('res', res)
           goodsData.data.forEach(nowGoods => {
+            // console.log(`${nowGoods.itemNo}`, nowGoods)
             const promotionList = _this.allPromotionHandle(res, nowGoods, _this)  
             console.log('promotionList', promotionList)
             promotionList.length && promotionList.forEach((item, index) => {
-              console.log(item)
+              // console.log(item)
               const type = item.promotionNo.slice(0, 2)
-              console.log('allPromotion[item.promotionNo]', allPromotion[item.promotionNo])
+              // console.log('allPromotion[item.promotionNo]', allPromotion, item.promotionNo)
               if (allPromotion[item.promotionNo]) {
-                if (type == 'MJ' || type == 'BF' || type == 'SZ') {
+                if (type == 'MJ') {
+                  // console.log(nowGoods.realQty * nowGoods.orgiPrice, allPromotion[item.promotionNo])
+                  allPromotion[item.promotionNo].price += nowGoods.realQty * nowGoods.orgiPrice
+                } else if (type == 'BF') {
+                  allPromotion[item.promotionNo].price += nowGoods.realQty * nowGoods.orgiPrice
+                } else if (type == 'SZ') {
                   allPromotion[item.promotionNo].price += nowGoods.realQty * nowGoods.orgiPrice
                 } else if (type == 'MQ' && nowGoods.currentPromotionType == 'MQ') {
                   // console.log(item.promotionNo, nowGoods)
@@ -873,15 +886,19 @@ Component({
                 }
               } else {
                 allPromotion[item.promotionNo] = item
-                if (type == 'MJ' || type == 'BF' || type == 'SZ') {
+                if (type == 'MJ') {
+                  allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.orgiPrice
+                } else if (type == 'BF') {
+                  allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.orgiPrice
+                } else if (type == 'SZ') {
                   allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.orgiPrice
                 } else if (type == 'MQ' && nowGoods.currentPromotionType == 'MQ') {
-                  allPromotion[item.promotionNo].qty += nowGoods.realQty
+                  allPromotion[item.promotionNo].qty = nowGoods.realQty
                 }
               }
             })
           })
-          console.log(allPromotion, 'asdadasads78997879978978978978dasads')
+          // console.log(allPromotion, 'asdadasads78997879978978978978dasads')
           allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
           _this.setData({ allPromotion })
         }

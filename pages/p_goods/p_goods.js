@@ -253,6 +253,7 @@ Page({
         sourceNo: dbBranchNo,
         branchNo: branchNo
       }
+      goods.currentPromotionNo = this.data.promotionNo
       const cartsObj = dispatch[types.CHANGE_CARTS]({ goods, type, config })
       if (cartsObj) {
         let obj = { cartsObj: setParentGoodsCartsObj(cartsObj) }
