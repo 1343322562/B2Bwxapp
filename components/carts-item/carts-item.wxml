@@ -98,7 +98,7 @@
 
 </view> -->
 
-<view class="box">
+<view class="box" wx:if="{{goods.data.length}}">
 
   <view class="cartsType">
     <view class="type {{goods.cartsType}}" wx:if="{{partnerCode != 1052}}">
@@ -126,61 +126,65 @@
 
     <view 
       class="li" 
-      wx:if="{{item.currentPromotionNo == goods.currentPromotionNo || (goods.currentPromotionNo == '' && item == 'NO') || (goods.currentPromotionType == 'BG' && item == 'NO') || (goods.currentPromotionType == 'SD' && item == 'NO') || (goods.currentPromotionType == 'MS' && item == 'NO')}}" 
+      wx:if="{{item.currentPromotionNo == good.currentPromotionNo || (good.currentPromotionNo == '' && item == 'NO') || (good.currentPromotionType == 'BG' && item == 'NO') || (good.currentPromotionType == 'SD' && item == 'NO') || (good.currentPromotionType == 'MS' && item == 'NO') || goods.sourceType == 1}}" 
       wx:for="{{goods.data}}" 
-      wx:for-item="goods"  
+      wx:for-item="good"  
       wx:key="index" 
     >
     <!-- {{goods.currentPromotionType}} -->
-      <view class="goods{{leftAnimation?' act':''}}"  data-index="{{index}}" style="left:-{{(goods.goodsLeft||0)}}px" bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" bindtouchcancel="touchend">
-        <view  class="checkbox{{!goods.cancelSelected?' act':''}}" data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}"  bindtap="selectGoods">
+      <view class="goods{{leftAnimation?' act':''}}"  data-index="{{index}}" style="left:-{{(good.goodsLeft||0)}}px" bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" bindtouchcancel="touchend">
+        <view  class="checkbox{{!good.cancelSelected?' act':''}}" data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}"  bindtap="selectGoods">
           <image class="icon" src="../../images/hook.png" />
         </view>
         <view class="img" data-index="{{index}}" bindtap="goGoodsDetails">
-          <image class="icon" src="{{goods.goodsImgUrl}}" />
-          <image wx:if="{{goods.RSD}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image> 
-          <view wx:if="{{goods.enReturnGoods=='0'||goods.isProhibit=='1'}}" class="noReturn">不可退</view>
+          <image class="icon" src="{{good.goodsImgUrl}}" />
+          <image wx:if="{{good.RSD}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image> 
+          <view wx:if="{{good.enReturnGoods=='0'||good.isProhibit=='1'}}" class="noReturn">不可退</view>
         </view>
         <view class="info">
-          <text class="name">{{goods.itemName}}</text>
-          <view class='size'>{{goods.itemSize}} 
+          <text class="name">{{good.itemName}}</text>
+          <view class='size'>{{good.itemSize}} 
             <view 
               class="switchPromotiom" 
               bindtap="showSwitchPromotionDialog" 
-              wx:if="{{goods.promotionCollectionsArr.length>1}}"
-              data-promotionNoArr="{{goods.promotionCollectionsArr}}"
-              data-itemNo="{{goods.itemNo}}"
-              data-cpnPromotionNo="{{goods.currentPromotionNo}}"
+              wx:if="{{good.promotionCollectionsArr.length>1}}"
+              data-promotionNoArr="{{good.promotionCollectionsArr}}"
+              data-itemNo="{{good.itemNo}}"
+              data-cpnPromotionNo="{{good.currentPromotionNo}}"
             >
               换促销
             </view> 
           </view>
           <view class="price">
-            <text class="now">￥{{goods.price}}/{{goods.deliveryUnit}}</text>
-            <text class="before" wx:if="{{goods.orgiPrice!=goods.price}}">￥{{goods.orgiPrice}}</text>
+            <text class="now">￥{{good.price}}/{{good.deliveryUnit}}</text>
+            <text class="before" wx:if="{{good.orgiPrice!=good.price}}">￥{{good.orgiPrice}}</text>
           </view>
           <view class='tag'>
           <!-- 统配 -->
-            <text wx:if="{{goods.currentPromotionType == 'BF'}}">买满赠</text>
-            <text wx:if="{{goods.currentPromotionType == 'FS'}}">首单特价</text>
-            <text wx:if="{{goods.currentPromotionType == 'BG'}}">买赠</text>
-            <text wx:if="{{goods.currentPromotionType == 'SD'}}">单日限购</text>
-            <text wx:if="{{goods.currentPromotionType == 'MQ'}}">数量满减</text>
-            <text wx:if="{{goods.currentPromotionType == 'SZ'}}">首赠</text> 
-            <text wx:if="{{goods.currentPromotionType == 'MJ'}}">满减</text>
-            <text wx:if="{{goods.currentPromotionType == 'MS'}}">秒杀</text>
-            <text wx:if="{{goods.currentPromotionType.ZK}}">{{goods.discount}}</text>
+            <text wx:if="{{good.currentPromotionType == 'BF'}}">买满赠</text>
+            <text wx:if="{{good.currentPromotionType == 'FS'}}">首单特价</text>
+            <text wx:if="{{good.currentPromotionType == 'BG'}}">买赠</text>
+            <text wx:if="{{good.currentPromotionType == 'SD'}}">单日限购</text>
+            <text wx:if="{{good.currentPromotionType == 'MQ'}}">数量满减</text>
+            <text wx:if="{{good.currentPromotionType == 'SZ'}}">首赠</text> 
+            <text wx:if="{{good.currentPromotionType == 'MJ'}}">满减</text>
+            <text wx:if="{{good.currentPromotionType == 'MS'}}">秒杀</text>
+            <text wx:if="{{good.currentPromotionType.ZK}}">{{good.discount}}</text>
           <!-- 直配 -->
-          <text wx:if="{{goods.RBF}}">买满赠</text>
-          <text wx:if="{{goods.RMJ}}">满减</text>
-          <text wx:if="{{goods.RSD}}">限时促销</text>
-            <!-- <text>{{(goods.enReturnGoods=='0'||goods.isProhibit=='1')?'不可退':'可退'}}</text> -->
+          <!-- <text wx:if="{{good.RBF}}">买满赠</text>
+          <text wx:if="{{good.RMJ}}">满减</text>
+          <text wx:if="{{good.RSD}}">限时促销</text> -->
+          
+          <text wx:if="{{good.currentPromotionType == 'RBF'}}">买满赠</text>
+          <text wx:if="{{good.currentPromotionType == 'RMJ'}}">满减</text>
+          <text wx:if="{{good.currentPromotionType == 'RSD'}}">限时促销</text>
+            <!-- <text>{{(good.enReturnGoods=='0'||good.isProhibit=='1')?'不可退':'可退'}}</text> -->
           </view>
         </view>
         <view class='btn'>
           <view class='minus item' catchtap='changeGoodsNum' data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}" data-type="minus"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_sub.png':'../../images/goodsList_minus_carts.png'}}" /></view>
-          <!-- <text class='num'>{{goods.realQty}}</text> -->
-          <input class='num' data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}" type="number" bindblur="inputConfirm"  value="{{goods.realQty}}" />
+          <!-- <text class='num'>{{good.realQty}}</text> -->
+          <input class='num' data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}" type="number" bindblur="inputConfirm"  value="{{good.realQty}}" />
           <!-- <view class='add item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'':'Null')+'.png'}}" /></view> -->
           <view class='add item' catchtap='changeGoodsNum' data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'Null':'')+'.png'}}" /></view>
         </view>

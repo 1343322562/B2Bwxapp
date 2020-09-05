@@ -104,6 +104,8 @@ const actions = {
                 }
               } else if (i == 'SZ') {
                 console.log(10)
+                console.log(item)
+                console.log(list)
                 item.map((i, index)  => {
                   if('reachVal' in i) obj.SZ['giftInfo'].push(i.reachVal)  // SZ 信息
                   let giftQty = i.giftListQty.slice(0 ,i.giftListQty.indexOf('.'))

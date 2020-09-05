@@ -127,9 +127,9 @@
           </view>
           <!-- 直配促销信息 -->
           <view class='tag'>
-            <text wx:if="{{goods.RBF}}">买满赠</text>
-            <text wx:if="{{goods.RMJ}}">满减</text>
-            <text wx:if="{{goods.RSD}}">限时促销</text>
+            <text wx:if="{{goods.currentPromotionType == 'RBF'}}">买满赠</text>
+            <text wx:if="{{goods.currentPromotionType == 'RMJ'}}">满减</text>
+            <text wx:if="{{goods.currentPromotionType == 'RSD'}}">限时促销</text>
           </view>
         </view>
         <view class='size' wx:if="{{goods.deliveryUnit}}">单位:{{goods.deliveryUnit}}</view>

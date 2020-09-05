@@ -150,10 +150,12 @@ Page({
   },
   // 处理 直配促销页面渲染信息
   getSupplierPromotion(goods){
+    console.log(goods)
     let { branchNo, token, platform, username } = wx.getStorageSync('userObj')
     API.Public.getSupplierAllPromotion({
       data: { branchNo, token, platform, username, supplierNo: this.supcustNo },
       success: res => {
+        console.log(res)
         let data = res.data
         if (res.code == 0 && res.data) {
           let promoList = this.data.promotionList
@@ -196,6 +198,7 @@ Page({
             let endDate = goods.todayPromotion.endDate.slice(0, 10)
             promoList.push({ name: '限时促销', msg: ['活动时间: ' + startDate + ' 至 ' + endDate] })
           }
+          console.log(promoList)
           this.setData({
             promotionList: promoList
           })

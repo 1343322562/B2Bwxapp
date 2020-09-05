@@ -215,6 +215,8 @@ Page({
   // 直配 满减满赠 数据获取(itemList: 支付商品信息,supplier：入驻商编号)
   getSupplierMjMz(itemList, supplierNo) {
     console.log("mjList:", itemList)
+    console.log(218 ,this.data.goodsList)
+    let goodsList = this.data.goodsList
     const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = this.userObj
     API.Liquidation.getSupplierSettlementPromotion({
       data:{ branchNo, token, username, platform, supplierNo, dbranchNo, data: itemList },
@@ -224,15 +226,18 @@ Page({
           let obj = {}
           let giftList = []
           let mjList = []
-          res.data.forEach(item => {
-            const type = item.promotionType
-            // 满赠 || 满减 数据对象赋值
-            if (type == 'RMJ') {
-              mjList.push(item)
-            } else if ( type == 'RBF') {
-              giftList.push(item)
-            }
+          goodsList.forEach(t => {
+            res.data.forEach(item => {
+              const type = item.promotionType
+              // 满赠 || 满减 数据对象赋值
+              if (type == 'RMJ' && t['currentPromotionType'] == 'RMJ') {
+                mjList.push(item)
+              } else if ( type == 'RBF' && t['currentPromotionType'] == 'RBF') {
+                giftList.push(item)
+              }
+            })
           })
+          
           this.baseMj = mjList // 挂载满减信息对象
           obj.giftList = giftList
           this.setData(obj)
