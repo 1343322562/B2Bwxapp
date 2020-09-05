@@ -436,7 +436,7 @@ Component({
         supcustNo: cartsObj.cartsType == 'sup' ? cartsObj.sourceNo:''
       })
     },
-    countMoney(currentProObj, is) {
+    countMoney(currentProObj) {
       let cartsMoney = 0
       let selectNum = 0
       let selectTypeNum = 0
