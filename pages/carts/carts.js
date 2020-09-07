@@ -55,7 +55,9 @@ Page({
                 }
               }
               goods.carstBasePrice =  goods.orgiPrice
-              goods.currentPromotionNo = S_cartObj[goods.itemNo].currentPromotionNo || ''
+              goods.currentPromotionNo = S_cartObj[goods.itemNo].currentPromotionNo || '' 
+              goods.currentPromotionType = config.sourceType == 0 ? goods.currentPromotionNo.slice(0, 2) : goods.currentPromotionNo.slice(0, 3) 
+              goods.promotionCollectionsArr = goods.promotionCollections.includes(',') ?  goods.promotionCollections.split(',') : [goods.promotionCollections]
               const tag = getGoodsTag(goods, promotionObj,true)
               goods = Object.assign(goods, tag)
               goods.goodsImgUrl = (config.sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl): zcGoodsUrl) + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
@@ -107,10 +109,12 @@ Page({
     this.getCartsData()
   },
   onPullDownRefresh() {
-    this.refreshCarts()
-    const cpn = this.selectComponent('.carts-items')
-    console.log(cpn)
-    cpn.attached()
+    // this.refreshCarts()
+    const cpn = this.selectAllComponents('.carts-items')
+    // 刷新组件
+    cpn.forEach(item => {
+      console.log(item.pullUpdata())
+    })
     // this.onLoad()
     // this.onShow()
   },

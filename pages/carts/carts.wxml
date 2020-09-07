@@ -1,6 +1,6 @@
 <block wx:if="{{pageLoading}}">
   <block wx:for="{{cartsList}}" wx:key="index">
-    <carts-item  isReplenish="{{replenish[item]}}" type="{{cartsObj[item].cartsType}}" binddeleteCarts="deleteCarts" goods="{{cartsObj[item]}}"  bindrefreshCarts="refreshCarts" />
+    <carts-item class="carts-items"  isReplenish="{{replenish[item]}}" type="{{cartsObj[item].cartsType}}" binddeleteCarts="deleteCarts" goods="{{cartsObj[item]}}"  bindrefreshCarts="refreshCarts" />
   </block>
   <view class="cartsNull" wx:if="{{!cartsList.length}}">
     <image mode="widthFix" src="../../images/carts-null.png"/>

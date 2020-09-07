@@ -463,7 +463,7 @@ Component({
       })
 
       // 若是有促销单据，计算商品是否满足促销条件， 并修改当前差异价格
-      console.log('currentProObj444', currentProObj)
+      console.log('currentProObj444', deepCopy(currentProObj))
       if (currentProObj) {
         const promoType = this.sourceType == 0 ? currentProObj.promotionNo.slice(0, 2) : currentProObj.promotionNo.slice(0, 3),
               promotionNo = currentProObj['promotionNo']
@@ -475,13 +475,16 @@ Component({
           console.log(deepCopy(currentProObj))
           currentProObj.price = currentProObj.price + differPrice
           console.log(differPrice, cartsMoney , this.data.cartsMoney)
-          currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj}) // 促销信息对象计算处理
+          // currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj}) // 促销信息对象计算处理
+          console.log(deepCopy(currentProObj) , deepCopy(allPromotion))
+          if (currentProObj.price <= 0) return delete allPromotion[currentProObj.promotionNo]
           allPromotion = Object.assign(allPromotion, currentProObj)
           // console.log(currentProObj)
         } else if (promoType == 'MQ') {
           const differQty = selectNum - this.data.selectNum
           currentProObj.qty = currentProObj.qty + differQty
-          currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj }) // 促销信息对象计算处理
+          // currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj }) // 促销信息对象计算处理
+          if (currentProObj.qty <= 0) return delete allPromotion[currentProObj.promotionNo]
           allPromotion = Object.assign(allPromotion, currentProObj)
           // console.log(currentProObj)
         }
@@ -570,6 +573,8 @@ Component({
       const currentPromotionNo = e.currentTarget.dataset.currentpromotionno
       const allPromotion = this.data.allPromotion
       const currentProObj = allPromotion[currentPromotionNo]
+      const currentPromotion = this.data.currentPromotion
+      console.log(577, currentPromotion, currentPromotion)
       const index = e.currentTarget.dataset.index
       const type = e.currentTarget.dataset.type
       let cartsObj = this.data.goods
@@ -591,7 +596,7 @@ Component({
               dispatch[types.CHANGE_CARTS]({ goods, type, config })
               if (cartsObj.data.length) {
                 this.setData({ goods: cartsObj })
-                this.countMoney(currentProObj)
+                this.countMoney(currentProObj, type)
               } else {
                 this.triggerEvent('deleteCarts', cartsObj.type)
               }
@@ -1021,9 +1026,11 @@ Component({
           success(res) {
             console.log(1000, res)
             goodsData.data.forEach(nowGoods => {
+              nowGoods.cancelSelected = false
               const suplierPromotionList = _this.suplierPromotionHandle(res, nowGoods)
-              console.log(999, nowGoods)
+              console.log(999, nowGoods, deepCopy(allPromotion))
               suplierPromotionList.length && suplierPromotionList.forEach((item) => {
+                console.log(1028,deepCopy(item))
                 const type = item.promotionNo.slice(0, 3)
 
                 if (allPromotion[item.promotionNo]) {
@@ -1046,8 +1053,9 @@ Component({
                 }
               })
               allPromotion = _this.isSatisfyPromotion(allPromotion)
-              console.log(948 ,allPromotion)
-              _this.setData({ allPromotion })
+              console.log(948 ,deepCopy(allPromotion))
+              _this.setData({ allPromotion, goods: goodsData })
+              _this.countMoney() // 计算购物车金额, 防止下拉刷新时获取不到最近的购物车金额
             })
           }
         })
@@ -1086,10 +1094,56 @@ Component({
         }
       }
       return allPromotion
+    },
+    
+    // 下拉刷新
+    pullUpdata() {
+      // console.log(this)
+      // setTimeout(() => console.log(this), 1200)
+      this.countMoney()
+      this.getCommonSetting() // 获取送货开始和结束时间
+      const { ww } = getApp().data
+      this.ww = ww
+      let goodsData = this.data.goods
+      this.sourceType = goodsData.sourceType
+      // console.log('jsongoodsData', JSON.parse(JSON.stringify(goodsData)))
+      // this.getAllPromotion(goodsData) // 获取所有促销信息
+      goodsData = this.addCurrentSelectedPromotion(goodsData) // 首次加载时，添加当前所选择的促销字段
+      console.log('goodsData', goodsData)
+      // console.log(this)
+      // console.log('这是 goods(cars-item):', goodsData)
+      // if (goodsData.sourceType == 1) {
+      //   // let supplierPromotion = wx.getStorageSync('supplierPromotion')
+      //   let supplierPromotion = ''
+      //   // 缓存中无直配促销信息，请求促销接口。有促销信息则直接使用
+      //   if (!supplierPromotion) {
+      //     const { branchNo, token, platform, username } = wx.getStorageSync('userObj')
+      //     this.getSupplierAllPromotion(branchNo, token, platform, username, goodsData)
+      //   } else {
+      //     goodsData.data.forEach(item => { // 商品对象中 添加促销信息
+      //       if ('promotionCollections' in item && item.promotionCollections.includes('RMJ')) item['RMJ'] = '满减商品'
+      //       if ('promotionCollections' in item && item.promotionCollections.includes('RBF')) item['RBF'] = '满赠商品'
+      //       if ('promotionCollections' in item && item.promotionCollections.includes('RSD')) item['RSD'] = '限时抢购'
+      //       // 直配限时购买信息
+      //       for (let key in supplierPromotion) {
+      //         if (item['itemNo'] == key) {
+      //           supplierPromotion[key].startDate = supplierPromotion[key].startDate.slice(0, 10)
+      //           supplierPromotion[key].endDate = supplierPromotion[key].endDate.slice(0, 10)
+      //           supplierPromotion[key].limitedQty = supplierPromotion[key].limitedQty
+      //           item['todayPromotion'] = supplierPromotion[key]
+      //         }
+      //       }
+      //     })
+      //   }
+      //   this.setData({ goods: goodsData })
+      // }
+      // this.selectAllGoods()
+      // this.selectAllGoods()
+      setTimeout(() => console.log(this.data.goods, this, getCurrentPages()), 1200)
     }
   },
   attached() {
-    // console.log(this)
+    console.log(1137 ,this)
     // setTimeout(() => console.log(this), 1200)
     this.countMoney()
     this.getCommonSetting() // 获取送货开始和结束时间
