@@ -108,6 +108,9 @@ Page({
   },
   onPullDownRefresh() {
     this.refreshCarts()
+    const cpn = this.selectComponent('.carts-items')
+    console.log(cpn)
+    cpn.attached()
     // this.onLoad()
     // this.onShow()
   },

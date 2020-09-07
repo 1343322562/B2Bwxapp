@@ -1,3 +1,4 @@
+import API from '../api/index.js'
 export const showLoading = (text = '') => {
   wx.showLoading({
     title: String(text),
@@ -311,4 +312,39 @@ export const filterArr = (arr) => {
   arr.forEach(item => map[JSON.stringify(item)] = item);
   // 2、再把对象的值抽成一个数组返回即为不重复的集合
   return Object.keys(map).map(key => map[key])
+}
+
+// 直配促销处理
+export const HANDLE_SUP_PROMOTION = function(param) {
+  console.log(43, param)
+  let obj = {
+    RMJ: { reachVal: '', subMoney: '', memo: '' },
+    RBF: { reachVal: '', memo: ''  },
+    RSD: { itemNo: [], memo: '', endDate: '' }
+  }
+  const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = getApp().data['userObj'] || wx.getStorageSync('userObj')
+  API.Public.getSupplierAllPromotion({
+    data: { branchNo, token, platform, username, supplierNo: param.data.sourceNo },
+    success: res => {
+      console.log(res)
+      let data = res.data
+      for(let key in data) {
+        if (key.includes('RMJ')) {
+          obj.RMJ.reachVal = data[key][0].reachVal
+          obj.RMJ.subMoney = data[key][0].subMoney
+          obj.RMJ.memo = data[key][0].memo
+        } else if (key.includes('RBF')) {
+          obj.RBF.reachVal = data[key][0].reachVal
+          obj.RBF.memo = data[key][0].memo
+        } else if (key.includes('RSD')) {
+          for(let rsdKey in data[key]) {
+            obj.RSD.itemNo.push(rsdKey)
+            console.log(data[key], rsdKey)
+            obj.RSD.endDate = data[key][rsdKey].endDate.slice(0, 10)
+          }
+        }
+      }
+      param.success(obj)
+    }
+  })
 }
