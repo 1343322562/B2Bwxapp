@@ -289,10 +289,12 @@ Component({
       this.setData({ goods, leftAnimation })
     },
     touchmove(e) {
+      console.log(e)
       const clientX = e.changedTouches[0].clientX
       const index = e.currentTarget.dataset.index
       let goods = this.data.goods
       let move = this.startPoint - clientX
+      console.log(move)
       if (move < goods.data[index].baseGoodsLeft && move >= 0) return
       if (move <= 0) move += goods.data[index].baseGoodsLeft
       if (move <= this.setSize(500)) {
@@ -450,8 +452,8 @@ Component({
       let selectTypeNum = 0
       let isSelectAll = this.data.isSelectAll
       const cartsObj = this.data.goods
-      // console.log(cartsObj)
-      cartsObj.data.map(goods => {
+      console.log(cartsObj)
+      cartsObj.data.length && cartsObj.data.map(goods => {
         if (!goods.cancelSelected) {
           cartsMoney = Number((cartsMoney + (goods.price * goods.realQty)).toFixed(2))
           selectNum += goods.realQty
@@ -475,16 +477,16 @@ Component({
           console.log(deepCopy(currentProObj))
           currentProObj.price = currentProObj.price + differPrice
           console.log(differPrice, cartsMoney , this.data.cartsMoney)
-          // currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj}) // 促销信息对象计算处理
+          currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj}) // 促销信息对象计算处理
           console.log(deepCopy(currentProObj) , deepCopy(allPromotion))
-          if (currentProObj.price <= 0) return delete allPromotion[currentProObj.promotionNo]
+          // if (currentProObj.price <= 0) return delete allPromotion[currentProObj.promotionNo]
           allPromotion = Object.assign(allPromotion, currentProObj)
           // console.log(currentProObj)
         } else if (promoType == 'MQ') {
           const differQty = selectNum - this.data.selectNum
           currentProObj.qty = currentProObj.qty + differQty
-          // currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj }) // 促销信息对象计算处理
-          if (currentProObj.qty <= 0) return delete allPromotion[currentProObj.promotionNo]
+          currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj }) // 促销信息对象计算处理
+          // if (currentProObj.qty <= 0) return delete allPromotion[currentProObj.promotionNo]
           allPromotion = Object.assign(allPromotion, currentProObj)
           // console.log(currentProObj)
         }
@@ -596,8 +598,18 @@ Component({
               dispatch[types.CHANGE_CARTS]({ goods, type, config })
               if (cartsObj.data.length) {
                 this.setData({ goods: cartsObj })
+                switch(this.sourceType){
+                  case '0':
+                    this.addCurrentSelectedPromotion(cartsObj)
+                    break;
+                  case '1':
+                    // console.log('这是直配',455)
+                    this.setData({ goods: cartsObj })
+                    break;
+                }
                 this.countMoney(currentProObj, type)
               } else {
+                this.setData({ goods: [] })
                 this.triggerEvent('deleteCarts', cartsObj.type)
               }
             }

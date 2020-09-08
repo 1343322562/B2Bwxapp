@@ -382,8 +382,12 @@ const actions = {
           if (res.code == 0 && res.data) {
             res.data.forEach(config => {
               config.datas.forEach(goods => {
+                console.log(goods)
                 const itemNo = goods.itemNo,
-                      currentPromotionNo = (`${itemNo}` in cartsObj && cartsObj[itemNo].currentPromotionNo) || goods.currentPromotionNo || goods.promotionCollections.slice(0, 18)
+                      currentPromotionNo = (`${itemNo}` in cartsObj && cartsObj[itemNo].currentPromotionNo) 
+                                          || goods.currentPromotionNo 
+                                          || ('promotionCollections' in goods && goods.promotionCollections.slice(0, 18))
+                                          || ''
                 console.log(currentPromotionNo)
                 newCartsObj.keyArr.push(itemNo)
                 console.log(cartsObj, goods)
