@@ -836,7 +836,7 @@ Component({
       const brandNo = nowGoods.itemBrandno || nowGoods.itemBrandNo
       const itemClsno = nowGoods.itemClsno
       // console.log(nowGoods)
-      // console.log('ttag', tag, res)
+      console.log('ttag', tag, res)
       let promotionList = []
       let BFpromotionList = []
       // console.log('这是tag SZZZZZZZZZZZZZZZZZZZZZZZZZZZ', tag)
@@ -893,6 +893,7 @@ Component({
           const giftInfo = res.BG.giftGoods[arr[i]][i]
           msg.msg.push(giftInfo.explain ||  '满 ' + giftInfo.buyQty + nowGoods.unit + '送' + giftInfo.giftQty + nowGoods.unit + ' [' + giftInfo.giftName +']')
         }
+        console.log(333,msg, arr)
         msg.promotionNo = _this.addPromotionNo(nowGoods, 'BG')
         promotionList.push(msg)
       }
