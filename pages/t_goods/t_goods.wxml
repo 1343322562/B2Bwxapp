@@ -62,7 +62,7 @@
     <view class='info'>
       <view class='name'>{{goodsObj[itemNo].itemName}}</view>
       <view class='productionTime' wx:if="{{goodsObj[itemNo].productionTime}}">生产日期:{{goodsObj[itemNo].productionTime}}</view>
-      <view class='size'>{{goodsObj[itemNo].itemSize}}</view>
+      <view class='size'>{{goodsObj[itemNo].itemSize}}</view>  
       <view class='price' wx:if="{{partnerCode!='1039' && partnerCode!='1049'}}">
         <text class='now'>￥{{goodsObj[itemNo].price}}{{goodsObj[itemNo].specType=='2'?'起':('/'+(goodsObj[itemNo].unit||''))}}</text>
         <text class='before' wx:if="{{goodsObj[itemNo].orgiPrice&&goodsObj[itemNo].orgiPrice!=goodsObj[itemNo].price&&goodsObj[itemNo].specType!='2'}}">￥{{goodsObj[itemNo].orgiPrice}}</text>

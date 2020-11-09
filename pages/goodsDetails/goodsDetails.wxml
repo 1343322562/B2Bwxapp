@@ -104,8 +104,10 @@
         <text class="text">{{goods.itemBrandname||'未分类'}}</text>
       </view>
       <view class="item">
+        <!-- <text class="name">库存</text>:
+        <text class="text">{{goods.todayPromotion.totalQty || (goods.stockQty>0?goods.stockQty:0)}}</text> -->
         <text class="name">库存</text>:
-        <text class="text">{{goods.todayPromotion.totalQty || (goods.stockQty>0?goods.stockQty:0)}}</text>
+        <text class="text">{{(goods.stockQty > 99 && goods.stockQty >= 0) ? '有库存' : goods.stockQty}}</text>
       </view>
       <view class="item" wx:if="{{partnerCode != '1052'}}">
         <text class="name">保 质 期</text>:
