@@ -1,7 +1,7 @@
 <wxs module="filters" src="../../tool/filter.wxs"></wxs>  <!-- 引入 wxs module -->  
 <view class="block">
   <view class='title'>付款方式</view>
-  <view class='contentBlock' wx:for="{{payWayList}}" wx:key="index" wx:if="{{item.show && !(partnerCode == 1053 && item.type == 0)}}" bindtap='changePayWay' data-type="{{item.type}}">
+  <view class='contentBlock' wx:for="{{payWayList}}" wx:key="index" wx:if="{{item.show && !(partnerCode == 1059 && item.type == 0)}}" bindtap='changePayWay' data-type="{{item.type}}">
     <image class="icon" src="../../images/liquidation_page_{{item.icon}}.png" />
     <text class='text'>{{item.name}}</text>
     <text class='msg' wx:if="{{item.type == '2'}}">(下单可用余额: ￥{{storedValue}})</text>

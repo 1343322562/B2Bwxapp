@@ -6,7 +6,7 @@
     <view class='content'><text class="money">￥{{filters.toFixed(realPayAmt - order.czPayAmt + order.transportFeeAmt)}}</text><text class='moneyType'>实付</text></view>
     <view class='msg'>订单总金额为:￥{{totalMoney}}，已优惠(优惠券，满减):￥{{discountsMoney}}<text wx:if="{{order.transportFeeAmt}}">，配送费: ￥{{order.transportFeeAmt}}</text><text wx:if="{{order.payWay=='4' || isUseBlendWay}}">;其中储值部分已支付:￥{{order.czPayAmt}}</text></view>
     <view class='payWayList'>
-      <view class='contentBlock' wx:for="{{payWayList}}" wx:key="index" wx:if="{{item.show && !(partnerCode == 1053 && item.type == 0)}}" bindtap='changePayWay' data-type="{{item.type}}">
+      <view class='contentBlock' wx:for="{{payWayList}}" wx:key="index" wx:if="{{item.show && !(partnerCode == 1059 && item.type == 0)}}" bindtap='changePayWay' data-type="{{item.type}}">
         <image class="icon" src="../../images/liquidation_page_{{item.icon}}.png" />
         <text class='text'>{{item.name}}</text>
         <text class='msg' wx:if="{{item.type == '2'}}">(下单可用余额: ￥{{storedValue}})</text>
