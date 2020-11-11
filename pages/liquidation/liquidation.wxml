@@ -22,7 +22,7 @@
     </view>
   </view>
 </view>
-<view class="block" style="margin: 0;" wx:if="{{(partnerCode == 1000 || partnerCode == 1053 || partnerCode == 05) && !replenish}}" >
+<view class="block" style="margin: 0;" wx:if="{{(partnerCode == 1000 || partnerCode == 1059 || partnerCode == 05) && !replenish}}" >
   <view class='title'>  
     <text>配送方式</text>
     <!-- <view class="right act">

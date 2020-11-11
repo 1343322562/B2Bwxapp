@@ -65,7 +65,7 @@
         "pagePath": "pages/t_goods/t_goods",
         "iconPath": "images/tab_icon_tp.png",
         "selectedIconPath": "images/tab_icon_select_tp.png",
-        "text": "统配进货"
+        "text": "分类"
       },
       {
         "pagePath": "pages/z_goods/z_goods",

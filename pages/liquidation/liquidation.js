@@ -1,4 +1,4 @@
-import { showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, toast, alert, getTime,goPage } from '../../tool/index.js'
+import { showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, arrRemoveRepeat, toast, alert, getTime,goPage } from '../../tool/index.js'
 import API from '../../api/index.js'
 import { tim, timCurrentDay } from '../../tool/date-format.js'
 const app = getApp()
@@ -623,6 +623,7 @@ Page({
           memo: '',
           flowNo: item.flowNo
         })
+        itemNos.push(item.itemNo)
       })
       console.log(list)
       request.orderMeetingData = JSON.stringify(list)
@@ -670,6 +671,7 @@ Page({
         }
       })
     }
+    // itemNos = arrRemoveRepeat(itemNos) // 数组去重，捆绑和兑换可能重复添加
     request.itemNos = itemNos.join(',')
     request.data = JSON.stringify(goodsData)
     console.log(this.isReplenish)
@@ -692,8 +694,9 @@ Page({
     // } else if (payWay == 2) {
     //   if (czPay != 1) return toast('储值支付暂未开启，请重新选择')
     // }
-    if (this.data.partnerCode == 1053 && payWay == 0) return toast('货到付款暂未开启，请重新选择')
-
+    if (this.data.partnerCode == 1059 && payWay == 0) return toast('货到付款暂未开启，请重新选择')
+    console.log(dhCouponsList)
+    
     API.Liquidation.saveOrder({
       data: request,
       success: res => {

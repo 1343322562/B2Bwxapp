@@ -33,6 +33,10 @@ export const deepCopy = (p, c) => { // 对象拷贝
   }
   return c
 }
+export const arrRemoveRepeat = (arr) => { // 数组去重
+  let arr1 = new Set(arr)
+  return Array.from(arr1)
+}
 export const getTime = (str) => { // 获取时间戳
   if (!str) return 0
   let t1 = str.split(' ')
