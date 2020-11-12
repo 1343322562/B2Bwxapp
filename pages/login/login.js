@@ -385,7 +385,7 @@ Page({
       console.log(1)
       showLoading()
       let request = {
-        url: 'https://xcx.jiuleshenghuo.com/zksrb2b-web/asd.json',
+        url: 'https://mmj.zksr.cn/zksrb2b-web/asd.json',
         method: 'POST',
         header: {
           'content-type': 'application/json'
