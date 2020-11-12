@@ -353,14 +353,14 @@ export const HANDLE_SUP_PROMOTION = function(param) {
       console.log(res)
       let data = res.data
       for(let key in data) {
-        if (key.includes('RMJ')) {
+        if (key.includes('RMJ') && data[key].length) {
           obj.RMJ.reachVal = data[key][0].reachVal
           obj.RMJ.subMoney = data[key][0].subMoney
           obj.RMJ.memo = data[key][0].memo
-        } else if (key.includes('RBF')) {
+        } else if (key.includes('RBF') && data[key].length) {
           obj.RBF.reachVal = data[key][0].reachVal
           obj.RBF.memo = data[key][0].memo
-        } else if (key.includes('RSD')) {
+        } else if (key.includes('RSD') && data[key].length) {
           for(let rsdKey in data[key]) {
             obj.RSD.itemNo.push(rsdKey)
             console.log(data[key], rsdKey)

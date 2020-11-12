@@ -1,10 +1,10 @@
-import { getIp } from './tool/index.js'
+// import { getIp } from './tool/index.js'
 App({
   data: { 
     // partnerCode: '1027',
     // baseImgUrl:'http://39.98.78.85:8080/',
-    // partnerCode: '1029',
-    // baseImgUrl:'http://39.98.164.194:8081/',
+    partnerCode: '1029',
+    baseImgUrl:'http://39.98.164.194:8081/',
     // partnerCode: '1013',
     // baseImgUrl:'http://erp.365wdyp.com/',
     // partnerCode: '1012',
@@ -30,7 +30,7 @@ App({
     // partnerCode: '1051',
     // partnerCode: '10510',
     // baseImgUrl:'http://app.tmzyz.com/',
-    partnerCode: '1059',
+    // partnerCode: '1059',
     // partnerCode: '1054',
     // partnerCode: '1055',
     // partnerCode: '2222',
