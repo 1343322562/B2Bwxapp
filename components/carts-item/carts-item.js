@@ -948,15 +948,16 @@ Component({
         infoArr.forEach((item,i) => {
           if (item && item.length) {
             let name = (i==0?'全场':(i==1?'类别':(i==2?'品牌':'单品')))+'满赠'
+            let msg = []
+            let data
+            let reachVal = []
             item.forEach(info => {
-              promotionList.push({
-                name,
-                msg: [info.explain || ('满￥' + info.reachVal+',赠'+info.data.length+'样赠品')],
-                data: info.data,
-                promotionNo: _this.addPromotionNo(nowGoods, 'BF'),
-                reachVal: info.reachVal
-              })
+              msg.push(info.explain || ('满￥' + info.reachVal+',赠'+info.data.length+'样赠品'))
+              data = info.data
+              reachVal.push(info.reachVal)
             })
+            reachVal.sort((a, b) => { a - b })
+            promotionList.push({ name, msg, data, reachVal: reachVal[0], promotionNo: _this.addPromotionNo(nowGoods, 'BF')})
           }
         })
       }
