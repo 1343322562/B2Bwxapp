@@ -1,0 +1,83 @@
+.select-time-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13rpx 3%;
+  width: 94;
+  border-bottom: 8rpx solid #f5f5f5;
+}
+
+.select-time-box .btn{
+    margin: 0;
+    height: 50rpx;
+    width: 110rpx;
+    font-size: 30rpx;
+}
+
+.selecter-time-conainer {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  background-color: rgba(0,0,0,.4);
+}
+
+.selecter-time-box {
+  position: absolute;
+  bottom: 0;
+  height: 35vh;
+  width: 100%;
+  background-color: #ffffff;
+  transition: height .5s;
+  padding-top: 45rpx;
+}
+
+.btn-box {
+  width: 90%;
+  margin: 50rpx 5% 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 36rpx;
+  letter-spacing: 2rpx;
+}
+
+/* .btn-box text:nth-child(2){
+  color: #3dae3f;
+} */
+
+.promo-box {
+  width: 86%;
+  margin: 20rpx 7%;
+  height: 100rpx;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+  border-radius: 20rpx;
+  border: 1rpx solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.promo-box .tag{
+  padding: 2rpx 10rpx;
+  border-radius: 3rpx;
+  font-size: 26rpx;
+  background-color:#e60012;
+  color:#fff;
+}
+.promo-box .info{
+  font-size: 23rpx;
+}
+
+.actPromo {
+  border-color: #e60012;
+}
+.info-box {
+  display: flex;
+  flex-direction: column;
+}
+.act {
+  border-color: #e60012;
+}

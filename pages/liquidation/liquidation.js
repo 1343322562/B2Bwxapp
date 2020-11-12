@@ -262,23 +262,29 @@ Page({
   // 直配 满减满赠 数据获取(itemList: 支付商品信息,supplier：入驻商编号)
   getSupplierMjMz(itemList, supplierNo) {
     console.log("mjList:", itemList)
+    console.log(218 ,this.data.goodsList)
+    let goodsList = this.data.goodsList
     const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = this.userObj
     API.Liquidation.getSupplierSettlementPromotion({
       data:{ branchNo, token, username, platform, supplierNo, dbranchNo, data: itemList },
       success: res => {
+        console.log('直配满减数据' ,res)
         if (res.code == 0 && res.data) {
           let obj = {}
           let giftList = []
           let mjList = []
-          res.data.forEach(item => {
-            const type = item.promotionType
-            // 满赠 || 满减 数据对象赋值
-            if (type == 'RMJ') {
-              mjList.push(item)
-            } else if ( type == 'RBF') {
-              giftList.push(item)
-            }
+          goodsList.forEach(t => {
+            res.data.forEach(item => {
+              const type = item.promotionType
+              // 满赠 || 满减 数据对象赋值
+              if (type == 'RMJ' && t['currentPromotionType'] == 'RMJ') {
+                mjList.push(item)
+              } else if ( type == 'RBF' && t['currentPromotionType'] == 'RBF') {
+                giftList.push(item)
+              }
+            })
           })
+          
           this.baseMj = mjList // 挂载满减信息对象
           obj.giftList = giftList
           this.setData(obj)
@@ -296,6 +302,9 @@ Page({
     
     console.log(this.data.goodsList)
     const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = this.userObj
+    // const cartsObj = commit[types.GET_CARTS]()
+    const allPromotion = this.data.allPromotion
+    console.log('allPromotion',allPromotion)
     API.Liquidation.getSettlementPromotion({
       data: { branchNo, token, platform, username, dbranchNo, data: itemList },
       success: res => {
@@ -305,10 +314,11 @@ Page({
           let giftList = []
           let mjList = []
           res.data.forEach(item => {
+            const promoNo = item.promotionSheetNo
             const type = item.promotionType
-            if (type == 'MJ') {
+            if (type == 'MJ' && allPromotion[promoNo].pInfo == '已满足') {
               mjList.push(item)
-            } else if (type == 'SZ') {
+            } else if (type == 'SZ' && allPromotion[promoNo].pInfo == '已满足') {
               let goodsList = this.data.goodsList
               console.log(goodsList, item)
               let data = res.data
@@ -321,7 +331,7 @@ Page({
                   giftList.push(item)
                 }
               })
-            } else if (type == 'MQ') {
+            } else if (type == 'MQ' && allPromotion[promoNo].pInfo == '已满足') {
               mjList.push(item)
               // goodsList.push({ promotionType: type })
             } else if (type == 'BG') {
@@ -352,7 +362,7 @@ Page({
               })
               obj.BGnum = BGnum
               obj.goodsList = goodsList
-            } else if (type == 'BF') {
+            } else if (type == 'BF' && allPromotion[promoNo].pInfo == '已满足') {
               giftList.push(item)
             }
             
@@ -806,6 +816,8 @@ Page({
     if(replenish) {
       this.setData({ replenish: true })  // 补货则不显示自提选择
     }
+    this.data.allPromotion = JSON.parse(opt.allPromotion)
+    console.log(opt, JSON.parse(opt.allPromotion))
     const obj = wx.getStorageSync('liquidationObj')
     this.promotionObj = wx.getStorageSync('allPromotion')
     this.userObj = wx.getStorageSync('userObj')
@@ -847,6 +859,7 @@ Page({
     payWayList[2].show = codPay == '1'
     if (partnerCode == '1029' && cartsType == 'sup') payWayList[1].show = false // 怡星 ZC 单不开微信支付 
     let goodsList = obj.items[0].datas
+    console.log('goodsList', goodsList)
     const sourceType = obj.items[0].sourceType
     console.log(sourceType)
     console.log('obj', obj)
@@ -920,6 +933,8 @@ Page({
     this.getMjMz(requestItemList)
     this.getCoupons(requestItemList)
     this.getExchangeCoupons()
+    
+    console.log('goodsListddd', goodsList)
   },
   onReady () {
   },

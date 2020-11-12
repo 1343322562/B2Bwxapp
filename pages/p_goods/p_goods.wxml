@@ -1,0 +1,114 @@
+<block wx:if="{{pageLoading}}">
+<!-- <view class='pageLeft' wx:if="{{classifyList.length}}">
+  <view class='search' bindtap='goSearchPage'>
+    <image class='icon' src='../../images/goodsList_page_search.png' />
+    <text class='text'>搜索</text>
+  </view>
+  <scroll-view scroll-y class="category">
+    <block wx:for="{{classifyList}}" wx:for-index="oneIndex" wx:for-item="clsOne" wx:key="clsOne">
+      <view class="oneCls{{nowSelectOneCls==clsOne?' act':''}}" animation="{{ nowSelectOneCls==clsOne?animtionObjShow:(beforeOneCls==clsOne?animtionObjHide:null)}}">
+        <view class='oneClsTitle' bindtap="tapOneCls" data-no="{{clsOne}}"><text>{{classifyObj[clsOne].title}}</text></view>
+        <view class='twoClsList'>
+          <block wx:for="{{classifyObj[clsOne].children}}" wx:for-index="twoIndex" wx:for-item="clsTwo" wx:key="twoIndex">
+            <view class="twoClsTitle{{nowSelectTwoCls==clsTwo.clsNo?' act':''}}" bindtap="tapTwoCls" data-no="{{clsTwo.clsNo}}"><text>{{clsTwo.clsName}}</text></view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+</view> -->
+<view class='goodsList'>
+  <view class='screen'>
+    <view catchtap='selectScreen' data-type="0" class="item{{screenSelect=='0'?' act':''}}">综合</view>
+    <view catchtap='selectScreen' data-type="1" class="item{{(screenSelect=='1'||screenSelect=='2')?' act':''}}">
+      <text>价格</text>
+      <image wx:if="{{screenSelect=='1'||screenSelect=='2'}}" class="icon{{screenSelect=='2'?' act':''}}" src="../../images/up_donwn_icon.png" />
+    </view>
+    <view class='item' catchtap='showScreen'>筛选</view>
+  </view>
+  <view class='li'  wx:for="{{goodsList}}" wx:for-item="itemNo" wx:key="index" data-no="{{itemNo}}" bindtap='goGoodsDetails'>
+    <view class='img'>
+      <image class='icon' src="{{goodsObj[itemNo].goodsImgUrl}}" />
+      <view class='goodsType' wx:if="{{goodsObj[itemNo].specType=='2'}}">多规格</view>
+      <view class='goodsType' wx:if="{{goodsObj[itemNo].isBind=='1'}}">组合</view>
+      <view class='c-stock_null' wx:if="{{!goodsObj[itemNo].isStock}}">补货中</view>
+      <!-- 之前的不可退货图标 -->
+      <!-- <image class='noReturnAllowed' wx:if="{{goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1'}}" src="../../images/noReturnAllowed.png" /> -->
+      <view wx:if="{{goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1'}}" class="noReturn">不可退</view>
+      <!-- <view class="yesReturn">{{(goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1')?'不可退':'可退'}}</view> -->
+    </view>
+    <view class='info'>
+      <view class='name'>{{goodsObj[itemNo].itemName}}</view>
+      <view class='productionTime' wx:if="{{goodsObj[itemNo].productionTime}}">生产日期:{{goodsObj[itemNo].productionTime}}</view>
+      <view class='size'>{{goodsObj[itemNo].itemSize}}</view>
+      <view class='price' wx:if="{{partnerCode!='1039' && partnerCode!='1049'}}">
+        <text class='now'>￥{{goodsObj[itemNo].price}}{{goodsObj[itemNo].specType=='2'?'起':('/'+(goodsObj[itemNo].unit||''))}}</text>
+        <text class='before' wx:if="{{goodsObj[itemNo].orgiPrice&&goodsObj[itemNo].orgiPrice!=goodsObj[itemNo].price&&goodsObj[itemNo].specType!='2'}}">￥{{goodsObj[itemNo].orgiPrice}}</text>
+      </view>
+      <view class='tag'>
+        <text wx:if="{{goodsObj[itemNo].BF}}">买满赠</text>
+        <text wx:if="{{goodsObj[itemNo].FS}}">首单特价</text>
+        <text wx:if="{{goodsObj[itemNo].BG}}">买赠</text>
+        <text wx:if="{{goodsObj[itemNo].SD}}">单日限购</text>
+        <text wx:if="{{goodsObj[itemNo].MJ}}">满减</text>
+        <text wx:if="{{goodsObj[itemNo].SZInfo}}">首赠</text>
+        <text wx:if="{{goodsObj[itemNo].MQ}}">数量满减</text>
+        <text wx:if="{{goodsObj[itemNo].MS}}">秒杀</text>
+        <text wx:if="{{goodsObj[itemNo].ZK}}">{{goodsObj[itemNo].discount}}</text>
+        <text wx:if="{{goodsObj[itemNo].discountMoney}}">优惠{{goodsObj[itemNo].discountMoney}}元</text>
+        <text wx:if="{{goodsObj[itemNo].rewardPoint>0}}">积分</text>
+      </view>
+      
+    </view>
+    <view wx:if="{{!cartsObj[itemNo].realQty&&goodsObj[itemNo].minSupplyQty>1}}" class='minSupplyQty'>起订数量{{goodsObj[itemNo].minSupplyQty}}</view>
+    <view class='goCarts'>
+      <view wx:if="{{goodsObj[itemNo].stockType!='0' && partnerCode != 1052}}" class="type {{goodsObj[itemNo].stockType=='0'?'cw':'dw'}}">{{goodsObj[itemNo].stockType=='0'?'常温':'低温'}}</view>
+      <view class='btn'>
+        <block wx:if="{{cartsObj[itemNo].realQty}}">
+        <view 
+          class='minus item' 
+          catchtap='changeCarts' 
+          data-no="{{itemNo}}" 
+          data-type="minus"
+        ><image class='icon' src="{{partnerCode == 1052?'../../images/yz_sub.png':'../../images/goodsList_minus_carts.png'}}" /></view>
+
+        <text class='num'>{{cartsObj[itemNo].realQty}}</text>
+        </block>
+        <view 
+          class='add item' 
+          catchtap='changeCarts' 
+          data-no="{{itemNo}}" 
+          data-type="add"
+        ><image class='icon' src="{{partnerCode == 1052?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'':'Null')+'.png'}}" /></view>
+
+      </view>
+    </view>
+  </view>
+
+  <view class='goodsList_null' wx:if="{{goodsList.length===totalLength}}">
+   <image class='icon' src="../../images/goodsList_bottom_null.png" />
+  </view>
+  <view class='loadingGoods' wx:if="{{isloadingGoods}}">加载更多···</view>
+</view>
+
+</block>
+
+<view class="pageData_null" wx:if="{{pageLoading && !classifyList.length}}">
+  <image mode="widthFix" src="../../images/pageData-null.png" />
+  <view class="page_text">没有商品数据~</view>
+</view>
+
+<view class='mask'  wx:if="{{screenShow}}">
+  <view class='alert'>
+    <text class="title">品牌 (可多选)</text>
+    <scroll-view class='scrollBox' scroll-y>
+      <view class='select'>
+        <text class="item{{itemBrandnos[item]?' act':''}}" catchtap='selectedScreen' data-no="{{item}}" wx:for="{{brandList}}" wx:key="index">{{brandObj[item]}}</text>
+      </view>
+    </scroll-view>
+    <view class='btn'>
+      <text catchtap='confirm' data-type="0">重置</text>
+      <text catchtap='confirm' data-type="1">确定</text>
+    </view>
+  </view>
+</view>

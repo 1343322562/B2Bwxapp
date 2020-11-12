@@ -44,7 +44,7 @@ export default {
   '1031': 'https://xcx.xz-jx.cn/zksrb2b-web/', //  拉萨见喜商贸   图片  erp.xz-jx.cn (隐藏直供。统配需要改成选品)
   '1032': 'https://mp.huidt.tech/zksrb2b-web/', //  武汉黄石   图片   erp.huidt.tech
   '1033': 'https://xcx.rhbh.net.cn/zksrb2b-web/', //  清河   图片   erp.rhbh.net.cn
-  '1034': 'https://xcx.xlsp168.com/zksrb2b-web/', //  广州闲聊食品   图片   39.100.103.135:8080 （隐藏直配，统配改成商城）
+  '1034': 'https://xcx.xlsp168.com/zksrb2b-web/', //  广州闲聊食品   图片   39.100.103.135:8080 （隐藏直配，统配改成商城）13533549113 123456
   '1035': 'https://app.huayanghuimin.com/zksrb2b-web/', //  邢台华海惠民   图片 erp.huayanghuimin.com  (隐藏： 订货额度、信用额度、待返利、授信明细)
   '1036': 'https://xcx.yhfws.cn/zksrb2b-web/', //  唐山一合   图片   erp.yhfws.cn  （统配改名分类）
   '1037': 'https://wx.gapin24.cn/zksrb2b-web/', //  西安嘉品云市   图片   erp.gapin24.cn

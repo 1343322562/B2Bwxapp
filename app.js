@@ -57,7 +57,9 @@ App({
     userObj: '',
     bounding: {}, // 右上角胶囊信息
     phoneType:'',// 手机系统
-    userIp: '' // 用户的ip地址
+    userIp: '', // 用户的ip地址
+    phoneType:'', // 手机系统
+    // goodsData: {} // 新版购物车的数据对象OBJ
   },
   editData (key ,val) {
     this.setData({
@@ -73,6 +75,7 @@ App({
     wx.reLaunch({ url: '/pages/login/login' })
   },
   onLaunch () {
+    console.log(1)
     // 绵阳鸭子tabbar 
     console.log(wx)
     if (wx.getSystemInfo) {

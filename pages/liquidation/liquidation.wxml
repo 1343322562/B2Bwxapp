@@ -173,20 +173,20 @@
           规格:{{goods.itemSize}}
           <!-- 统配促销信息 -->
           <view class='tag'>
-            <text wx:if="{{goods.MS}}">秒杀</text>
-            <text wx:if="{{goods.MQ}}">数量满减</text>
-            <text wx:if="{{goods.MJ}}">满减</text>
-            <text wx:if="{{goods.SZ}}">首赠</text>
-            <text wx:if="{{goods.BG}}">买赠</text>
-            <text wx:if="{{goods.FS}}">首单特价</text>
-            <text wx:if="{{goods.SD}}">单日限购</text>
-            <text wx:if="{{goods.BF}}">买满赠</text>
+            <text wx:if="{{goods.currentPromotionType == 'MS'}}">秒杀</text>
+            <text wx:if="{{goods.currentPromotionType == 'MQ'}}">数量满减</text>
+            <text wx:if="{{goods.currentPromotionType == 'MJ'}}">满减</text>
+            <text wx:if="{{goods.currentPromotionType == 'SZ'}}">首赠</text>
+            <text wx:if="{{goods.currentPromotionType == 'BG'}}">买赠</text>
+            <text wx:if="{{goods.currentPromotionType == 'FS'}}">首单特价</text>
+            <text wx:if="{{goods.currentPromotionType == 'SD'}}">单日限购</text>
+            <text wx:if="{{goods.currentPromotionType == 'BF'}}">买满赠</text>
           </view>
           <!-- 直配促销信息 -->
           <view class='tag'>
-            <text wx:if="{{goods.RBF}}">买满赠</text>
-            <text wx:if="{{goods.RMJ}}">满减</text>
-            <text wx:if="{{goods.RSD}}">限时促销</text>
+            <text wx:if="{{goods.currentPromotionType == 'RBF'}}">买满赠</text>
+            <text wx:if="{{goods.currentPromotionType == 'RMJ'}}">满减</text>
+            <text wx:if="{{goods.currentPromotionType == 'RSD'}}">限时促销</text>
           </view>
         </view>
         <view class='size' wx:if="{{goods.deliveryUnit}}">单位:{{goods.deliveryUnit}}</view>
