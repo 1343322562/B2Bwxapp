@@ -107,6 +107,7 @@ App({
     })
   },
   onShow(opt) {
+    console.log(1)
     this.getIp()
     setTimeout(()=>console.log(this.data.userIp), 10000)
     
