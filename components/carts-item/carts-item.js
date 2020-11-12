@@ -996,10 +996,10 @@ Component({
                 const type = item.promotionNo.slice(0, 2)
                 // console.log('allPromotion[item.promotionNo]', allPromotion, item.promotionNo)
                 // console.log(961, type)
-                if (nowGoods['currentPromotionNo'] != item.promotionNo) return 
                 console.log(88,item)
                 if (allPromotion[item.promotionNo]) {
                   // console.log(deepCopy(allPromotion), item.promotionNo)
+                  if (nowGoods['currentPromotionNo'] != item.promotionNo) return 
                   if (type == 'MJ') {
                     //consoleon[item.promotionNo])
                     allPromotion[item.promotionNo].price += nowGoods.realQty * nowGoods.orgiPrice
@@ -1028,7 +1028,7 @@ Component({
             })
             // console.log(allPromotion, 'asdadasads78997879978978978978dasads')
             allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
-            // console.log(946, allPromotion ,this.data.currentPromotion)
+            console.log(946, allPromotion ,this.data.currentPromotion)
             _this.setData({ allPromotion, goods: goodsData })
           }
         })
