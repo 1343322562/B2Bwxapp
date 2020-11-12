@@ -23,8 +23,8 @@ App({
     // baseImgUrl:'https://39.100.103.135:8080/',
     // partnerCode: '10522',
     // partnerCode: '1011',
-    // partnerCode: '1034',
-    // baseImgUrl:'https://39.100.103.135:8080/',
+    partnerCode: '1036',
+    baseImgUrl:'https://erp.yhfws.cn/',
     // partnerCode: '1026',
     
     // partnerCode: '1051',
@@ -37,10 +37,9 @@ App({
 
     // partnerCode: '1039',
     // partnerCode: '1058',
-    
-    
+
     //  partnerCode: '1056', 
-     partnerCode: '1057',
+    //  partnerCode: '1057',
 
     // partnerCode: '1050',
     // baseImgUrl:'http://erp.wgjnh.com',

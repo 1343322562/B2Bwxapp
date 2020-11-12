@@ -20,7 +20,7 @@ const actions = {
               platform: '3'
             },
             success: (res) => {
-              console.log(res)
+              console.log('openid',res)
               let id = ''
               if (res.code == 0) {
                 id = res.data
@@ -28,7 +28,8 @@ const actions = {
               }
               param && param(id)
             },
-            error: ()=>{
+            error: (err)=>{
+              console.log('err', err)
               param && param()
             }
           })
