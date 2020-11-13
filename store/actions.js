@@ -319,8 +319,10 @@ const actions = {
         branchNo: branchNo,
         sourceType: sourceType,
         sourceNo: sourceNo,
-        parentItemNo: parentItemNo || '',
-        // createDate: timCurrentDay(0) + ' ' + tim() 
+        parentItemNo: parentItemNo || '' 
+      }
+      if (getApp().data.partnerCode == 1027) {
+        item.createDate = timCurrentDay(0) + ' ' + tim()
       }
       console.log(timCurrentDay(0) + tim())
       if (param.type == 'input') {
@@ -374,12 +376,13 @@ const actions = {
           if (res.code == 0 && res.data) {
             res.data.forEach(config => {
               // 按加购时间排序
-              // config.datas.sort((a, b) => {
-              //   let aDate = new Date(a.createDate).getTime()
-              //   let bDate = new Date(b.createDate).getTime()
-              //   console.log(aDate, bDate, aDate - bDate)
-              //   return bDate - aDate
-              // })
+              if (getApp().data.partnerCode == 1027) {
+                config.datas.sort((a, b) => {
+                  let aDate = new Date(a.createDate).getTime()
+                  let bDate = new Date(b.createDate).getTime()
+                  return bDate - aDate
+                })
+              }
               config.datas.forEach(goods => {
                 const itemNo = goods.itemNo
                 newCartsObj.keyArr.push(itemNo)
