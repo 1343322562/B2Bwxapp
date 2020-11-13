@@ -67,6 +67,7 @@ export default {
     saveOrder: (param) => ajax.post(`supplymini/saveOrder.do`, param), // 保存订单
     getSettlementPromotion: (param) => ajax.post(`supplymini/getSettlementPromotion.do`, param), // 获取 统配 满减满赠促销
     getSupplierSettlementPromotion: (param) => ajax.post(`supplymini/getSupplierSettlementPromotion.do`, param), // 获取入驻商(直配)结算页满减满赠促销信息
+    getSettlementPromotionNew: (param) => ajax.post(`supplymini/getSettlementPromotionNew.do`, param), // 获取新版购物车
     getMiniPayParameters: (param) => ajax.post(`minipay/getMiniPayParameters.do`, param), // 微信支付
   },
   Orders: {

@@ -437,7 +437,9 @@ Component({
       // console.log('this.data.goods.cartsType' ,this.data.goods.cartsType)
       // console.log(replenish,replenishNo)
       // console.log()
-      goPage('liquidation', { cartsType: this.data.goods.cartsType, replenish, replenishNo, allPromotion })
+
+      // goPage('liquidation', { cartsType: this.data.goods.cartsType, replenish, replenishNo, allPromotion })
+      goPage('liquidation', { isNewCarts: true, cartsType: this.data.goods.cartsType, replenish, replenishNo, allPromotion })  // isNewCarts: 是否新版购物车
     },
     goGoodsDetails(e) {
       const index = e.currentTarget.dataset.index
