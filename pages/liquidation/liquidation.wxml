@@ -25,14 +25,6 @@
 <view class="block" style="margin: 0;" wx:if="{{(partnerCode == 1000 || partnerCode == 1059 || partnerCode == 05) && !replenish}}" >
   <view class='title'>  
     <text>配送方式</text>
-    <!-- <view class="right act">
-      <picker header-text="选择配送方式" bindchange="bindPickerChange" value="{{transWayIndex}}" range="{{transWayArray}}">
-        <view class="picker">
-          {{transWayArray[transWayIndex]}} 
-          <image class="icon" src="../../images/goRight_icon.png" />
-        </view>
-      </picker>
-    </view> -->
   </view>
   <view class="transWayList" >
     <view class="transBlock" bindtap="selectTransWayClick" data-type="0">
@@ -226,29 +218,3 @@
 <select-mzgoods show="{{showSelectMzgoods}}" now="{{selectedGift}}" list="{{giftList}}" bindselectGift="selectGift"  /> 
 <select-dhCoupons show="{{showSelectDhCoupons}}" now="{{selectedDhCoupons}}" list="{{dhCouponsList}}" bindselectDhCoupons="selectDhCoupons" />
 <select-storeTime show="{{selectedStoreTime}}" time="{{storeTime}}" />
-
-<!-- <view class="selecter-time-conainer" wx:if="{{selected}}" catchtouchmove>
-  <view class="selecter-time-box">
-    <view class="btn-box">
-      <text bindtap='close'>取消</text>
-      <text bindtap='come'>确定</text>
-    </view>
-    <picker-view indicator-style="height: 50px;" style="margin: 0 8%; width: 84%; height: 300px;" value="{{value}}" bindchange="bindChange">
-  <picker-view-column>
-    <view wx:for="{{years}}" wx:key="{{years}}" style="line-height: 50px; text-align: center;">{{item}}</view>
-  </picker-view-column>
-  <picker-view-column>
-    <view wx:for="{{months}}" wx:key="{{months}}" style="line-height: 50px; text-align: center;">{{item}}</view>
-  </picker-view-column>
-  <picker-view-column>
-    <view wx:for="{{days}}" wx:key="{{days}}" style="line-height: 50px; text-align: center;">{{item}}</view>
-  </picker-view-column>
-  <view style="padding-right: 10rpx;display: flex;justify-content: center;align-items: center;font-size: 12px;font-weight: 100;">—</view>
-  <picker-view-column>
-    <view wx:for="{{hours}}" wx:key="{{hours}}" style="line-height: 50px; text-align: center;">{{item}}</view>
-  </picker-view-column>
-  <view style="padding-right: 10rpx;display: flex;justify-content: center;align-items: center;font-size: 14px;font-weight: 100;position:relative;left: -45rpx;">时</view>
-</picker-view>
-  </view>
-  
-</view> -->

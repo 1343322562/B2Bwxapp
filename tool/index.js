@@ -363,7 +363,6 @@ export const HANDLE_SUP_PROMOTION = function(param) {
         } else if (key.includes('RSD') && data[key].length) {
           for(let rsdKey in data[key]) {
             obj.RSD.itemNo.push(rsdKey)
-            console.log(data[key], rsdKey)
             obj.RSD.endDate = data[key][rsdKey].endDate.slice(0, 10)
           }
         }

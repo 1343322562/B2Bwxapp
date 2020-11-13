@@ -138,10 +138,9 @@
         <text class="go" bindtap="goAddGoodsClick" data-items="{{allPromotion[item.currentPromotionNo]}}">{{allPromotion[item.currentPromotionNo].pInfo == '已满足'?'再逛逛 >':'去凑单 >'}}</text>
       </view>
     </view>
-
     <view 
       class="li" 
-      wx:if="{{item.currentPromotionNo == good.currentPromotionNo || (good.currentPromotionNo == '' && item == 'NO') || (good.currentPromotionType == 'BG' && item == 'NO') || (good.currentPromotionType == 'ZK' && item == 'NO') || (good.currentPromotionType == 'SD' && item == 'NO') || (good.currentPromotionType == 'MS' && item == 'NO') || (good.currentPromotionType == 'RSD' && item == 'NO')}}"  
+      wx:if="{{item.currentPromotionNo == good.currentPromotionNo || (good.currentPromotionNo == '' && item == 'NO') || (good.currentPromotionType == 'BG' && item == 'NO') || (good.currentPromotionType == 'ZK' && item == 'NO') || (good.currentPromotionType == 'SD' && item == 'NO') || (good.currentPromotionType == 'MS' && item == 'NO') || (good.currentPromotionType == 'FS' && item == 'NO') || (good.currentPromotionType == 'RSD' && item == 'NO') || (good.rewardPoint > 0 && item == 'NO' && !good.currentPromotionType)}}"  
       wx:for="{{goods.data}}" 
       wx:for-item="good"  
       wx:key="index" 
@@ -171,7 +170,9 @@
             </view> 
           </view>
           <view class="price">
-            <text class="now">￥{{good.price}}/{{good.deliveryUnit}}</text>
+            <text wx:if="{{good.currentPromotionType == 'MS'}}" class="now">￥{{good.msPrice}}/{{good.deliveryUnit}}</text>
+            <text wx:elif="{{good.currentPromotionType == 'FS'}}" class="now">￥{{good.sdPrice}}/{{good.deliveryUnit}}</text>
+            <text wx:else class="now">￥{{good.price}}/{{good.deliveryUnit}}</text>
             <text class="before" wx:if="{{good.orgiPrice!=good.price}}">￥{{good.orgiPrice}}</text>
           </view>
           <view class='tag'>
@@ -185,6 +186,7 @@
             <text wx:if="{{good.currentPromotionType == 'MJ'}}">满减</text>
             <text wx:if="{{good.currentPromotionType == 'MS'}}">秒杀</text>
             <text wx:if="{{good.currentPromotionType == 'ZK'}}">{{good.discount}}</text>
+            <text wx:if="{{good.rewardPoint > 0 }}">积分</text>
           <!-- 直配 -->
           <!-- <text wx:if="{{good.RBF}}">买满赠</text>
           <text wx:if="{{good.RMJ}}">满减</text>

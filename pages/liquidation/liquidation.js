@@ -275,11 +275,10 @@ Page({
           let mjList = []
           goodsList.forEach(t => {
             res.data.forEach(item => {
-              const type = item.promotionType
               // 满赠 || 满减 数据对象赋值
-              if (type == 'RMJ' && t['currentPromotionType'] == 'RMJ') {
+              if (type == 'RMJ') {
                 mjList.push(item)
-              } else if ( type == 'RBF' && t['currentPromotionType'] == 'RBF') {
+              } else if ( type == 'RBF') {
                 giftList.push(item)
               }
             })
@@ -316,9 +315,9 @@ Page({
           res.data.forEach(item => {
             const promoNo = item.promotionSheetNo
             const type = item.promotionType
-            if (type == 'MJ' && allPromotion[promoNo].pInfo == '已满足') {
+            if (type == 'MJ') {
               mjList.push(item)
-            } else if (type == 'SZ' && allPromotion[promoNo].pInfo == '已满足') {
+            } else if (type == 'SZ') {
               let goodsList = this.data.goodsList
               console.log(goodsList, item)
               let data = res.data
@@ -331,7 +330,7 @@ Page({
                   giftList.push(item)
                 }
               })
-            } else if (type == 'MQ' && allPromotion[promoNo].pInfo == '已满足') {
+            } else if (type == 'MQ') {
               mjList.push(item)
               // goodsList.push({ promotionType: type })
             } else if (type == 'BG') {
@@ -362,7 +361,7 @@ Page({
               })
               obj.BGnum = BGnum
               obj.goodsList = goodsList
-            } else if (type == 'BF' && allPromotion[promoNo].pInfo == '已满足') {
+            } else if (type == 'BF') {
               giftList.push(item)
             }
             
@@ -806,18 +805,118 @@ Page({
     const hours = tim().slice(0, 2)
     return `${ymd} ${hours}`
   },
+  // 新版购物车促销(直配+统配)
+  getSettlementPromotionNew(requestItemList, allPromotion, supplierNo, cartsType) {
+    const _this = this
+    let data = {} 
+    requestItemList.forEach(item => {
+      if (!allPromotion[item['currentPromotionNo']]) return
+      let dataI = data[item['currentPromotionNo']]
+      if (dataI) {
+        data[item['currentPromotionNo']].push(item)
+        delete item['currentPromotionNo']
+      } else {
+        data[item['currentPromotionNo']] = [item]
+        delete item['currentPromotionNo']
+      }
+    })
+    console.log(data)
+    data = JSON.stringify(data)
+    const { branchNo, token, platform, username, dbBranchNo: dbranchNo } = this.userObj
+    let reqData = {branchNo, token, platform, username, dbranchNo, data}
+    if (cartsType == 'sup') reqData.supplierNo = supplierNo
+    API.Liquidation.getSettlementPromotionNew({
+      data: reqData,
+      success(res) {
+        console.log(res)
+        if (res.code == 0 && res.data) {
+          let obj = {}
+          let giftList = []
+          let mjList = []
+          res.data.forEach(item => {
+            const promoNo = item.promotionSheetNo
+            const type = item.promotionType
+            if (type == 'MJ') {
+              mjList.push(item)
+            } else if (type == 'SZ') {
+              let goodsList = this.data.goodsList
+              console.log(goodsList, item)
+              let data = res.data
+              let isSZ = false
+              goodsList.forEach(t => {
+                isSZ = t.stockType == '0' ? true : false 
+              })
+              data[0].items[0].items.forEach(t => {
+                if ((t.giftType == item.stockType) || isSZ) {
+                  giftList.push(item)
+                }
+              })
+            } else if (type == 'MQ') {
+              mjList.push(item)
+              // goodsList.push({ promotionType: type })
+            } else if (type == 'BG') {
+              const BG = this.promotionObj.BG.giftGoods
+              let goodsList = this.data.goodsList
+              let BGnum = 0
+              item.items.forEach((item2, index) => {
+                item2.items.forEach((no, i) => {
+                  let goods = BG[no.itemNo][no.id]
+                  BGnum += no.qty
+                  goodsList.push({
+                    itemNo:no.itemNo,
+                    itemName: no.itemName,
+                    promotionSheetNo: goods.sheetNo,
+                    promotionType: type,
+                    realQty: no.qty,
+                    price: 0,
+                    itemSize: goods.itemSize,
+                    isGift: true,
+                    preNo: no.parentItemNoSet.join(','),
+                    itemType: '2',
+                    parentItemQty: (goods.buyQty + ':' + goods.giftQty),
+                    id: no.id,
+                    subtotal: 0,
+                    goodsImgUrl: this.goodsUrl + no.itemNo + '/' + getGoodsImgSize(goods.giftImgName)
+                  })
+                })
+              })
+              obj.BGnum = BGnum
+              obj.goodsList = goodsList
+            } else if (type == 'BF') {
+              giftList.push(item)
+            } else if (type == 'RMJ') {
+              mjList.push(item)
+            } else if ( type == 'RBF') {
+              giftList.push(item)
+            }
+          })
+          _this.baseMj = mjList // 挂载满减信息对象
+          obj.giftList = giftList
+          console.log(mjList,obj)
+          _this.setData(obj)
+        }
+      },
+      complete: function() {
+        _this.exchangeLoading = true
+        _this.couponsLoading = true
+        _this.mjmzLoading = true
+        _this.setOrderAction()
+      }
+    })
+  },
   onLoad (opt) {
     console.log(opt)
     const partnerCode = getApp().data.partnerCode
     if (partnerCode == 1052) wx.setNavigationBarColor({ backgroundColor: '#e6c210', frontColor: '#ffffff' })
 
-    const { replenish, cartsType } = opt
+    const { replenish, cartsType, isNewCarts, supplierNo } = opt
     // 补货
     if(replenish) {
       this.setData({ replenish: true })  // 补货则不显示自提选择
     }
-    this.data.allPromotion = JSON.parse(opt.allPromotion)
-    console.log(opt, JSON.parse(opt.allPromotion))
+    const allPromotion = JSON.parse(opt.allPromotion)
+    this.data.allPromotion = allPromotion
+    console.log(opt, allPromotion)
     const obj = wx.getStorageSync('liquidationObj')
     this.promotionObj = wx.getStorageSync('allPromotion')
     this.userObj = wx.getStorageSync('userObj')
@@ -867,21 +966,25 @@ Page({
     let requestItemList = []
     let itemNos = []
     goodsList.forEach(goods => { /* itemType 0组合商品 1 普通商品 2 赠品  */
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('RMJ')) goods['RMJ'] = '满减商品'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('RBF')) goods['RBF'] = '满赠商品'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('RSD')) goods['RSD'] = '限时抢购'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('MJ')) goods['MJ'] = '满减'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('MQ')) goods['MQ'] = '数量满减'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('MS')) goods['MS'] = '秒杀'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('SZ')) goods['SZ'] = '首单赠送'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('BG')) goods['BG'] = '买赠'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('FS')) goods['FS'] = '首单特价'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('SD')) goods['SD'] = '单日限购'
-      if ('promotionCollections' in goods && goods.promotionCollections.includes('BF')) goods['BF'] = '买满赠'
-      
       const itemNo = goods.itemNo
       itemNos.push(itemNo)
-      let data = { itemNo: itemNo, qty: String(goods.realQty), price: String(goods.price) }
+      let data = {itemNo, qty: String(goods.realQty), price: String(goods.price)} // 促销请求数据对象
+      if (isNewCarts) {
+        data['clsNo'] = goods['itemClsno']
+        data['currentPromotionNo'] = goods['currentPromotionNo']
+      } else {
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('RMJ')) goods['RMJ'] = '满减商品'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('RBF')) goods['RBF'] = '满赠商品'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('RSD')) goods['RSD'] = '限时抢购'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('MJ')) goods['MJ'] = '满减'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('MQ')) goods['MQ'] = '数量满减'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('MS')) goods['MS'] = '秒杀'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('SZ')) goods['SZ'] = '首单赠送'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('BG')) goods['BG'] = '买赠'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('FS')) goods['FS'] = '首单特价'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('SD')) goods['SD'] = '单日限购'
+        if ('promotionCollections' in goods && goods.promotionCollections.includes('BF')) goods['BF'] = '买满赠'
+      }
       if (goods.itemType=='0') {
         data.clsNo = goods.itemClsno
         data.brandNo = goods.itemBrandno || ''
@@ -920,19 +1023,21 @@ Page({
     this.wxPayRateOpen =  wxPayRateOpen || '0'
     
     console.log(sourceType, cartsType, partnerCode)
-    if (sourceType == '1' && cartsType == 'sup' && partnerCode != 1050) { // 直配 满赠满减 (重庆会出现有时没有请求 促销接口的情况，无法复现先停掉直配促销接口)
+    if (isNewCarts) { // 新版购物车
+      this.getSettlementPromotionNew(requestItemList, allPromotion, supplierNo, cartsType)
+    } else if (sourceType == '1' && cartsType == 'sup' && partnerCode != 1050) { // 直配 满赠满减 (重庆会出现有时没有请求 促销接口的情况，无法复现先停掉直配促销接口)
       requestItemList = JSON.stringify(requestItemList)
       showLoading('加载促销...')
       const supplierNo = obj.items[0].sourceNo
       this.getSupplierMjMz(requestItemList, supplierNo)
-      return
+    } else {
+      // 统配 满赠满减
+      requestItemList = JSON.stringify(requestItemList)
+      showLoading('加载促销...')
+      this.getMjMz(requestItemList)
+      this.getCoupons(requestItemList)
+      this.getExchangeCoupons()
     }
-    // 统配 满赠满减
-    requestItemList = JSON.stringify(requestItemList)
-    showLoading('加载促销...')
-    this.getMjMz(requestItemList)
-    this.getCoupons(requestItemList)
-    this.getExchangeCoupons()
     
     console.log('goodsListddd', goodsList)
   },
