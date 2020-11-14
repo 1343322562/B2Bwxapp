@@ -244,7 +244,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     const buyQty = promotionObj.MS[itemNo].buyQty
     const limitedQty = promotionObj.MS[itemNo].limitedQty
     obj.msMaxQty = limitedQty > buyQty ? buyQty : limitedQty
-    (type && goods.realQty < goods.msMaxQty) || (obj.price = price)
+    type || (obj.price = price)
   }
   return obj
 }

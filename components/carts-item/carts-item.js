@@ -46,7 +46,7 @@ Component({
       const { currentPromotionNo, itemNo } = e.detail,
             goods = this.data.goods,
             currentPromotion = this.data.currentPromotion,
-            currentPromotionType = (goods.cartsType == 'cw' || goods.cartsType == 'dw') ? currentPromotionNo.slice(0, 2) : currentPromotionNo.slice(0, 3)
+            currentPromotionType = (goods.cartsType == 'cw' || goods.cartsType == 'dw') ? currentPromotionNo.slice(0, 2) : currentPromotionNo.slice(0, 3) // 切换的促销
 
       let allPromotion = this.data.allPromotion,
           nowGoods
@@ -67,9 +67,10 @@ Component({
               t.typeNum += 1
             }
           })
+          console.log(77, currentPromotionObj, deepCopy(nowGoods))
+          console.log(78, currentPromotionType)
           if (
-            isPromotion 
-            && currentPromotionType != 'BG'
+            currentPromotionType != 'BG'
             && currentPromotionType != 'MS'
             && currentPromotionType != 'SD'
             && currentPromotionType != 'ZK'
@@ -77,8 +78,26 @@ Component({
             && currentPromotionType != 'FS'
             && currentPromotionType != 'RSD'
           ) {
-            currentPromotion.unshift({ type: currentPromotionType, currentPromotionNo, typeNum:1 });
-            currentPromotionIndex++
+            nowGoods.price = nowGoods.orgiPrice // 切换为非价格促销,则返回原价 
+            if (isPromotion) {
+              currentPromotion.unshift({ type: currentPromotionType, currentPromotionNo, typeNum:1 });
+              currentPromotionIndex++
+            }
+          } else {
+            switch (currentPromotionType) {
+              case 'MS':
+                nowGoods.price = nowGoods.msPrice
+                break;
+              case 'FS':
+                nowGoods.price = nowGoods.sdPrice
+                break;
+              case 'SD':
+                nowGoods.price = nowGoods.drPrice
+                break;
+              case 'ZK':
+                nowGoods.price = nowGoods.zkPrice
+                break;
+            }
           }
           /* 
            * 切换前促销对象数量种类 == 1 ; 则删除此促销单据对象
@@ -137,6 +156,10 @@ Component({
       dispatch[types.CHANGE_CPROMOTION_CARTS]({ goods: { itemNo, currentPromotionNo } })
       toast('已切换')
       this.setData({ goods, currentPromotion, allPromotion })
+      this.data.goods = goods
+      this.data.currentPromotion = currentPromotion
+      this.data.allPromotion = allPromotion
+      this.countMoney()
     },
     // 显示促销 Dialog
     showSwitchPromotionDialog(e) {
@@ -148,13 +171,19 @@ Component({
       const promotionNoArr = e.currentTarget.dataset.promotionnoarr,
             promotionNo = e.currentTarget.dataset.cpnpromotionno,
             allPromotion = this.data.allPromotion,
+            p = deepCopy(allPromotion),
             itemNo = e.currentTarget.dataset.itemno
       let promotionNoObj = {},
           goods = this.data.goods
           // console.log(promotionNoArr)
       promotionNoArr.forEach((item, index) => {
-        promotionNoObj[item] = allPromotion[item]
+        promotionNoObj[item] = p[item]
+        if (item.includes('SD')) {
+          const msg = p[item].msg[itemNo]
+          promotionNoObj[item].msg = [msg]
+        }
       })
+      console.log(promotionNoObj, allPromotion, this.data.allPromotion)
       cpnObj.setData({ data: promotionNoObj, itemNo, goods, promotionNo })
     },
     // 跳转凑单页 
@@ -750,9 +779,10 @@ Component({
 
     // 对统配促销信息进行处理
     allPromotionHandle(res, nowGoods, _this = this) {
-      // console.log(1200,deepCopy(nowGoods))
-      const tag = getGoodsTag(nowGoods, res)
-      // console.log(1201,deepCopy(nowGoods))
+      const tag = getGoodsTag(nowGoods, res, true)
+      console.log(1201,deepCopy(nowGoods))
+      console.log(tag)
+      const { allPromotion } = this.data
       const itemNo = nowGoods.itemNo
       const brandNo = nowGoods.itemBrandno || nowGoods.itemBrandNo
       const itemClsno = nowGoods.itemClsno
@@ -764,7 +794,7 @@ Component({
         // nowGoods.price = tag.price
         promotionList.push({
           name: tag.FS ? '首单特价' : (tag.SD ? '单日限购' : (tag.zkType + '折扣')),
-          msg: [(tag.FS ? ('活动期间,首次下单且购买数量不超过 '+ tag.sdMaxQty + nowGoods.unit +' 享受优惠价格￥'+tag.sdPrice) : (tag.SD ? ('购买数量不超过 ' + tag.drMaxQty + nowGoods.unit + ' 参与促销活动，特价￥' + tag.drPrice) : ('当前' + tag.zkType + '下单立即享受' + tag.discount + '优惠')))],
+          msg: {[itemNo]: (tag.FS ? ('活动期间,首次下单且购买数量不超过 '+ tag.sdMaxQty + nowGoods.unit +' 享受优惠价格￥'+tag.sdPrice) : (tag.SD ? ('购买数量不超过 ' + tag.drMaxQty + nowGoods.unit + ' 参与促销活动，特价￥' + tag.drPrice) : ('当前' + tag.zkType + '下单立即享受' + tag.discount + '优惠')))},
           promotionNo: _this.addPromotionNo(nowGoods, ((tag.FS && 'FS') || (tag.SD && 'SD') || (tag.ZK && 'ZK')))
         })
         // console.log(1238, deepCopy(nowGoods), 'ZK')
@@ -878,10 +908,16 @@ Component({
               nowGoods.cancelSelected = false
               // console.log(954,`${nowGoods.itemNo}`, nowGoods)
               const promotionList = _this.allPromotionHandle(res, nowGoods, _this) // 每个商品的 促销列表 
-              // console.log('promotionList', promotionList)
+              console.log('promotionList', promotionList)
               promotionList.length && promotionList.forEach((item, index) => {
                 const type = item.promotionNo.slice(0, 2)
+                console.log(9030,deepCopy(item), type)
                 if (allPromotion[item.promotionNo]) {
+                  if (type == 'SD') {
+                    console.log(930,deepCopy(item))
+                    if (item.promotionNo == 'SD2011051533329271') console.log(931,deepCopy(item))
+                    allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
+                  }
                   if (nowGoods['currentPromotionNo'] != item.promotionNo) return 
                   if (type == 'MJ') {
                     allPromotion[item.promotionNo].price += nowGoods.realQty * nowGoods.price
@@ -894,6 +930,11 @@ Component({
                   }
                 } else {
                   allPromotion[item.promotionNo] = item
+                  if (type == 'SD') {
+                    console.log(933,deepCopy(item))
+                    if (item.promotionNo == 'SD2011051533329271') console.log(934,deepCopy(item))
+                    allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
+                  }
                   if (nowGoods['currentPromotionNo'] != item.promotionNo) return  allPromotion[item.promotionNo].price = 0
                   if (type == 'MJ') {
                     allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.price
@@ -908,7 +949,9 @@ Component({
               })
             })
             allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
-            // console.log(111, deepCopy(allPromotion))
+            console.log(111, deepCopy(allPromotion))
+            this.data.allPromotion = allPromotion
+            this.data.goods = goodsData
             _this.setData({ allPromotion, goods: goodsData })
           }
         })

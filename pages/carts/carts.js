@@ -1,4 +1,4 @@
-import { showLoading, hideLoading, getGoodsImgSize, getGoodsTag } from '../../tool/index.js'
+import { showLoading, hideLoading, getGoodsImgSize, getGoodsTag, deepCopy } from '../../tool/index.js'
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
@@ -26,12 +26,11 @@ Page({
     const promotionObj = wx.getStorageSync('allPromotion')
     dispatch[types.GET_CHANGE_CARTS]({
       success: (ret) => {
-        console.log(ret)
+        // console.log(JSON.parse(JSON.stringify(ret)))
         wx.stopPullDownRefresh()
         hideLoading()
         let obj = { pageLoading: true}
         if (ret.code == 0 ) {
-          console.log(JSON.parse(JSON.stringify(ret)))
           let list = ret.data||[]
           let cartsList = []
           let cartsObj = {}
@@ -58,6 +57,8 @@ Page({
               goods.currentPromotionNo = S_cartObj[goods.itemNo].currentPromotionNo || '' 
               goods.currentPromotionType = config.sourceType == 0 ? goods.currentPromotionNo.slice(0, 2) : goods.currentPromotionNo.slice(0, 3) 
               goods.promotionCollectionsArr = goods.promotionCollections.includes(',') ?  goods.promotionCollections.split(',') : [goods.promotionCollections]
+              const ty = goods.currentPromotionType
+              if (ty=='BF'||ty=='BG'||ty=='MQ'||ty=='SZ'||ty=='MJ'||ty=='BF') goods.price = goods.orgiPrice
               const tag = getGoodsTag(goods, promotionObj,true)
               goods = Object.assign(goods, tag)
               goods.goodsImgUrl = (config.sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl): zcGoodsUrl) + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)

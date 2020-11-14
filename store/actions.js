@@ -1,7 +1,7 @@
 import API from '../api/index.js'
 import * as types from './types.js'
 import commit from './mutations.js'
-import { getGoodsImgSize, toast } from '../tool/index.js'
+import { deepCopy, getGoodsImgSize, toast } from '../tool/index.js'
 import { timCurrentDay, tim } from '../tool/date-format.js'
 
 const app = getApp()
@@ -366,7 +366,8 @@ const actions = {
       API.Carts.getShoppingCartInfo({
         data: { items, platform, token, username, branchNo },
         success: (res) => {
-          console.log('购物车信息:', res)
+          console.log('购物车信息:', JSON.parse(JSON.stringify(res)))
+          console.log(JSON.parse(JSON.stringify(res.data)))
           let newCartsObj = { num: 0, keyArr:[]}
           if (res.code == 0 && res.data) {
             res.data.forEach(config => {

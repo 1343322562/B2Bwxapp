@@ -172,6 +172,7 @@
           <view class="price">
             <text wx:if="{{good.currentPromotionType == 'MS' && good.msMaxQty > good.realQty}}" class="now">￥{{good.msPrice}}/{{good.deliveryUnit}}</text>
             <text wx:elif="{{good.currentPromotionType == 'FS'}}" class="now">￥{{good.sdPrice}}/{{good.deliveryUnit}}</text>
+            <text wx:elif="{{good.currentPromotionType == 'SD'}}" class="now">￥{{good.drPrice}}/{{good.deliveryUnit}}</text>
             <text wx:else class="now">￥{{good.price}}/{{good.deliveryUnit}}</text>
             <text class="before" wx:if="{{good.orgiPrice!=good.price}}">￥{{good.orgiPrice}}</text>
           </view>
