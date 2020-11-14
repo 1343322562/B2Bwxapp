@@ -1,3 +1,4 @@
+import API from '../api/index.js'
 export const showLoading = (text = '') => {
   wx.showLoading({
     title: String(text),
@@ -181,7 +182,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
   if (BG) obj.BG = BG
   if (BF) obj.BF = true
   promotionObj.SZ['stockType'].map((item, index) => {
-    if (  // 判断库存类型
+    if (  
       item == 0
       || (item == 2 && goods['stockType'] != 0 )
       || (item == '1' && goods['stockType'] == '0')
@@ -191,7 +192,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
       const SZFilterArr = 'filterArr' in promotionObj['SZ'] ? promotionObj['SZ'].filterArr : false
       const SZName= 'giftName' in promotionObj['SZ'] ? promotionObj['SZ'].giftName : false
       SZFilterArr.forEach((t, ind) => {
-        if (goods.itemNo == t || goods.itemClsno == t) {
+        if (goods.itemNo == t || goods.itemClsno == t[0] || goods.itemClsno == t[1]) {
           if (SZInfo) {obj.SZInfo=[]; obj.SZInfo.push(SZInfo[ind])}                  // SZ配送信息
           if (SZName) { obj.SZName=[];  obj.SZName.push(SZName[ind])}                // SZ赠品名称
           if (SZStockType) { obj.SZStockType=[]; obj.SZStockType.push(SZStockType[ind])}   // SZ配送种类
@@ -209,7 +210,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     obj.sdPrice = price
     type || (obj.price = price)
   } else if (promotionObj.MQ[itemNo]) {
-    console.log(promotionObj.MQ)
+    // console.log(promotionObj.MQ)
     obj['MQ'] = {}
     obj['MQ'].buyQty = promotionObj.MQ[itemNo].buyQty
     obj['MQ'].subMoney = promotionObj.MQ[itemNo].subMoney
@@ -269,6 +270,7 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
     const isMs = (cartsGoodsNum > goods.msMaxQty) && (cartsGoodsNum <= goods.msMaxQty + stop )
     const isDr = goods.drMaxQty > goods.msMaxQty
     const isSd = goods.sdMaxQty > goods.msMaxQty
+    // console.log(273,deepCopy(goods))
     if (goods.MS && cartsGoodsNum <= goods.msMaxQty) {
       goods.price = goods.msPrice
     } else if (goods.SD && cartsGoodsNum <= goods.drMaxQty) {
@@ -328,3 +330,45 @@ export const getIP = (param) => {
     }
   });
 } 
+// 删除数组中重复的值(对象)
+export const filterArr = (arr) => {
+  const map = {};
+  // 1、把数组元素作为对象的键存起来（这样就算有重复的元素，也会相互替换掉）
+  arr.forEach(item => map[JSON.stringify(item)] = item);
+  // 2、再把对象的值抽成一个数组返回即为不重复的集合
+  return Object.keys(map).map(key => map[key])
+}
+
+// 直配促销处理
+export const HANDLE_SUP_PROMOTION = function(param) {
+  // console.log(43, param)
+  let obj = {
+    RMJ: { reachVal: '', subMoney: '', memo: '' },
+    RBF: { reachVal: '', memo: ''  },
+    RSD: { itemNo: [], memo: '', endDate: '' }
+  }
+  const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = getApp().data['userObj'] || wx.getStorageSync('userObj')
+  API.Public.getSupplierAllPromotion({
+    data: { branchNo, token, platform, username, supplierNo: param.data.sourceNo },
+    success: res => {
+      console.log(res)
+      let data = res.data
+      for(let key in data) {
+        if (key.includes('RMJ') && data[key].length) {
+          obj.RMJ.reachVal = data[key][0].reachVal
+          obj.RMJ.subMoney = data[key][0].subMoney
+          obj.RMJ.memo = data[key][0].memo
+        } else if (key.includes('RBF') && data[key].length) {
+          obj.RBF.reachVal = data[key][0].reachVal
+          obj.RBF.memo = data[key][0].memo
+        } else if (key.includes('RSD') && data[key].length) {
+          for(let rsdKey in data[key]) {
+            obj.RSD.itemNo.push(rsdKey)
+            obj.RSD.endDate = data[key][rsdKey].endDate.slice(0, 10)
+          }
+        }
+      }
+      param.success(obj)
+    }
+  })
+}

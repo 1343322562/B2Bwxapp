@@ -20,7 +20,8 @@ export default {
     getCouponsByBatchNo: (param) => ajax.post(`supplymini/getCouponsByBatchNo.do`, param),  // 领取优惠券
     getCouponsBatchNo: (param) => ajax.post(`supplymini/getCouponsBatchNo.do`, param),      // 获取优惠券
     getPopup: (param) => ajax.post(`supplymini/getPopup.do`, param),                         // 首页弹窗配置信息
-    getHotItem: (param) => ajax.post(`supplymini/getHotItem.do`, param)                         // 常购商品
+    getHotItem: (param) => ajax.post(`supplymini/getHotItem.do`, param),                     // 常购商品
+    searchItemByPromotionNo: (param) => ajax.post(`supplymini/searchItemByPromotionNo.do`, param) // 获取促销单据的凑单商品
     
   },
   Login: {
@@ -66,6 +67,7 @@ export default {
     saveOrder: (param) => ajax.post(`supplymini/saveOrder.do`, param), // 保存订单
     getSettlementPromotion: (param) => ajax.post(`supplymini/getSettlementPromotion.do`, param), // 获取 统配 满减满赠促销
     getSupplierSettlementPromotion: (param) => ajax.post(`supplymini/getSupplierSettlementPromotion.do`, param), // 获取入驻商(直配)结算页满减满赠促销信息
+    getSettlementPromotionNew: (param) => ajax.post(`supplymini/getSettlementPromotionNew.do`, param), // 获取新版购物车
     getMiniPayParameters: (param) => ajax.post(`minipay/getMiniPayParameters.do`, param), // 微信支付
   },
   Orders: {

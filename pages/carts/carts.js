@@ -1,9 +1,11 @@
-import { showLoading, hideLoading, getGoodsImgSize, getGoodsTag } from '../../tool/index.js'
+import { showLoading, hideLoading, getGoodsImgSize, getGoodsTag, deepCopy } from '../../tool/index.js'
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
+import commit from '../../store/mutations.js'
 Page({
   data: {
+    // promotionDialogObj: [], // 换促销数据
     pageLoading: false,
     cartsObj: {},
     cartsList: [],
@@ -24,6 +26,7 @@ Page({
     const promotionObj = wx.getStorageSync('allPromotion')
     dispatch[types.GET_CHANGE_CARTS]({
       success: (ret) => {
+        // console.log(JSON.parse(JSON.stringify(ret)))
         wx.stopPullDownRefresh()
         hideLoading()
         let obj = { pageLoading: true}
@@ -31,6 +34,8 @@ Page({
           let list = ret.data||[]
           let cartsList = []
           let cartsObj = {}
+          let S_cartObj = commit[types.GET_CARTS]()
+          console.log(S_cartObj)
           list.forEach(config => {
             config.datas.forEach(goods => {
               const type = config.sourceType == '0' ? (goods.stockType == '0' ? 'cw' : 'dw') : config.sourceNo
@@ -49,6 +54,11 @@ Page({
                 }
               }
               goods.carstBasePrice =  goods.orgiPrice
+              goods.currentPromotionNo = S_cartObj[goods.itemNo].currentPromotionNo || '' 
+              goods.currentPromotionType = config.sourceType == 0 ? goods.currentPromotionNo.slice(0, 2) : goods.currentPromotionNo.slice(0, 3) 
+              goods.promotionCollectionsArr = goods.promotionCollections.includes(',') ?  goods.promotionCollections.split(',') : [goods.promotionCollections]
+              const ty = goods.currentPromotionType
+              if (ty=='BF'||ty=='BG'||ty=='MQ'||ty=='SZ'||ty=='MJ'||ty=='BF') goods.price = goods.orgiPrice
               const tag = getGoodsTag(goods, promotionObj,true)
               goods = Object.assign(goods, tag)
               goods.goodsImgUrl = (config.sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl): zcGoodsUrl) + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
@@ -59,6 +69,7 @@ Page({
           obj.cartsObj = cartsObj
         }
         this.setData(obj)
+        console.log(obj)
       }
     })
   },
@@ -99,9 +110,16 @@ Page({
     this.getCartsData()
   },
   onPullDownRefresh() {
-    this.refreshCarts()
+    // this.refreshCarts()
+    const cpn = this.selectAllComponents('.carts-items')
+    // 刷新组件
+    cpn.forEach(item => {
+      console.log(item.pullUpdata())
+    })
+    // this.onLoad()
+    // this.onShow()
   },
   onReachBottom () {
-    console.log(this.data.cartsObj)
+    console.log(this.data.cartsObj, this.data)
   }
 })

@@ -4,6 +4,7 @@
   "backgroundTextStyle": "dark",
   "usingComponents": {
     "carts-item": "../../components/carts-item/carts-item",
-    "recommend-goods": "../../components/recommend-goods/recommend-goods"
+    "recommend-goods": "../../components/recommend-goods/recommend-goods",
+    "select-promotion": "../../components/select-promotion/select-promotion"
   }
 }

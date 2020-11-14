@@ -1,7 +1,7 @@
 import API from '../api/index.js'
 import * as types from './types.js'
 import commit from './mutations.js'
-import { getGoodsImgSize, toast } from '../tool/index.js'
+import { deepCopy, getGoodsImgSize, toast } from '../tool/index.js'
 import { timCurrentDay, tim } from '../tool/date-format.js'
 
 const app = getApp()
@@ -107,7 +107,6 @@ const actions = {
                   })
                 }
               } else if (i == 'SZ') {
-                console.log(10)
                 item.map((i, index)  => {
                   if('reachVal' in i) obj.SZ['giftInfo'].push(i.reachVal)  // SZ 信息
                   let giftQty = i.giftListQty.slice(0 ,i.giftListQty.indexOf('.'))
@@ -128,7 +127,6 @@ const actions = {
                   }
                 })
               } else if (i == 'MQ' && Object.keys(item).length) {
-                console.log(item)
                 for (let index in item ) {
                   let MQKeys = item[index][0].itemNo.split(',')
                   MQKeys.forEach((t, ind) => {
@@ -139,7 +137,6 @@ const actions = {
                   })
                   
                 }
-                console.log(obj.MQ)
                 let itemNo = obj[i][item[0]]
               } else if (i == 'SD' || i == 'FS'|| i == 'MS') {
                 for (let z in item) {
@@ -171,7 +168,6 @@ const actions = {
                   }
                 })
               } else if (i == 'MJ') {
-                // console.log(item)
                 item.forEach(info => {
                   const t = info.filterType
                   const type = t == 0 ? 'fullReduction' : (t == '1' ? 'cls' : (t == '2' ? 'brand' : (t == '3' ? 'goods' : 'data')))
@@ -186,7 +182,6 @@ const actions = {
                       obj.MJ[type][v2].push(data)
                     })
                   }
-                  // console.log(obj)
                 })
               } else if (i == 'BF') {
                 item.forEach(goods => {
@@ -210,7 +205,7 @@ const actions = {
                     })
                   }
                 })
-                console.log(obj, 'BF')
+                // console.log(obj, 'BF')
               }
             }
             wx.setStorage({ key: 'promotionTime', data: +new Date() })
@@ -248,6 +243,14 @@ const actions = {
       return 0 // 没达到限购值
     }
   },
+  // 增加(改变)当前促销至购物车中
+  [types.CHANGE_CPROMOTION_CARTS](param) { // goods
+    let { itemNo, currentPromotionNo, promotionCollections } = param.goods
+    let cartsObj = commit[types.GET_CARTS]()
+    cartsObj[itemNo].currentPromotionNo = currentPromotionNo
+    commit[types.SAVE_CARTS](cartsObj) // 缓存 cartsObj
+  },
+
   [types.CHANGE_CARTS](param, cartsObjs = 0) { // add delete minus； cartsObj 为促销信息，主要用来实现直配的限时促销，达到限购值，停止加购
     console.log(param)
   // 直配中商品数量若满足限时促销中的 限购值，则停止加购
@@ -264,6 +267,7 @@ const actions = {
       return toast('此商品已达秒杀最大限购数量!')
     }
     let cartsObj = commit[types.GET_CARTS]()
+    // console.log(JSON.parse(JSON.stringify(cartsObj)))
     if (cartsObj.keyArr.length>=300){
       toast('购物车已达到最大商品数量!')
       return
@@ -280,9 +284,12 @@ const actions = {
       orgiPrice = 0,
       specType = '0',
       isBind = '0',
-      parentItemNo
+      parentItemNo,
+      currentPromotionNo,
+      promotionCollections
     } = param.goods
     parentItemNo || (parentItemNo = '')
+    // currentPromotionNo || (currentPromotionNo = promotionCollections && promotionCollections.length > 0 && promotionCollections.slice(0, 18))
     stockQty || (stockQty=0)
     maxSupplyQty || (maxSupplyQty = 9999)
     minSupplyQty || (minSupplyQty = 1)
@@ -302,13 +309,11 @@ const actions = {
         cartsObj[itemNo].realQty = 0
         cartsObj.num -= nowNum
       } else {
-        console.log(cartsObj[itemNo], nowNum, minSupplyQty)
         cartsObj[itemNo].realQty = cartsObj[itemNo].realQty - (minSupplyQty || 1)
         String(cartsObj[itemNo].realQty).includes('.') && (cartsObj[itemNo].realQty = cartsObj[itemNo].realQty.toFixed(1))
         cartsObj.num -= (minSupplyQty || 1)
         String(cartsObj.num).includes('.') && (cartsObj.num = cartsObj.num.toFixed(1))
       }
-      console.log(308,'直配进来')
     } else {
       let item = {
         itemNo: itemNo,
@@ -319,20 +324,18 @@ const actions = {
         branchNo: branchNo,
         sourceType: sourceType,
         sourceNo: sourceNo,
-        parentItemNo: parentItemNo || '' 
+        parentItemNo: parentItemNo,
+        currentPromotionNo: (`${itemNo}` in cartsObj && cartsObj[itemNo].currentPromotionNo) || currentPromotionNo || ''
       }
       if (getApp().data.partnerCode == 1027) {
         item.createDate = timCurrentDay(0) + ' ' + tim()
       }
-      console.log(timCurrentDay(0) + tim())
       if (param.type == 'input') {
         let num2 = param.value - minSupplyQty;
         item.realQty = num2 <= 0 ? minSupplyQty : (minSupplyQty + (num2 <= supplySpec ? supplySpec : supplySpec * parseInt(num2 / supplySpec)))
         cartsObj.num = cartsObj.num - nowNum + item.realQty
       } else {
         const count = (param.type == 'add' ? (nowNum ? supplySpec : minSupplyQty) : -(nowNum - supplySpec >= minSupplyQty ? supplySpec : minSupplyQty))
-        // item.realQty += count
-        // cartsObj.num += count
         item.realQty = Number(item.realQty) + count; if(String(item.realQty).includes('.')) item.realQty = Number(Number(item.realQty).toFixed(1))
         cartsObj.num += Number(count); if(String(cartsObj.num).includes('.')) cartsObj.num = Number(Number(cartsObj.num).toFixed(1))
        
@@ -341,8 +344,7 @@ const actions = {
       //   toast(item.realQty > maxSupplyQty ? '已达到最大购买数量' :'库存不足')
       //   return
       // }
-      // 判断了直配和统配都判断了库存
-      console.log(339,'直配进来')
+      // 直配和统配都判断了库存, 上面是没判断的
       if (param.type != 'minus' && (item.realQty > maxSupplyQty || (item.realQty > (deliveryType == '3' ? 9999 : stockQty)))) {
         toast(item.realQty > maxSupplyQty ? '已达到最大购买数量' :'库存不足')
         return
@@ -350,14 +352,11 @@ const actions = {
       cartsObj[itemNo] || cartsObj.keyArr.push(itemNo)
       cartsObj[itemNo] = item
     }
-    console.log(cartsObj)
     commit[types.SAVE_CARTS](cartsObj) // 缓存 cartsObj
     wx.setStorageSync('updateCarts', true)
-    // wx.setStorage({key: 'updateCarts',data: true})
     return cartsObj
   },
   [types.GET_CHANGE_CARTS](param) {
-    console.log('get', param)
     const updateCarts = wx.getStorageSync('updateCarts')
     const { branchNo, token, username, platform } = getApp().data['userObj'] || wx.getStorageSync('userObj')
     const cartsObj = commit[types.GET_CARTS]()
@@ -371,7 +370,8 @@ const actions = {
       API.Carts.getShoppingCartInfo({
         data: { items, platform, token, username, branchNo },
         success: (res) => {
-          console.log('购物车信息:', res)
+          console.log('购物车信息:', JSON.parse(JSON.stringify(res)))
+          console.log(JSON.parse(JSON.stringify(res.data)))
           let newCartsObj = { num: 0, keyArr:[]}
           if (res.code == 0 && res.data) {
             res.data.forEach(config => {
@@ -384,7 +384,11 @@ const actions = {
                 })
               }
               config.datas.forEach(goods => {
-                const itemNo = goods.itemNo
+                const itemNo = goods.itemNo,
+                      currentPromotionNo = (`${itemNo}` in cartsObj && cartsObj[itemNo].currentPromotionNo) 
+                                          || goods.currentPromotionNo 
+                                          || ('promotionCollections' in goods && goods.promotionCollections.slice(0, 18))
+                                          || ''
                 newCartsObj.keyArr.push(itemNo)
                 newCartsObj[itemNo] = {
                   itemNo: itemNo,
@@ -395,7 +399,8 @@ const actions = {
                   branchNo: config.branchNo,
                   sourceType: config.sourceType,
                   sourceNo: config.sourceNo,
-                  parentItemNo: goods.parentItemNo || ''
+                  parentItemNo: goods.parentItemNo,
+                  currentPromotionNo
                 }
                 newCartsObj.num += goods.realQty
               })

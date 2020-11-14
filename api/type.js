@@ -44,7 +44,7 @@ export default {
   '1031': 'https://xcx.xz-jx.cn/zksrb2b-web/', //  拉萨见喜商贸   图片  erp.xz-jx.cn (隐藏直供。统配需要改成选品)
   '1032': 'https://mp.huidt.tech/zksrb2b-web/', //  武汉黄石   图片   erp.huidt.tech
   '1033': 'https://xcx.rhbh.net.cn/zksrb2b-web/', //  清河   图片   erp.rhbh.net.cn
-  '1034': 'https://xcx.xlsp168.com/zksrb2b-web/', //  广州闲聊食品   图片   39.100.103.135:8080 （隐藏直配，统配改成商城）
+  '1034': 'https://xcx.xlsp168.com/zksrb2b-web/', //  广州闲聊食品   图片   39.100.103.135:8080 （隐藏直配，统配改成商城）13533549113 123456
   '1035': 'https://app.huayanghuimin.com/zksrb2b-web/', //  邢台华海惠民   图片 erp.huayanghuimin.com  (隐藏： 订货额度、信用额度、待返利、授信明细)
   '1036': 'https://xcx.yhfws.cn/zksrb2b-web/', //  唐山一合   图片   erp.yhfws.cn  （统配改名分类）
   '1037': 'https://wx.gapin24.cn/zksrb2b-web/', //  西安嘉品云市   图片   erp.gapin24.cn
@@ -67,7 +67,7 @@ export default {
   '1054': 'https://xcx.xzkj.ltd/',  //  武汉酒业 wxd473e65be033c5ee http://47.92.86.135:8080 123456  123456  !!不要直配
   '1055': 'http://xcx.ugou360.com/', // 客诚  wxf23abc012b304264  http://39.100.70.234:8080/  17775767355 123546
   '1056': 'https://wx.qshygyl.com/', // 承德 wx60319370721265b9  http://wx.qshygyl.com  15233484260 123456  统配改分类,隐藏直配
-  '1057': 'https://xcx.lszx888.com/zksrb2b-web/', // 零食甄选 wxff89d54fc5013ad5  13212609585 123456  统配改分类,隐藏直配
+  '1057': 'https://xcx.lszx888.com/zksrb2b-web/', // 零食甄选 wxff89d54fc5013ad5  zksr 123456  
   '1058': 'https://wx.yygyt.cn/zksrb2b-web/', // 益阳云商通 wx.yygyt.cn/zksrb2b-web wxb4ff1e1646959e36  15101512488 123456 
   '1059': 'https://xcx.jiuleshenghuo.com/zksrb2b-web/', // 新乐尔乐 wx.yygyt.cn/zksrb2b-web wxb4ff1e1646959e36  15101512488 123456 
 }

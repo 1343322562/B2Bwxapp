@@ -1,4 +1,5 @@
 import urlConfig from './type'
+
 export default {
   baseURL: urlConfig[getApp().data.partnerCode],
   post (url, param) {
@@ -23,7 +24,6 @@ export default {
       dataType: 'json',
       data: requestObj ,
       success:  (response) => {
-        console.log(response, url)
         const data = (typeof response === 'object' ? response.data : response)
         if (!data || data.code == 2) {
           wx.setStorageSync('isWxLogin', true)
