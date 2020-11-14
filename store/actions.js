@@ -204,7 +204,7 @@ const actions = {
                     })
                   }
                 })
-                console.log(obj, 'BF')
+                // console.log(obj, 'BF')
               }
             }
             wx.setStorage({ key: 'promotionTime', data: +new Date() })

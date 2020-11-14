@@ -210,7 +210,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     obj.sdPrice = price
     type || (obj.price = price)
   } else if (promotionObj.MQ[itemNo]) {
-    console.log(promotionObj.MQ)
+    // console.log(promotionObj.MQ)
     obj['MQ'] = {}
     obj['MQ'].buyQty = promotionObj.MQ[itemNo].buyQty
     obj['MQ'].subMoney = promotionObj.MQ[itemNo].subMoney
@@ -244,7 +244,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     const buyQty = promotionObj.MS[itemNo].buyQty
     const limitedQty = promotionObj.MS[itemNo].limitedQty
     obj.msMaxQty = limitedQty > buyQty ? buyQty : limitedQty
-    type || (obj.price = price)
+    (type && goods.realQty < goods.msMaxQty) || (obj.price = price)
   }
   return obj
 }
@@ -270,6 +270,7 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
     const isMs = (cartsGoodsNum > goods.msMaxQty) && (cartsGoodsNum <= goods.msMaxQty + stop )
     const isDr = goods.drMaxQty > goods.msMaxQty
     const isSd = goods.sdMaxQty > goods.msMaxQty
+    // console.log(273,deepCopy(goods))
     if (goods.MS && cartsGoodsNum <= goods.msMaxQty) {
       goods.price = goods.msPrice
     } else if (goods.SD && cartsGoodsNum <= goods.drMaxQty) {
@@ -340,7 +341,7 @@ export const filterArr = (arr) => {
 
 // 直配促销处理
 export const HANDLE_SUP_PROMOTION = function(param) {
-  console.log(43, param)
+  // console.log(43, param)
   let obj = {
     RMJ: { reachVal: '', subMoney: '', memo: '' },
     RBF: { reachVal: '', memo: ''  },
