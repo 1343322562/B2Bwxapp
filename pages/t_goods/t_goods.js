@@ -10,6 +10,7 @@ Page({
     pageLoading: false,
     nowSelectOneCls: '', // 选中一级分类
     nowSelectTwoCls: '', // 选中二级分类
+    currentClsType: 1, // 当前分类供应商类别  1: 入驻商 2: 总仓
     classifyObj: {}, // 商品分类
     classifyList: [], // 商品分类KEY
     animtionObjShow: {},
@@ -107,15 +108,15 @@ Page({
     goPage('searchGoods',{openType: 'tongpei'})
   },
   tapOneCls (e,type) {
-    console.log(86,e,type, this)
+    console.log(86,e,type, this.data)
     if (e) {
       let no = typeof e == 'object' ? e.currentTarget.dataset.no : e
-      if (no == this.data.nowSelectOneCls) return
       console.log('这是 no', no)
+      const currentClsType = no.includes('s') ? 1 : 2
       const beforeNo = this.data.nowSelectOneCls
       const twoCls = (no in this.data.classifyObj && this.data.classifyObj[no].children) || []
       no == beforeNo && (no = null)
-      this.setData({ beforeOneCls: beforeNo })
+      if (beforeNo != null) this.setData({ beforeOneCls: beforeNo })
       setTimeout(()=>{
         if (type != 'one') {
           const h = ((twoCls.length + 1) * 100) + 'rpx'
@@ -124,10 +125,11 @@ Page({
           this.setData({
             animtionObjShow: this.nowAnmiation.export(),
             animtionObjHide: this.beforeAnmiation.export(),
+            currentClsType,
             nowSelectOneCls: no
           })
         }
-        console.log(105, twoCls)
+        if (no == null || (this.data.beforeOneCls == no && typeof e == 'object')) return
         twoCls.length && this.tapTwoCls(twoCls[0].clsNo)
       },20)
     }
@@ -401,7 +403,7 @@ Page({
     })
   },
   createAnimation() {
-    const config = { duration: 400, timingFunction: 'ease' }
+    const config = { duration: 500, timingFunction: 'ease' }
     const nowAnmiation = wx.createAnimation(config)
     const beforeAnmiation = wx.createAnimation(config)
     this.nowAnmiation = nowAnmiation

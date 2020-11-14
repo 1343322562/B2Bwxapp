@@ -37,7 +37,7 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.13.1",
-	"appid": "wx3f4c36326c645862",
+	"appid": "wxd1fd45ecfed2216a",
 	"projectname": "%E5%AE%9C%E6%98%8C%E9%87%91%E8%B4%9D%E6%BA%90n",
 	"scripts": {},
 	"simulatorType": "wechat",
@@ -209,6 +209,14 @@
 					"id": -1,
 					"name": "supplierGoods",
 					"pathName": "pages/supplierGoods/supplierGoods",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/t_goods/t_goods",
+					"pathName": "pages/t_goods/t_goods",
+					"query": "platform=1&username=18569429872&orderNo=YH2007241537392915&payAmt=11.7",
 					"scene": null
 				}
 			]

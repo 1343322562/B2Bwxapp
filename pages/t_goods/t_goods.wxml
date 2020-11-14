@@ -41,11 +41,13 @@
     </view>
     <view class='item' catchtap='showScreen'>筛选</view>
   </view>
-  <view 
+  <view  
     wx:if="{{nowSelectOneCls && classifyObj[nowSelectOneCls].minDeliveryMomey || (!nowSelectOneCls && classifyObj[classifyList[0]].minDeliveryMomey)}}" 
+    wx:if="{{currentClsType == 1 && (classifyObj[nowSelectOneCls].minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey)}}" 
     class="supTop"
   >
-    起送价：￥{{classifyObj.nowSelectOneCls.minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey}}
+    起送价: ￥{{classifyObj.nowSelectOneCls.minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey}}
+    {{classifyObj.nowSelectOneCls.supplierName || classifyObj[classifyList[0]].supplierName}}
   </view>
   <view class='li' wx:for="{{goodsList}}" wx:for-item="itemNo" wx:key="index" data-supNo="{{goodsObj[itemNo].supcustNo}}" data-no="{{itemNo}}" bindtap='goGoodsDetails'>
     <view class='img'>
