@@ -845,7 +845,10 @@ Page({
     payWayList[0].show = czPay == '1' //&& obj.items[0].sourceType == '0'
     payWayList[1].show = wxPay == '1' //&& obj.items[0].sourceType == '0'
     payWayList[2].show = codPay == '1'
-    if (partnerCode == '1029' && cartsType == 'sup') payWayList[1].show = false // 怡星 ZC 单不开微信支付 
+    if (partnerCode == '1029' && cartsType == 'sup') {
+      payWayList[1].show = false // 怡星 ZC 单不开微信支付 以及 储值支付、
+      payWayList[0].show = false
+    }
     let goodsList = obj.items[0].datas
     const sourceType = obj.items[0].sourceType
     console.log(sourceType)

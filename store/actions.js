@@ -322,7 +322,7 @@ const actions = {
         parentItemNo: parentItemNo || '' 
       }
       if (getApp().data.partnerCode == 1027) {
-        item.createDate = timCurrentDay(0) + ' ' + tim()
+        item.createDate = Number(new Date().getTime())
       }
       console.log(timCurrentDay(0) + tim())
       if (param.type == 'input') {
@@ -378,9 +378,10 @@ const actions = {
               // 按加购时间排序
               if (getApp().data.partnerCode == 1027) {
                 config.datas.sort((a, b) => {
-                  let aDate = new Date(a.createDate).getTime()
-                  let bDate = new Date(b.createDate).getTime()
-                  return bDate - aDate
+                  let aDate = Number(a.createDate)
+                  let bDate = Number(b.createDate)
+                  console.log(aDate - bDate, aDate , bDate)
+                  return aDate - bDate
                 })
               }
               config.datas.forEach(goods => {
