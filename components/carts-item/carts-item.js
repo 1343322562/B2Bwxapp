@@ -255,7 +255,6 @@ Component({
         data.items[0].datas.sort((a, b) => {
           let aDate = Number(a.createDate)
           let bDate = Number(b.createDate)
-          console.log(aDate - bDate, aDate , bDate)
           return aDate - bDate
         })
       }
