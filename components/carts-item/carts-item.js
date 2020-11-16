@@ -137,20 +137,14 @@ Component({
               allPromotion[currentPromotionObj.currentPromotionNo].price -= nowGoods.price * nowGoods.realQty
               allPromotion = this.isSatisfyPromotion(allPromotion) 
             }
-            
-            
-            
           } else {
             if (currentPromotionType == 'SZ' || currentPromotionType == 'MJ' || currentPromotionType == 'BF' || currentPromotionType == 'RMJ' || currentPromotionType == 'RBF') {
               if (isPromotion) {
                 allPromotion[currentPromotionNo].price = 0
                 allPromotion = this.isSatisfyPromotion(allPromotion) 
-              } else {
               }
             } 
           }
-          
-
           
           goods.data[index].currentPromotionNo = currentPromotionNo
           goods.data[index].currentPromotionType = currentPromotionType
@@ -158,6 +152,7 @@ Component({
       })
       dispatch[types.CHANGE_CPROMOTION_CARTS]({ goods: { itemNo, currentPromotionNo } })
       toast('已切换')
+      wx.setStorageSync('updateCarts', true)
       console.log(goods)
       this.setData({ goods, currentPromotion, allPromotion })
       this.data.goods = goods
@@ -416,14 +411,15 @@ Component({
       const allPromotion = this.data.allPromotion
       const cartsObj = commit[types.GET_CARTS]()
       let sheetAmt = 0
-      const { goods: cGood } = this.data
-      console.log(cGood)
-      data.items[0].datas.forEach(goods => {
+      const { data: cData } = this.data.goods
+      console.log(cData)
+      console.log(data)
+      data.items[0].datas.forEach((goods, index) => {
         const imgUrl = (sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl) : zcGoodsUrl)
         goods.goodsImgUrl = imgUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
         goods.subtotal = Number((goods.price * goods.realQty).toFixed(2))
         goods.itemType = goods.promotionType =='BD'?'0': '1'
-        const promotionNo = goods.currentPromotionNo || ''
+        const promotionNo = cData[index].currentPromotionNo || ''
         const ty = (sourceType == '1' && promotionNo) ? promotionNo.slice(0, 3) : promotionNo.slice(0, 2)
         goods.currentPromotionType = ty
         console.log(ty, promotionNo)
@@ -435,9 +431,9 @@ Component({
           goods.price = goods.sdPrice
         } else if (ty == 'ZK') {
           goods.price = goods.zkPrice
-        } else if (ty == 'MS') {
-          goods.price = goods.msPrice
-        }
+        } else if (ty == 'SD') {
+          goods.price = goods.drPrice
+        } 
         sheetAmt += goods.price * goods.realQty
       })
       data.sheetAmt = Number(sheetAmt.toFixed(2))

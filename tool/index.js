@@ -261,7 +261,7 @@ export const setParentGoodsCartsObj = (cartsObj) => { // 计算多规格主商�
 }
 export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单日限购 判断计算
   const warn = (openType == 'add' || openType == 'input')
-  const ty = goods.currentPromotionNo
+  const ty = goods.currentPromotionNo || ''
   if (ty.includes('MS') || ty.includes('SD') || ty.includes('ZK') || ty.includes('FS')) {
     goods.msMaxQty || (goods.msMaxQty=0)
     goods.drMaxQty || (goods.drMaxQty=0)
