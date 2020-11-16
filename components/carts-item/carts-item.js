@@ -148,6 +148,7 @@ Component({
           
           goods.data[index].currentPromotionNo = currentPromotionNo
           goods.data[index].currentPromotionType = currentPromotionType
+          console.log(currentPromotionNo, currentPromotionType)
         }
       })
       dispatch[types.CHANGE_CPROMOTION_CARTS]({ goods: { itemNo, currentPromotionNo } })
@@ -403,6 +404,14 @@ Component({
       })
       
     },
+    // 对象化 data
+    backGoodObj(data) {
+      const obj = {}
+      data.forEach(item => {
+        obj[item.itemNo] = item
+      })
+      return obj
+    },
     saveLiquidationObj(data, replenish) {
       console.log('保存购物车 data 数据' ,deepCopy(data))
       const { zhGoodsUrl, goodsUrl, zcGoodsUrl, partnerCode } = getApp().data
@@ -412,27 +421,29 @@ Component({
       const cartsObj = commit[types.GET_CARTS]()
       let sheetAmt = 0
       const { data: cData } = this.data.goods
-      console.log(cData)
-      console.log(data)
-      data.items[0].datas.forEach((goods, index) => {
+      const cDataObj = this.backGoodObj(cData)
+      data.items[0].datas.forEach(goods => {
+        if (goods['currentPromotionNo']) {
+          goods['promotionSheetNo'] = goods['currentPromotionNo']
+          goods['promotionType'] = goods['currentPromotionType'] 
+        }
         const imgUrl = (sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl) : zcGoodsUrl)
         goods.goodsImgUrl = imgUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
         goods.subtotal = Number((goods.price * goods.realQty).toFixed(2))
         goods.itemType = goods.promotionType =='BD'?'0': '1'
-        const promotionNo = cData[index].currentPromotionNo || ''
+        const promotionNo = cDataObj[goods.itemNo].currentPromotionNo || ''
         const ty = (sourceType == '1' && promotionNo) ? promotionNo.slice(0, 3) : promotionNo.slice(0, 2)
         goods.currentPromotionType = ty
-        console.log(ty, promotionNo)
         if (ty == 'BG' || ty == 'BF' || ty == 'MQ' || ty == 'MJ') {
-          goods.price = goods.orgiPrice
+          goods.price = cDataObj[goods.itemNo].orgiPrice
         } else if (ty == 'MS') {
-          goods.price = goods.msPrice
+          goods.price = cDataObj[goods.itemNo].msPrice
         } else if (ty == 'FS') {
-          goods.price = goods.sdPrice
+          goods.price = cDataObj[goods.itemNo].sdPrice
         } else if (ty == 'ZK') {
-          goods.price = goods.zkPrice
+          goods.price = cDataObj[goods.itemNo].zkPrice
         } else if (ty == 'SD') {
-          goods.price = goods.drPrice
+          goods.price = cDataObj[goods.itemNo].drPrice
         } 
         sheetAmt += goods.price * goods.realQty
       })
@@ -711,7 +722,7 @@ Component({
             typeNum: 0              // 商品种类数量
           } 
           // console.log(promoObj)
-          switch(sourceType) { // 0: 统配, 1: 直配
+          switch(Number(sourceType)) { // 0: 统配, 1: 直配
             case 0:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 2)
               // if (item['currentPromotionType'] =='MJ') console.log(item,  promoObj.typeNum)
@@ -968,6 +979,10 @@ Component({
             this.data.allPromotion = allPromotion
             this.data.goods = goodsData
             _this.setData({ allPromotion, goods: goodsData })
+            hideLoading()
+          },
+          error:() => {
+            hideLoading()
           }
         })
       } else { // 直配
@@ -1003,11 +1018,11 @@ Component({
               allPromotion = _this.isSatisfyPromotion(allPromotion)
               _this.setData({ allPromotion, goods: goodsData })
               _this.countMoney() // 计算购物车金额, 防止下拉刷新时获取不到最近的购物车金额
+              hideLoading()
             })
           }
         })
       }
-      
     },
     // 计算是否满足促销条件
     isSatisfyPromotion(allPromotion) {
@@ -1054,6 +1069,7 @@ Component({
     }
   },
   attached() {
+    showLoading('请稍候...')
     console.log(1137 ,this)
     this.countMoney()
     this.getCommonSetting() // 获取送货开始和结束时间
