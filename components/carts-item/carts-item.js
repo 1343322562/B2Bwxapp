@@ -250,6 +250,15 @@ Component({
       const { zhGoodsUrl, goodsUrl, zcGoodsUrl } = getApp().data
       const sourceType = data.items[0].sourceType
       const replenishNo = this.data.isReplenish
+      // 按加购时间排序
+      if (getApp().data.partnerCode == 1027) {
+        data.items[0].datas.sort((a, b) => {
+          let aDate = Number(a.createDate)
+          let bDate = Number(b.createDate)
+          console.log(aDate - bDate, aDate , bDate)
+          return aDate - bDate
+        })
+      }
       data.items[0].datas.forEach(goods => {
         const imgUrl = (sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl) : zcGoodsUrl)
         goods.goodsImgUrl = imgUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
