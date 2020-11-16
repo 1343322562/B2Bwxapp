@@ -1,8 +1,8 @@
 import { getIp } from './tool/index.js'
 App({
   data: { 
-    partnerCode: '1027',
-    baseImgUrl:'http://39.98.78.85:8080/',
+    // partnerCode: '1027',
+    // baseImgUrl:'http://39.98.78.85:8080/',
     // partnerCode: '1029',
     // baseImgUrl:'http://39.98.164.194:8081/',
     // partnerCode: '1013',
@@ -22,7 +22,8 @@ App({
     // partnerCode: '1034',
     // baseImgUrl:'https://39.100.103.135:8080/',
     // partnerCode: '10522',
-    // partnerCode: '1011',
+    partnerCode: '1014',
+    baseImgUrl:'https://bbladmin.bangbianli.com/',
     // partnerCode: '1036',
     // baseImgUrl:'https://erp.yhfws.cn/',
     // partnerCode: '1026',
@@ -43,6 +44,7 @@ App({
 
     // partnerCode: '1050',
     // baseImgUrl:'http://erp.wgjnh.com',
+    // partnerCode: '06',
     // 18569429872
     supplierNo: '', // 首页跳转入驻商类别
     ww:'', // 屏幕宽度
