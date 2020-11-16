@@ -261,7 +261,8 @@ export const setParentGoodsCartsObj = (cartsObj) => { // 计算多规格主商�
 }
 export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单日限购 判断计算
   const warn = (openType == 'add' || openType == 'input')
-  if (goods.MS || goods.SD|| goods.ZK || goods.FS) {
+  const ty = goods.currentPromotionNo
+  if (ty.includes('MS') || ty.includes('SD') || ty.includes('ZK') || ty.includes('FS')) {
     goods.msMaxQty || (goods.msMaxQty=0)
     goods.drMaxQty || (goods.drMaxQty=0)
     goods.sdMaxQty || (goods.sdMaxQty = 0)
@@ -271,19 +272,19 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
     const isDr = goods.drMaxQty > goods.msMaxQty
     const isSd = goods.sdMaxQty > goods.msMaxQty
     // console.log(273,deepCopy(goods))
-    if (goods.MS && cartsGoodsNum <= goods.msMaxQty) {
+    if (ty.includes('MS') && cartsGoodsNum <= goods.msMaxQty) {
       goods.price = goods.msPrice
-    } else if (goods.SD && cartsGoodsNum <= goods.drMaxQty) {
+    } else if (ty.includes('SD') && cartsGoodsNum <= goods.drMaxQty) {
       goods.price = goods.drPrice
-      if (warn && goods.MS && isDr && isMs ) {
+      if (warn && ty.includes('MS') && isDr && isMs ) {
         alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
-    } else if (goods.ZK && cartsGoodsNum <= goods.zkMaxQty) {
+    } else if (ty.includes('ZK') && cartsGoodsNum <= goods.zkMaxQty) {
       goods.price = goods.zkPrice
       if (warn && goods.MS  && isMs) {
         alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
-    } else if (goods.FS && cartsGoodsNum <= goods.sdMaxQty) {
+    } else if (ty.includes('FS') && cartsGoodsNum <= goods.sdMaxQty) {
       goods.price = goods.sdPrice
       if (warn && goods.MS && isSd && isMs) {
         alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
@@ -291,9 +292,9 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
     } else {
       goods.price = goods.orgiPrice
       if (warn&&(
-        (goods.MS && isMs)
-        || (goods.SD && (cartsGoodsNum > goods.drMaxQty) && (cartsGoodsNum <= goods.drMaxQty + stop))
-        || (goods.FS && (cartsGoodsNum > goods.sdMaxQty) && (cartsGoodsNum <= goods.sdMaxQty + stop))
+        (ty.includes('MS') && isMs)
+        || (ty.includes('SD') && (cartsGoodsNum > goods.drMaxQty) && (cartsGoodsNum <= goods.drMaxQty + stop))
+        || (ty.includes('FS') && (cartsGoodsNum > goods.sdMaxQty) && (cartsGoodsNum <= goods.sdMaxQty + stop))
         )) {
         alert('商品购买数量已超' + ((isDr || isSd) ? '促销' : '秒杀') + '上限[' + goods[isDr ? 'drMaxQty' : (isSd ? 'sdMaxQty' :'msMaxQty')] + '],商品将恢复原价')
       }

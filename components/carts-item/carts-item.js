@@ -97,6 +97,9 @@ Component({
               case 'ZK':
                 nowGoods.price = nowGoods.zkPrice
                 break;
+              case 'BG':
+                nowGoods.price = nowGoods.orgiPrice
+                break;
             }
           }
           /* 
@@ -155,6 +158,7 @@ Component({
       })
       dispatch[types.CHANGE_CPROMOTION_CARTS]({ goods: { itemNo, currentPromotionNo } })
       toast('已切换')
+      console.log(goods)
       this.setData({ goods, currentPromotion, allPromotion })
       this.data.goods = goods
       this.data.currentPromotion = currentPromotion
@@ -405,22 +409,41 @@ Component({
       
     },
     saveLiquidationObj(data, replenish) {
-      console.log('保存购物车 data 数据' ,data)
+      console.log('保存购物车 data 数据' ,deepCopy(data))
       const { zhGoodsUrl, goodsUrl, zcGoodsUrl, partnerCode } = getApp().data
       const sourceType = data.items[0].sourceType
       const replenishNo = this.data.isReplenish
       const allPromotion = this.data.allPromotion
       const cartsObj = commit[types.GET_CARTS]()
+      let sheetAmt = 0
+      const { goods: cGood } = this.data
+      console.log(cGood)
       data.items[0].datas.forEach(goods => {
-        const itemNo = goods.itemNo
         const imgUrl = (sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl) : zcGoodsUrl)
         goods.goodsImgUrl = imgUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
         goods.subtotal = Number((goods.price * goods.realQty).toFixed(2))
         goods.itemType = goods.promotionType =='BD'?'0': '1'
-        const promotionNo = cartsObj[itemNo].currentPromotionNo || ''
-        goods.currentPromotionType = sourceType == '1' && promotionNo ? promotionNo.slice(0, 3) : promotionNo.slice(0, 2)
+        const promotionNo = goods.currentPromotionNo || ''
+        const ty = (sourceType == '1' && promotionNo) ? promotionNo.slice(0, 3) : promotionNo.slice(0, 2)
+        goods.currentPromotionType = ty
+        console.log(ty, promotionNo)
+        if (ty == 'BG' || ty == 'BF' || ty == 'MQ' || ty == 'MJ') {
+          goods.price = goods.orgiPrice
+        } else if (ty == 'MS') {
+          goods.price = goods.msPrice
+        } else if (ty == 'FS') {
+          goods.price = goods.sdPrice
+        } else if (ty == 'ZK') {
+          goods.price = goods.zkPrice
+        } else if (ty == 'MS') {
+          goods.price = goods.msPrice
+        }
+        sheetAmt += goods.price * goods.realQty
       })
+      data.sheetAmt = Number(sheetAmt.toFixed(2))
+      console.log(data)
       wx.setStorageSync('liquidationObj', data)
+      console.log(424,data)
       if (partnerCode == '1029') {   // isNewCarts: 新版购物车
         goPage('liquidation', { supplierNo: data.items[0].sourceNo, isNewCarts: true, cartsType: this.data.goods.cartsType, replenish, replenishNo, allPromotion })
       } else {
@@ -434,7 +457,7 @@ Component({
       const goods = cartsObj.data[index]
       goPage('goodsDetails', {
         itemNo: goods.itemNo,
-        supcustNo: cartsObj.cartsType == 'sup' ? cartsObj.sourceNo:''
+        supcustNo: cartsObj.cartsType == 'sup' ? cartsObj.sourceNo : ''
       })
     },
     countMoney(currentProObj) {
@@ -914,8 +937,6 @@ Component({
                 console.log(9030,deepCopy(item), type)
                 if (allPromotion[item.promotionNo]) {
                   if (type == 'SD') {
-                    console.log(930,deepCopy(item))
-                    if (item.promotionNo == 'SD2011051533329271') console.log(931,deepCopy(item))
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
                   }
                   if (nowGoods['currentPromotionNo'] != item.promotionNo) return 
@@ -931,8 +952,6 @@ Component({
                 } else {
                   allPromotion[item.promotionNo] = item
                   if (type == 'SD') {
-                    console.log(933,deepCopy(item))
-                    if (item.promotionNo == 'SD2011051533329271') console.log(934,deepCopy(item))
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
                   }
                   if (nowGoods['currentPromotionNo'] != item.promotionNo) return  allPromotion[item.promotionNo].price = 0

@@ -855,8 +855,8 @@ Page({
               mjList.push(item)
               // goodsList.push({ promotionType: type })
             } else if (type == 'BG') {
-              const BG = this.promotionObj.BG.giftGoods
-              let goodsList = this.data.goodsList
+              const BG = _this.promotionObj.BG.giftGoods
+              let goodsList = _this.data.goodsList
               let BGnum = 0
               item.items.forEach((item2, index) => {
                 item2.items.forEach((no, i) => {
@@ -876,7 +876,7 @@ Page({
                     parentItemQty: (goods.buyQty + ':' + goods.giftQty),
                     id: no.id,
                     subtotal: 0,
-                    goodsImgUrl: this.goodsUrl + no.itemNo + '/' + getGoodsImgSize(goods.giftImgName)
+                    goodsImgUrl: _this.goodsUrl + no.itemNo + '/' + getGoodsImgSize(goods.giftImgName)
                   })
                 })
               })
@@ -919,6 +919,7 @@ Page({
     console.log(opt, allPromotion)
     const obj = wx.getStorageSync('liquidationObj')
     this.promotionObj = wx.getStorageSync('allPromotion')
+    console.log(this.promotionObj)
     this.userObj = wx.getStorageSync('userObj')
     this.liquidationObj = deepCopy(obj)
     wx.removeStorageSync('invoiceSelectedIndex')
@@ -1025,7 +1026,8 @@ Page({
     console.log(sourceType, cartsType, partnerCode)
     if (isNewCarts) { // 新版购物车
       this.getSettlementPromotionNew(requestItemList, allPromotion, supplierNo, cartsType)
-    } else if (sourceType == '1' && cartsType == 'sup' && partnerCode != 1050) { // 直配 满赠满减 (重庆会出现有时没有请求 促销接口的情况，无法复现先停掉直配促销接口)
+    } else if (sourceType == '1' && cartsType == 'sup' && partnerCode != 1050) { 
+      // 直配 满赠满减 (重庆会出现有时没有请求 促销接口的情况，无法复现先停掉直配促销接口)
       requestItemList = JSON.stringify(requestItemList)
       showLoading('加载促销...')
       const supplierNo = obj.items[0].sourceNo

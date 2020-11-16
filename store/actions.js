@@ -252,6 +252,7 @@ const actions = {
   },
 
   [types.CHANGE_CARTS](param, cartsObjs = 0) { // add delete minus； cartsObj 为促销信息，主要用来实现直配的限时促销，达到限购值，停止加购
+    console.log(deepCopy(param))
     console.log(param)
   // 直配中商品数量若满足限时促销中的 限购值，则停止加购
     if (
@@ -297,6 +298,7 @@ const actions = {
     orgiPrice || (orgiPrice = 0)
     specType || (specType = '0')
     isBind || (isBind = '0')
+    // console.log(deepCopy(param))
     const nowNum = (cartsObj[itemNo] ? cartsObj[itemNo].realQty : 0)
     if ((param.type !== 'add' && nowNum <= 1 && param.type != 'input') || param.type === 'delete' || (param.type == 'input' && !param.value)) {
       // if (!cartsObj[itemNo]) return
