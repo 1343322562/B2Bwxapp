@@ -1,0 +1,100 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/verificationPhone/verificationPhone",
+    "pages/reconciliation/reconciliation",
+    "pages/wxMiniPay/wxMiniPay",
+    "pages/searchGoods/searchGoods",
+    "pages/register/register",
+    "pages/goodsDetails/goodsDetails",
+    "pages/accountManage/accountManage",
+    "pages/invoice/invoice",
+    "pages/grade/grade",
+    "pages/z_goods/z_goods",
+    "pages/groupBuying/GB_index/GB_index",
+    "pages/seckill/seckill",
+    "pages/integralExchange/integralExchange",
+    "pages/activity/activity",
+    "pages/getCoupons/getCoupons",
+    "pages/editPwd/editPwd",
+    "pages/dhCoupons/dhCoupons",
+    "pages/coupons/coupons",
+    "pages/integral/integral",
+    "pages/bankBalance/bankBalance",
+    "pages/ordersDetails/ordersDetails",
+    "pages/ordersList/ordersList",
+    "pages/liquidation/liquidation",
+    "pages/goodsChildren/goodsChildren",
+    "pages/my/my",
+    "pages/index/index",
+    "pages/t_goods/t_goods",
+    "pages/carts/carts",
+    "pages/paySuccess/paySuccess",
+    "pages/groupBuying/GB_details/GB_details",
+    "pages/groupBuying/GB_payOk/GB_payOk",
+    "pages/groupBuying/GB_ordersDetails/GB_ordersDetails",
+    "pages/groupBuying/GB_ordersList/GB_ordersList",
+    "pages/supplierGoods/supplierGoods",
+    "pages/salesReturn/ordersDetails/ordersDetails",
+    "pages/salesReturn/ordersList/ordersList",
+    "pages/H5/H5",
+    "pages/boxGoodSeach/boxGoodSeach",
+    "pages/myList/myList",
+    "pages/myListDetail/myListDetail",
+    "pages/currentMonthOrder/currentMonthOrder"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#fff",
+    "backgroundColor": "#f2f2f2"
+  },
+  "tabBar": {
+    "color": "#707070",
+    "borderStyle": "white",
+    "backgroundColor": "#fff",
+    "selectedColor": "#d40000",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/tab_icon_my.png",
+        "selectedIconPath": "images/tab_icon_select_my.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/t_goods/t_goods",
+        "iconPath": "images/tab_icon_tp.png",
+        "selectedIconPath": "images/tab_icon_select_tp.png",
+        "text": "统配进货"
+      },
+      {
+        "pagePath": "pages/z_goods/z_goods",
+        "iconPath": "images/tab_icon_zp.png",
+        "selectedIconPath": "images/tab_icon_select_zp.png",
+        "text": "直配进货"
+      },
+      {
+        "pagePath": "pages/carts/carts",
+        "iconPath": "images/tab_icon_carts.png",
+        "selectedIconPath": "images/tab_icon_select_carts.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "iconPath": "images/tab_icon_my.png",
+        "selectedIconPath": "images/tab_icon_select_my.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 30000,
+    "downloadFile": 30000
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "需要您的地理位置，给您提供更好的服务"
+    }
+  },
+  "sitemapLocation": "sitemap.json"
+}

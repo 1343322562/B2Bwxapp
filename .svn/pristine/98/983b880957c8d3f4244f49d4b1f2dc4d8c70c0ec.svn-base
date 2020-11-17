@@ -1,0 +1,35 @@
+<wxs module="filters" src="../../tool/filter.wxs"></wxs>  <!-- 引入 wxs module -->  
+
+<view class='mask'  wx:if="{{show}}" >
+  <view class='box'>
+    <view class='title'><text>支付订单</text> <text class='quit' catchtap='quit'>X</text></view>
+    <view class='content'><text class="money">￥{{filters.toFixed(realPayAmt - order.czPayAmt + order.transportFeeAmt)}}</text><text class='moneyType'>实付</text></view>
+    <view class='msg'>订单总金额为:￥{{totalMoney}}，已优惠(优惠券，满减):￥{{discountsMoney}}<text wx:if="{{order.transportFeeAmt}}">，配送费: ￥{{order.transportFeeAmt}}</text><text wx:if="{{order.payWay=='4' || isUseBlendWay}}">;其中储值部分已支付:￥{{order.czPayAmt}}</text></view>
+    <view class='payWayList'>
+      <view class='contentBlock' wx:for="{{payWayList}}" wx:key="index" wx:if="{{item.show && !(partnerCode == 1059 && item.type == 0)}}" bindtap='changePayWay' data-type="{{item.type}}">
+        <image class="icon" src="../../images/liquidation_page_{{item.icon}}.png" />
+        <text class='text'>{{item.name}}</text>
+        <text class='msg' wx:if="{{item.type == '2'}}">(下单可用余额: ￥{{storedValue}})</text>
+        <view class="checkbox{{item.type == payWay?' act':(isUseBlendWay&&item.type=='2'?' use':'')}}"><image class="icon" src="../../images/hook.png" /></view>
+        <!-- <view class="checkbox{{item.type == payWay?' act':''}}"><image class="icon" src="../../images/hook.png" /></view> -->
+        <view  class='right' wx:if="{{item.type == '0'}}">部分优惠不能享用</view>
+        <view  class='right' wx:if="{{item.type == '1' && wxPayRateOpen == 1}}">收取手续费{{wxPayRate}}%</view>
+      </view>
+    </view>
+<!-- 混合支付 -->
+    <view class='payWayWarning' wx:if="{{(payWay == '2' && storedValue != 0 && storedValue < realPayAmt)||isUseBlendWay}}">
+      <image class="icon" src="../../images/warning_icon.png" />
+      <text class='text'>您的余额不足以单独支付订单金额,可搭配其他方式混合支付,是否使用混合支付?</text>
+      <view class='select'>
+        <checkbox-group bindchange="checkboxChange">
+          <label class="checkbox">
+            <checkbox value="true"  checked="{{isUseBlendWay}}"/>
+            <text>使用混合支付</text>
+          </label>
+        </checkbox-group>
+      </view>
+    </view>
+
+    <view class='confirmPay' catchtap='confirmPay'>确认支付</view>
+  </view>
+</view>

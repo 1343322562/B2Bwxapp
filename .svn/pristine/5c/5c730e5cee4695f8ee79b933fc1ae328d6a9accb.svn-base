@@ -1,0 +1,56 @@
+<view class=''></view>
+<view class='goodsList'>
+  <view class='li' wx:for="{{goodsList}}" wx:for-item="itemNo" wx:key="index" data-no="{{itemNo}}" bindtap='goGoodsDetails'>
+    <view class='img'>
+      <image class='icon' src="{{goodsObj[itemNo].goodsImgUrl}}" />
+      <view class='goodsType' wx:if="{{goodsObj[itemNo].specType=='2'}}">多规格</view>
+      <view class='goodsType' wx:if="{{goodsObj[itemNo].isBind=='1'}}">组合</view>
+      <view class='c-stock_null' wx:if="{{!goodsObj[itemNo].isStock}}">补货中</view>
+      <image class='noReturnAllowed' wx:if="{{goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1'}}" src="../../images/noReturnAllowed.png" />
+      <!-- <view class="yesReturn">{{(goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1')?'不可退':'可退'}}</view> -->
+    </view>
+    <view class='name'>
+      <text class='text'>{{goodsObj[itemNo].itemName}}</text>
+    </view>
+    <view class='productionTime' wx:if="{{goodsObj[itemNo].productionTime}}">生产日期:{{goodsObj[itemNo].productionTime}}</view>
+    <view class='size'>规格:{{goodsObj[itemNo].itemSize}}</view>
+    <view class='tag'>
+      <text wx:if="{{goodsObj[itemNo].BF}}">买满赠</text> 
+      <text wx:if="{{goodsObj[itemNo].FS}}">首单特价</text> 
+      <text wx:if="{{goodsObj[itemNo].BG}}">买赠</text>
+      <text wx:if="{{goodsObj[itemNo].SD}}">单日限购</text>
+      <text wx:if="{{goodsObj[itemNo].MQ}}">数量满减</text>
+      <text wx:if="{{goodsObj[itemNo].SZ}}">首赠</text>
+      <text wx:if="{{goodsObj[itemNo].MJ}}">满减</text>
+      <text wx:if="{{goodsObj[itemNo].MS}}">秒杀</text>
+      <text wx:if="{{goodsObj[itemNo].ZK}}">{{goodsObj[itemNo].discount}}</text>
+      <text wx:if="{{goodsObj[itemNo].discountMoney && !(goodsObj[itemNo].itemDetails && partnerCode == 1005)}}">优惠{{goodsObj[itemNo].discountMoney}}元</text>
+      <text wx:if="{{goodsObj[itemNo].rewardPoint>0}}">积分</text>
+    </view>
+    <view class='price' wx:if="{{partnerCode!='1039'}}">
+      <text class='now'>￥{{goodsObj[itemNo].price}}{{goodsObj[itemNo].specType=='2'?'起':('/'+goodsObj[itemNo].unit)}}</text>
+      <text class='before' wx:if="{{goodsObj[itemNo].orgiPrice&&goodsObj[itemNo].price!=goodsObj[itemNo].orgiPrice&&goodsObj[itemNo].specType!='2'}}">￥{{goodsObj[itemNo].orgiPrice}}</text>
+    </view>
+    <view wx:if="{{!cartsObj[itemNo].realQty&&goodsObj[itemNo].minSupplyQty>1}}" class='minSupplyQty'>起订数量{{goodsObj[itemNo].minSupplyQty}}</view>
+    <view class='goCarts'>
+      <view wx:if="{{goodsObj[itemNo].stockType!='0'}}" class="type {{goodsObj[itemNo].stockType=='0'?'cw':'dw'}}">{{goodsObj[itemNo].stockType=='0'?'常温':'低温'}}</view>
+      <view class='btn'>
+        <block wx:if="{{cartsObj[itemNo].realQty}}">
+        <view class='minus item' catchtap='changeCarts' data-no="{{itemNo}}" data-type="minus"><image class='icon' src="../../images/goodsList_minus_carts.png" /></view>
+        <text class='num'>{{cartsObj[itemNo].realQty}}</text>
+        </block>
+        <view class='add item' catchtap='changeCarts' data-no="{{itemNo}}" data-type="add"><image class='icon' src="../../images/goodsList_add_carts{{goodsObj[itemNo].isStock?'':'Null'}}.png" /></view>
+      </view>
+    </view>
+  </view>
+</view>
+<text  class="page-bottom-null" wx:if="{{goodsList.length===totalLength&&goodsList.length}}"></text>
+<view class="pageData_null" wx:if="{{!goodsList.length&&pageLoading}}">
+  <image mode="widthFix" src="../../images/pageData-null.png"/>
+  <view class="page_text">{{isCollectGoods?'赶紧去收藏几个商品试试':'活动已结束'}}~</view>
+</view>
+
+<view class='goCartsPage' catchtap='goCartsPage'>
+  <image class='icon' mode="widthFix" src="../../images/goods-goCarts.png"/>
+  <text>购物车</text>
+</view>

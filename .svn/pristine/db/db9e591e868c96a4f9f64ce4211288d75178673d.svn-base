@@ -1,0 +1,24 @@
+.mask{position:fixed;top:0;left:0;width:100%;bottom:0;background-color:rgba(0,0,0,.4);z-index:100}
+.box{background-color: #fff;padding:40rpx 20rpx;width: 80%;left: 10%;margin-left: -10rpx;position: absolute;top: 50%;border-radius: 20rpx;margin-top: -340rpx}
+.box>.title{text-align: center;font-size: 34rpx;}
+.box>.title .quit{color: #777;position: absolute;top: 0;right: 0;width: 120rpx;line-height: 90rpx;font-size: 32rpx;}
+.box>.content{text-align: center;margin-top: 30rpx;}
+.box>.content .money{color: #444;font-size: 70rpx;font-weight: bold;}
+.box>.content .moneyType{background-color: #f2f2f2;font-size: 22rpx;color: #888;display: inline-block;margin-left: 10rpx;border-radius: 10rpx;padding: 5rpx 10rpx;}
+.box>.msg{color: #888;font-size: 24rpx;text-align: center;padding: 5rpx 10rpx 20rpx;}
+.contentBlock{overflow: hidden;line-height: 80rpx;border-bottom: 2rpx solid #eee;padding: 0 20rpx}
+.contentBlock>.icon{width: 60rpx;height: 60rpx;vertical-align: middle;}
+.contentBlock>.text{color: #333;margin: 0 5rpx;}
+.contentBlock>.msg{font-size: .8em;color: #777}
+.contentBlock>.checkbox{float: right;width: 50rpx;height: 50rpx;border-radius: 100%;overflow: hidden;border:2rpx solid #e4e4e4;margin-top: 10rpx;}
+.contentBlock>.checkbox .icon{width: 100%;height: 100%;}
+.contentBlock>.checkbox.act{background-color: #d40000;border-color: #d40000}
+.contentBlock>.checkbox.use{background-color: #999;border-color: #999}
+.contentBlock>.right{float: right;color: #777;margin-right: 10rpx;font-size: 24rpx;max-width: 50%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.contentBlock>.right.act{color: #d40000}
+.contentBlock>.right .icon{width: 30rpx;height: 30rpx;vertical-align: middle;}
+.confirmPay{width: 80%;margin: 40rpx auto 0 auto;line-height: 80rpx;background-color: #d40000;color: #fff;text-align: center;border-radius: 20rpx;}
+.payWayWarning{padding: 20rpx 20rpx;position: relative}
+.payWayWarning>.icon{width: 50rpx;height: 50rpx;vertical-align: middle;margin-right: 20rpx}
+.payWayWarning>.text{color: #f98e37 ;font-size: 24rpx;display: inline-block;width: 265rpx ;vertical-align: middle;}
+.payWayWarning>.select{position: absolute;top: 30rpx;right: 20rpx;font-size: 20rpx;}

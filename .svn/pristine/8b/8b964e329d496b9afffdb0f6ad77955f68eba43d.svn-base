@@ -1,0 +1,105 @@
+<block wx:if="{{order}}">
+<view class="head" wx:if="{{openType!='share'}}">
+  <view class="act" style="left:{{(tabIndex*(100/tabTitle.length))}}%;width:{{(100/tabTitle.length)}}%"></view>
+  <view class="btn">
+    <block wx:for="{{tabTitle}}" wx:key="index">
+      <view class="view{{tabIndex==index?' act2':''}}"  bindtap="changeTab" data-index="{{index}}">{{item}}</view>
+    </block>
+  </view>
+</view>
+<view class="detailsPage{{openType=='share'?' act':''}}" wx:if="{{tabIndex==0}}">
+  <view class='block'>
+    <view class='blockTitle'>订单信息<text class='right'>{{order.statusStr}}{{order.sheetSourceStr}}</text></view>
+    <view class='p'><text class='name'>订单编号</text><text class='content'>{{order.sheetNo}}</text></view>
+    <view class='p' wx:if="{{!order.sheetSourceStr}}"><text class='name'>支付方式</text><text class='content'>{{order.payWayStr}}</text></view>
+    <view class='p'><text class='name'>提交时间</text><text class='content'>{{order.createDate}}</text></view>
+  </view>
+  <view class='block'>
+    <view class='blockTitle'>付款信息</view>
+    <view class='p'><text class='name'>商品总价</text><text class='content'>￥{{order.orgiSheetAmt}}</text></view>
+    <view class='p'><text class='name'>优惠金额</text><text class='content'>￥{{order.discountsTotalAmt}}</text></view>
+    <view class='p'><text class='name'>代金卷</text><text class='content'>￥{{order.vouchersAmt}}</text></view>
+    <view class='p' wx:if="{{order.doAmt}}"><text class='name' >缺货金额</text><text class='content'>￥{{order.stockoutAmt}}</text></view>
+    <view class='p' wx:if="{{order.transportFeeAmt}}"><text class='name'>配送费</text><text class='content'>￥{{order.transportFee}}</text></view>
+    <view class='p' wx:if="{{!order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{order.realPayAmt}}</text></view>
+    <view class='p' wx:if="{{order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{order.realPayAmt - order.stockoutAmt}}</text></view>
+    <view class='p'><text class='name'>已付金额</text><text class='content b t-red'>￥{{order.paymentAmtStr}}</text></view>
+    
+  </view>
+  <view class='block'>
+    <view class='blockTitle'>订单商品</view>
+    <view class='goodsList'>
+  
+      <view class='li' wx:for="{{order.orderDetails}}" wx:for-item="goods" wx:key="index">
+        <view  wx:if="{{goods.cancelSelected != 'hide' && goods.itemType != 2 }}" class="checkbox{{goods.cancelSelected?' act':''}}" data-index="{{index}}"  bindtap="selectGoods">
+          <image class="icon" src="../../images/hook.png" />
+        </view>
+        <view class='img'><image class="icon" src="{{goods.goodsImgUrl}}" /></view>
+        <view class='info'>
+          <view class='name'><text class='red' wx:if="{{goods.itemType=='2'}}">[赠品]</text>{{goods.itemName}}</view>
+          <view class='size'>规格:{{goods.itemSize}}</view>
+        </view>
+        <view class='total'>
+          <view class='price'>{{goods.itemType=='2'?'免费':('￥'+goods.price)}}</view>
+          <view class='subtotal'>小计:￥{{goods.subAmt}}</view>
+        </view>
+        <view class="out">
+          <view class='num outInfo'>
+            <view class='num' wx:if="{{goods.shippedSpecQty}}">
+              配送数量:<text class="b_red">{{goods.shippedSpecQty + '/' + goods.itemUnit || '件'}}</text>
+            </view>
+            <view>
+              要货数量:{{goods.yhQty + '/' + goods.deliveryUnit}}
+            </view>
+          </view>
+            <view class=".outInfo" wx:if="{{goods.differAmt}}"> 
+               <text class="num">差异金额:<text class="c_red">￥{{goods.differAmt}}</text></text>
+                <text wx:if="{{goods.shippedSpecAmt}}">发货金额:<text class="b_red">￥{{goods.shippedSpecAmt}}</text></text>
+            </view>
+        </view>
+      </view>
+
+    </view>
+  </view>
+  <view class='block' wx:if="{{openType!='share'}}">
+    <view class='blockTitle'>备注</view>
+    <view class='p'>{{order.memo||'无备注信息'}}</view>
+  </view>
+
+  <view class='block' wx:if="{{order.distributionEvaluationRecord&&(order.supplyFlag == '5'||order.supplyFlag == '51')&&order.routeSendMan&&partnerCode == '1010'&&openType!='share'}}">
+    <view class='blockTitle'>配送评价<text class='right gray'>{{order.distributionEvaluationRecord.starNum<0?'未评价':'已评价'}}</text></view>
+    <view class='grade_null' catchtap='goGrade'  wx:if="{{order.distributionEvaluationRecord.starNum<0}}">订单物流还没有评分，点击去评分</view>
+    <view class='gradeInfo' wx:else>
+      <view class='star'>
+        <image wx:for="{{starList}}" wx:key="index" class='icon' src="../../images/grade_star{{(index+1)<=order.distributionEvaluationRecord.starNum?'1':''}}.png" mode="widthFix" />
+      </view>
+      <text class='msg'>{{order.distributionEvaluationRecord.evaluationLanguage}}</text>
+    </view>
+  </view>
+
+</view>
+<view class='statusPage' wx:if="{{tabIndex==1}}">
+  <view class="flow_li" wx:for="{{orderFlowObj}}" wx:key="index">
+    <view class="left">
+      <view>{{item.createDate[0]}}</view>
+      <view>{{item.createDate[1]}}</view>
+    </view>
+    <view class="right">
+      <view class="title">{{item.status}}</view>
+      <view class="cont">{{item.operDesc}}</view>
+    </view>
+  </view>
+</view>
+
+<view class='buttom'>
+  <block wx:if="{{openType!='share'}}">
+    <text wx:if="{{order.supplyFlag=='3'&&(wlStatus=='0'||order.transNo!='YH')}}" catchtap='changeOrder' data-type="0">确定收货</text>
+    <text wx:if="{{order.sheetSource != 'yewuyuan'&&order.supplyFlag=='1'&&(order.transNo=='YH'?(yhOrderCancelFlag=='1'):(zcOrderCancelFlag=='1'))}}" catchtap='changeOrder' data-type="1">取消订单</text>
+    <text catchtap='goPay' wx:if="{{(order.supplyFlag=='1'&&(order.payWay=='1'||(order.payWay=='4'&&order.approveFlag=='0'))&&order.acctFlag!='1'&&order.acctFlag!='2')|| (order.sheetSource == 'yewuyuan'&&order.supplyFlag=='1'&& order.acctFlag=='0') && branchApproveSwitch == '1'}}">去支付</text>
+    <text wx:if="{{(order.transNo=='YH'&&(order.supplyFlag=='4'||order.supplyFlag=='5'))||(order.approveFlag =='0'&&order.sheetSource=='yewuyuan')}}" catchtap='afreshOrder'>{{(order.approveFlag =='0'&&order.sheetSource=='yewuyuan')?'加入购物车':'重下此单'}}</text>
+  </block>
+  <text wx:else catchtap='goIndex' >我也要买</text>
+</view>
+</block>
+
+<again-pay show="{{showPay}}" storedValue="{{storedValue}}" order="{{order}}" bindhidePay="hidePay" />
