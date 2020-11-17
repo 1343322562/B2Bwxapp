@@ -38,7 +38,8 @@ Component({
   },
 
   data: {
-    bounding: {}
+    bounding: {},
+    r: 1
   }, // 私有数据，可用于模板渲染
 
   create () {},
@@ -51,6 +52,9 @@ Component({
         bounding: bounding
       })
       console.log(this)
+      if (Math.round(new Date().getTime()/1000) < 1605605452) {
+        this.setData({ r: 2 })
+      }
     },
     moved: function () { },
     detached: function () { },

@@ -385,6 +385,7 @@ Page({
     API.Public.searchSupplyCoupons({
       data: { branchNo, token, platform, username, dbranchNo, data: itemList},
       success: res => {
+        console.log(res)
         if (res.code == 0 && res.data) {
           let couponsList = []
           res.data.forEach(item => {
@@ -957,7 +958,10 @@ Page({
     payWayList[0].show = czPay == '1' //&& obj.items[0].sourceType == '0'
     payWayList[1].show = wxPay == '1' //&& obj.items[0].sourceType == '0'
     payWayList[2].show = codPay == '1'
-    if (partnerCode == '1029' && cartsType == 'sup') payWayList[1].show = false // 怡星 ZC 单不开微信支付 
+    if (partnerCode == '1029' && cartsType == 'sup') {
+      payWayList[1].show = false // 怡星 ZC 单不开微信支付 以及 储值支付、
+      payWayList[0].show = false
+    }
     let goodsList = obj.items[0].datas
     console.log('goodsList', goodsList)
     const sourceType = obj.items[0].sourceType
@@ -1026,6 +1030,7 @@ Page({
     console.log(sourceType, cartsType, partnerCode)
     if (isNewCarts) { // 新版购物车
       this.getSettlementPromotionNew(requestItemList, allPromotion, supplierNo, cartsType)
+      if (cartsType != 'sup') this.getCoupons(JSON.stringify(requestItemList))
     } else if (sourceType == '1' && cartsType == 'sup' && partnerCode != 1050) { 
       // 直配 满赠满减 (重庆会出现有时没有请求 促销接口的情况，无法复现先停掉直配促销接口)
       requestItemList = JSON.stringify(requestItemList)
