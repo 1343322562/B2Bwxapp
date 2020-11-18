@@ -1,6 +1,7 @@
 import API from '../../api/index.js'
 import { goPage,toast,alert } from '../../tool/index.js'
 import { tim, timCurrentDay } from '../../tool/date-format.js'
+const app = getApp()
 Page({
   data: {
     partnerCode: '',
@@ -97,9 +98,11 @@ Page({
   },
   onLoad (opt) {
     const partnerCode = getApp().data.partnerCode
+    const baseImgUrl = app.data.baseImgUrl
     if (partnerCode == 1052) {wx.setNavigationBarColor({ backgroundColor: '#e6c210', frontColor: '#ffffff' })}
     
     const userObj = wx.getStorageSync('userObj')
+    if (userObj.picHeader) userObj['picHeader'] = baseImgUrl + 'upload/images/icon/' + userObj.picHeader
     this.setData({ userObj, isInvoice: wx.getStorageSync('configObj').isInvoice })
     this.requestObj = {
       branchNo: userObj.branchNo,
@@ -160,7 +163,9 @@ Page({
   },
   onShow () {
     const userObj = wx.getStorageSync('userObj')
+    const baseImgUrl = app.data.baseImgUrl
     if (userObj) {
+      if (userObj.picHeader) userObj['picHeader'] = baseImgUrl + 'upload/images/icon/' + userObj.picHeader
       this.setData({ userObj })
       this.requestObj.token = userObj.token
     } 

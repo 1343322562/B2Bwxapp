@@ -1,4 +1,4 @@
-import { HANDLE_SUP_PROMOTION, toast, alert, filterArr, deepCopy ,setFilterDataSize, goPage, showLoading, hideLoading, getGoodsImgSize, MsAndDrCount, getGoodsTag } from '../../tool/index.js'
+import { HANDLE_SUP_PROMOTION, toast, alert, filterArr, deepCopy, promoArrSort ,setFilterDataSize, goPage, showLoading, hideLoading, getGoodsImgSize, MsAndDrCount, getGoodsTag } from '../../tool/index.js'
 import dispatch from '../../store/actions.js'
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
@@ -475,9 +475,9 @@ Component({
       const cartsObj = this.data.goods
       cartsObj.data.length && cartsObj.data.map(goods => {
         if (!goods.cancelSelected) {
-          // console.log(deepCopy(goods))
+          console.log(deepCopy(goods))
           cartsMoney = Number((cartsMoney + (goods.price * goods.realQty)).toFixed(2))
-          // console.log(cartsMoney)
+          console.log(cartsMoney)
           selectNum += goods.realQty
           if (String(selectNum).includes('.')) selectNum = Number(Number(selectNum).toFixed(1))
           selectTypeNum += 1
@@ -485,6 +485,7 @@ Component({
 
         }
       })
+      console.log(cartsMoney, currentProObj)
 
       // 若是有促销单据，计算商品是否满足促销条件， 并修改当前差异价格
       if (currentProObj) {
@@ -511,6 +512,7 @@ Component({
         cartsObj.data.length === selectTypeNum && (isSelectAll = true)
         this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll })
       }
+      console.log(cartsMoney)
       // console.log(deepCopy(cartsObj.data))
     },
     selectAllGoods() {
@@ -673,7 +675,6 @@ Component({
         }
       })
     },
-    
     // 商品中添加当前所选择的促销字段 currentPromotion
     addCurrentSelectedPromotion(goodsData = this.data.goods) {
       let currentPromotion = ['NO']  // 当前购物车商品的所选择促销数组
@@ -685,20 +686,24 @@ Component({
       goodsData.data.forEach((item, i) => {
         // 首次加载，默认选第一个促销
         if (item['promotionCollections']) {
-          if (item['promotionCollections'].indexOf(',')) {
-            item['promotionCollectionsArr'] = item['promotionCollections'].split(',')
+          if (item['promotionCollections'].includes(',')) {
+            const promoArr = item['promotionCollections'].split(',')
+            item['promotionCollectionsArr'] = promoArr
+            // 商品促销数组的排序  'MS', 'FS', 'SD', 'ZK', 'BF', 'SZ' , 'BG', 'MJ', 'MQ'
+            item['promotionCollectionsArr'] = promoArrSort(promoArr, sourceType)
           } else if (item['promotionCollections'] == '') {
             item['promotionCollectionsArr'] = [item['promotionCollections']]
           }
 
-          if (!item['currentPromotionNo'] && item['promotionCollections'] ) {
+          if (item['promotionCollections']) {
             item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
           }
 
           if (this.sourceType == 1 && item['currentPromotionNo'].length < 19) {
+            console.log(deepCopy(item['promotionCollectionsArr']))
             item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
           }
-          
+          console.log(item['currentPromotionNo'], item)
           // if (item['promotionSheetNo'] && )
           // 不参与促销计算
           let backSign
@@ -940,8 +945,8 @@ Component({
               const promotionList = _this.allPromotionHandle(res, nowGoods, _this) // 每个商品的 促销列表 
               console.log('promotionList', promotionList)
               promotionList.length && promotionList.forEach((item, index) => {
-                const type = item.promotionNo.slice(0, 2)
                 console.log(9030,deepCopy(item), type)
+                const type = item.promotionNo.slice(0, 2)
                 if (allPromotion[item.promotionNo]) {
                   if (type == 'SD') {
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]

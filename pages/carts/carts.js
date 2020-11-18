@@ -63,7 +63,13 @@ Page({
               if (ty=='BF'||ty=='BG'||ty=='MQ'||ty=='SZ'||ty=='MJ'||ty=='BF') {
                 goods.price = goods.orgiPrice
               } else if (ty=='MS') {
-                goods.price = goods.msPrice
+                if (goods.msPrice) {
+                  goods.price = goods.msPrice
+                } else {
+                  goods['price'] = goods.orgiPrice
+                  goods['currentPromotionNo'] = ''
+                  goods['currentPromotionType'] = ''
+                }
               } else if (ty=='FS') {
                 goods.price = goods.sdPrice
               } else if (ty=='SD') {

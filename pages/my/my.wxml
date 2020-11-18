@@ -1,5 +1,5 @@
 <view class="head head-col">
-  <view class='img' catchtap='goPage' data-page="accountManage"><image class="icon" src="../../images/my_page_icon_user.png" /> </view>
+  <view class='img' catchtap='goPage' data-page="accountManage"><image class="icon" src="{{userObj.picHeader || '../../images/my_page_icon_user.png'}}" /> </view>
   <view class='info'>
     <view class='name' style="padding-top:30rpx;" catchtap='goLogin' wx:if="{{userObj.isLogin}}">点击登录</view>
     <block wx:else>

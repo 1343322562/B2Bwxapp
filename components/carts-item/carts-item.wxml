@@ -157,18 +157,8 @@
         </view>
         <view class="info">
           <text class="name">{{good.itemName}}</text>
-          <view class='size'>{{good.itemSize}} 
-            <view 
-              class="switchPromotiom" 
-              bindtap="showSwitchPromotionDialog" 
-              wx:if="{{good.promotionCollectionsArr.length>1}}"
-              data-promotionNoArr="{{good.promotionCollectionsArr}}"
-              data-itemNo="{{good.itemNo}}"
-              data-cpnPromotionNo="{{good.currentPromotionNo}}"
-            >
-              换促销
-            </view> 
-          </view>
+          <view class='size'>{{good.itemSize}}    
+        </view>
           <view class="price">
             <text wx:if="{{good.currentPromotionType == 'MS' && good.msMaxQty > good.realQty}}" class="now">￥{{good.msPrice}}/{{good.deliveryUnit}}</text>
             <text wx:elif="{{good.currentPromotionType == 'FS'}}" class="now">￥{{good.sdPrice}}/{{good.deliveryUnit}}</text>
@@ -188,6 +178,16 @@
             <text wx:if="{{good.currentPromotionType == 'MS'}}">秒杀</text>
             <text wx:if="{{good.currentPromotionType == 'ZK'}}">{{good.discount}}</text>
             <text wx:if="{{good.rewardPoint > 0 }}">积分</text>
+            <view 
+              class="switchPromotiom" 
+              bindtap="showSwitchPromotionDialog" 
+              wx:if="{{good.promotionCollectionsArr.length>1}}"
+              data-promotionNoArr="{{good.promotionCollectionsArr}}"
+              data-itemNo="{{good.itemNo}}"
+              data-cpnPromotionNo="{{good.currentPromotionNo}}"
+            >
+              换促销
+            </view> 
           <!-- 直配 -->
           <!-- <text wx:if="{{good.RBF}}">买满赠</text>
           <text wx:if="{{good.RMJ}}">满减</text>

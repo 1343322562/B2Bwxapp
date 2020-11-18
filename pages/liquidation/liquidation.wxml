@@ -83,7 +83,7 @@
     <view class='info'><text class='l'>付款商品</text><text class='c'>x{{totalNum}}</text><text class='r b'>￥{{totalMoney}}</text></view>
     <view class='info'><text class='l'>赠送商品</text><text class='c'>x{{BGnum}}</text><text class='r'>￥0</text></view>
     <view class='info'><text class='l'>兑换商品</text><text class='c'>x{{selectedDhCoupons.num}}</text><text class='r'>￥0</text></view>
-    <view class='info'><text class='l'>优惠金额</text><text class='r'>￥{{discountsMoney}}</text></view>
+    <view class='info'><text class='l'>优惠金额</text><text class='r'>￥{{filters.toFixed(discountsMoney + singlePromoAmt)}}</text></view>
     <view class='info'><text class='l'>配送金额</text><text class='r'>￥{{transportFeeAmt}}</text></view>
   </view>
   <!-- 优惠卷区域 -->
@@ -185,8 +185,8 @@
       </view>
       <view class='total'>
         <view class='price'>{{goods.isGift?'免费':('￥'+goods.price)}}</view>
-        <view class='num'>x{{goods.realQty}}</view>
-        <view class='subtotal'>小计:￥{{goods.subtotal}}</view>
+        <view class='num'>x{{goods.realQty || goods.qty}}</view>
+        <view class='subtotal'>小计:￥{{goods.subtotal || 0}}</view>
       </view>
     </view>
 
@@ -208,7 +208,7 @@
     <view class="totalMoney" wx:if="{{!isUseBlendWay}}"><view class='title'>合计: </view><view class='text'>￥{{filters.toFixed(realPayAmt + transportFeeAmt)}}</view></view>
     <!-- 混合支付要减去储值金额 -->
     <view class="totalMoney" wx:else><view class='title'>合计: </view><view class='text'>￥{{filters.toFixed(realPayAmt - storedValue + transportFeeAmt)}}</view></view>
-    <view class="discountsMoney">已优惠: ￥{{discountsMoney}}</view>
+    <view class="discountsMoney">已优惠: ￥{{filters.toFixed(discountsMoney + singlePromoAmt)}}</view>
   </view>
   
 </view>

@@ -373,3 +373,25 @@ export const HANDLE_SUP_PROMOTION = function(param) {
     }
   })
 }
+// 商品促销数组的排序
+export const promoArrSort = (promoArr, sourceType) => {
+  let rArr = []  // 排序完的数组
+  if (sourceType === 0) {
+    const pSortArr = ['MS', 'FS', 'SD', 'ZK', 'SZ', 'BF', 'BG', 'MJ', 'MQ'] // 排序
+    pSortArr.forEach(type => {
+      promoArr.forEach(promoNo => {
+        if (promoNo.includes(type)) rArr.push(promoNo)
+      })
+    })
+  } else if (sourceType === 1) {
+    const pSortArr = ['RSD', 'RMJ', 'RBF'] // 排序let rArr = []  // 排序完的数组
+    pSortArr.forEach(type => {
+      promoArr.forEach(promoNo => {
+        if (promoNo.includes(type)) rArr.push(promoNo)
+      })
+    })
+  }
+  console.log(rArr, sourceType, promoArr)
+  return rArr
+}
+

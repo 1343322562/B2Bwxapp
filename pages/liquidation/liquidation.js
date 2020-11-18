@@ -11,6 +11,7 @@ Page({
     totalMoney: 0, // 商品总金额
     totalNum: 0, // 普通商品总数量
     discountsMoney: 0,// 优惠总金额
+    singlePromoAmt: 0, // 单品优惠金额 ZK MS SD FS
     sourceType: '', // 配送方式  0 统配 1 直配
     couponsList: [], // 优惠券列表
     dhCouponsList: [], // 兑换券列表
@@ -159,7 +160,8 @@ Page({
           types = true
         }
         if (types) {
-          totalMoney += Number((goods.realQty * goods.price).toFixed(2))
+          // totalMoney += Number((goods.realQty * goods.price).toFixed(2))
+          totalMoney += Number((goods.realQty * goods.orgiPrice).toFixed(2))
           totalNum += goods.realQty
         }
         return types
@@ -237,15 +239,49 @@ Page({
     this.setData({ payWay })
     this.setOrderAction()
   },
+  // 赠品数组转 obj
+  giftListTransObj(giftList) {
+    let obj = {}
+    giftList.forEach(item => {
+      obj[item.promotionSheetNo] = item
+    })
+    return obj
+  },
   // 确认 赠品
-  selectGift (e) {
+  selectGift (e) {  
+    console.log(e)
+    console.log(this.data)
     const selectedGift = e.detail
     const showSelectMzgoods = false
     const selectedGiftNum = Object.keys(selectedGift).length
+    let { giftList, goodsList } = this.data
     selectedGiftNum || (this.selectedGiftType = 'no')
     this.baseSelectedGift = selectedGift
-    console.log({ selectedGift, showSelectMzgoods, selectedGiftNum })
-    this.setData({ selectedGift, showSelectMzgoods, selectedGiftNum })
+    if (!selectedGiftNum){ // 清空 BF 赠品
+      goodsList.forEach((item, index) => {
+        console.log(888, item)
+        if (item.BF && item.isGift) {
+          console.log(887,item)
+          goodsList.splice(index,1)
+        }
+      })
+    } else { // 添加赠品至明细
+      let giftListObj = this.giftListTransObj(giftList) // 赠品数组转 obj
+      const selectedGiftArr = Object.keys(selectedGift)
+      // 将赠品加入商品列表中
+      selectedGiftArr.forEach((key) => {
+        let goodItem = giftListObj[key].items[selectedGift[key]].items
+        goodItem.forEach(item => {
+          item.BF = true
+          item.isGift = true
+          item.subtotal = 0
+          item.realQty = item.qty
+          item.itemSize = item.qty+'/'+item.unitNo
+          goodsList.push(item)
+        })
+      })
+    }
+    this.setData({ selectedGift, showSelectMzgoods, selectedGiftNum, goodsList })
   },
   getUserInfo () {
     const { branchNo, token, platform, username} = this.userObj
@@ -443,11 +479,13 @@ Page({
   setOrderAction () {
     if (this.mjmzLoading) {
       hideLoading()
-      let { totalMoney, couponsList, payWay, selectedCoupons, selectedGiftNum, giftList} = this.data
+      let { totalMoney, couponsList, payWay, selectedCoupons, selectedGiftNum, giftList, realPayAmt, singlePromoAmt } = this.data
+      realPayAmt = Number(realPayAmt)
+      totalMoney = Number(totalMoney)
       const { transportFeeType }  = wx.getStorageSync('configObj') 
-      let realPayAmt = totalMoney
-      let discountsMoney = 0
-
+      if (singlePromoAmt == 0) singlePromoAmt = Number((totalMoney - realPayAmt).toFixed(2)) // 单品优惠 ZK SD FS MS
+      realPayAmt = totalMoney
+      let discountsMoney = 0 
       let mjObj = []
       // 计算优惠券
       if ((payWay != '0' || this.autoCoupons == '1') && selectedCoupons != 'no') {
@@ -471,6 +509,7 @@ Page({
           })
         }
       }
+      console.log(realPayAmt)
       realPayAmt = Number((realPayAmt - discountsMoney).toFixed(2))
       // 满足赠品条件时，显示赠品 Dialog
       const showSelectMzgoods = (this.selectedGiftType != 'no' && giftList.length && !selectedGiftNum && (payWay != '0' ||this.codPayMzFlag == '1')) ? true : false
@@ -479,10 +518,10 @@ Page({
         let bestGift = this.chooseBestGift(giftList)  // 返回最优惠的赠品
         this.setData({ selectedGift: bestGift }) 
       } 
-      discountsMoney = discountsMoney.toFixed(2)
+      // discountsMoney = Number(discountsMoney.toFixed(2))
       let transportFeeAmt = transportFeeType != 0 ? this.transportFeeHandle(realPayAmt) : 0
-      
-      this.setData({ transportFeeAmt, realPayAmt, discountsMoney, selectedCoupons, mjObj, showSelectMzgoods })
+      console.log(realPayAmt, discountsMoney, singlePromoAmt)
+      this.setData({ transportFeeAmt, realPayAmt, discountsMoney, selectedCoupons, mjObj, showSelectMzgoods, singlePromoAmt })
     }
   },
   // 计算配送费
@@ -572,6 +611,7 @@ Page({
     }
 
     goodsList.forEach(goods => {
+      if (goods.BF && goods.isGift) return
       itemNos.push(goods.itemNo)
       let data = { itemNo: goods.itemNo, isGift: goods.isGift ? '1' : '0', qty: String(goods.realQty), price: String(goods.isGift ? 0 : goods.price), itemType: goods.itemType}
       if (this.transNo == 'YH') {
@@ -968,11 +1008,13 @@ Page({
     console.log(sourceType)
     console.log('obj', obj)
     this.supcustNo = obj.items[0].sourceNo
+    let totalMoney = 0
     let requestItemList = []
     let itemNos = []
     goodsList.forEach(goods => { /* itemType 0组合商品 1 普通商品 2 赠品  */
       const itemNo = goods.itemNo
       itemNos.push(itemNo)
+      totalMoney += Number((goods.realQty * goods.price).toFixed(2))
       let data = {itemNo, qty: String(goods.realQty), price: String(goods.price)} // 促销请求数据对象
       if (isNewCarts) {
         data['clsNo'] = goods['itemClsno']
@@ -1006,7 +1048,8 @@ Page({
       wxPayRate,
       wxPayRateOpen,
       goodsList,
-      totalMoney: obj.sheetAmt,
+      // totalMoney: obj.sheetAmt,
+      totalMoney: totalMoney.toFixed(2),
       realPayAmt: obj.sheetAmt,
       totalNum: obj.sheetQty,
       totalVariety: goodsList.length,
