@@ -186,7 +186,7 @@
               data-itemNo="{{good.itemNo}}"
               data-cpnPromotionNo="{{good.currentPromotionNo}}"
             >
-              换促销
+              换促销 ↓
             </view> 
           <!-- 直配 -->
           <!-- <text wx:if="{{good.RBF}}">买满赠</text>

@@ -16,7 +16,7 @@
 .goods>.info .tag text{display: inline-block;line-height: 30rpx;font-size: 22rpx;border: 1px solid red;color: red;margin-left: 10rpx;border-radius: 10rpx;padding: 0 6rpx;}
 .goods>.delete{position:absolute;top:0;right:-180rpx;background-color:#e60012;color:#fff;height:180rpx;line-height:180rpx;width:180rpx;text-align:center;}
 .switchPromotiom{color: #fff;background-color: #999999;display: inline-block;font-size: 22rpx;border-radius: 20rpx;width: 100rpx;padding: 2rpx 0rpx 4rpx 14rpx;margin-left: 15rpx;position: relative;}
-.switchPromotiom:after{position: absolute;content: ' ';width: 12rpx;height: 12rpx;border-bottom: 2rpx solid #f9f9f9;border-right: 2rpx solid #f9f9f9;transform: rotate(45deg);top: 10rpx;right: 15rpx;}
+/* .switchPromotiom:after{position: absolute;content: ' ';width: 12rpx;height: 12rpx;border-bottom: 2rpx solid #f9f9f9;border-right: 2rpx solid #f9f9f9;transform: rotate(45deg);top: 8rpx;right: 15rpx;} */
 .goods>.btn{position: absolute;right: 10rpx;bottom: 10rpx;width: 230rpx;height: 80rpx;text-align: center}
 .goods>.btn .item{height: 100%;width: 80rpx;position: absolute;top: 0}
 .goods>.btn .item>.icon{width: 50rpx;height: 50rpx;margin-top: 15rpx;background-color:#fff;}

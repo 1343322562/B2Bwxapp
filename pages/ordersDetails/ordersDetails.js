@@ -96,7 +96,7 @@ Page({
             console.log(91, goods.differAmt, isNaN(goods.differAmt))
             console.log(87, order)
             console.log(92, order.supplyFlag, order.sheetSourceStr, order.memo)  
-            if (order.supplyFlag == 5 || order.supplyFlag == 51) {
+            if (order.supplyFlag == 5  || order.supplyFlag == '4' || order.supplyFlag == 51 || order.sheetSource=='yewuyuan') {
               goods.cancelSelected = true
             } else {
               goods.cancelSelected = 'hide'

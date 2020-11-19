@@ -80,7 +80,7 @@
 <view class="block">
   <view class='title'>费用明细</view>
   <view class='detail'>
-    <view class='info'><text class='l'>付款商品</text><text class='c'>x{{totalNum}}</text><text class='r b'>￥{{totalMoney}}</text></view>
+    <view class='info'><text class='l'>付款商品</text><text class='c'>x{{totalNum}}</text><text class='r b'>￥{{allTotalMoney || totalMoney}}</text></view>
     <view class='info'><text class='l'>赠送商品</text><text class='c'>x{{BGnum}}</text><text class='r'>￥0</text></view>
     <view class='info'><text class='l'>兑换商品</text><text class='c'>x{{selectedDhCoupons.num}}</text><text class='r'>￥0</text></view>
     <view class='info'><text class='l'>优惠金额</text><text class='r'>￥{{filters.toFixed(discountsMoney + singlePromoAmt)}}</text></view>

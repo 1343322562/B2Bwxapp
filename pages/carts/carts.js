@@ -24,6 +24,7 @@ Page({
   getCartsData() {
     const { goodsUrl,zcGoodsUrl,zhGoodsUrl} = getApp().data
     const promotionObj = wx.getStorageSync('allPromotion')
+    wx.setStorageSync('updateCarts', true)
     dispatch[types.GET_CHANGE_CARTS]({
       success: (ret) => {
         // console.log(JSON.parse(JSON.stringify(ret)))
@@ -63,7 +64,7 @@ Page({
               if (ty=='BF'||ty=='BG'||ty=='MQ'||ty=='SZ'||ty=='MJ'||ty=='BF') {
                 goods.price = goods.orgiPrice
               } else if (ty=='MS') {
-                if (goods.msPrice) {
+                if (goods.msPrice && goods.realQty <= goods.msMaxQty ) {
                   goods.price = goods.msPrice
                 } else {
                   goods['price'] = goods.orgiPrice
@@ -72,7 +73,7 @@ Page({
                 }
               } else if (ty=='FS') {
                 goods.price = goods.sdPrice
-              } else if (ty=='SD') {
+              } else if (ty=='SD' && (goods.drMaxQty > goods.realQty || goods.drMaxQty == 0)) {
                 goods.price = goods.drPrice
               } else if (ty=='ZK') {
                 goods.price = goods.zkPrice
@@ -132,8 +133,6 @@ Page({
     cpn.forEach(item => {
       console.log(item.pullUpdata())
     })
-    // this.onLoad()
-    // this.onShow()
   },
   onReachBottom () {
     console.log(this.data.cartsObj, this.data)

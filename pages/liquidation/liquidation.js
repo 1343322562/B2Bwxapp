@@ -1,4 +1,4 @@
-import { showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, arrRemoveRepeat, toast, alert, getTime,goPage } from '../../tool/index.js'
+import { showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, arrRemoveRepeat, toast, alert, getTime,goPage, notEmpty } from '../../tool/index.js'
 import API from '../../api/index.js'
 import { tim, timCurrentDay } from '../../tool/date-format.js'
 const app = getApp()
@@ -9,6 +9,7 @@ Page({
     goodsList: [], // 商品列表
     storedValue: 0, // 余额储值
     totalMoney: 0, // 商品总金额
+    allTotalMoney: 0, // 商品总金额(未包含单品优惠)
     totalNum: 0, // 普通商品总数量
     discountsMoney: 0,// 优惠总金额
     singlePromoAmt: 0, // 单品优惠金额 ZK MS SD FS
@@ -247,10 +248,15 @@ Page({
     })
     return obj
   },
+  goodsListTransObj(goodsList) {
+    let obj = {}
+    goodsList.forEach(item => {
+      obj[item.itemNo] = item
+    })
+    return obj
+  },
   // 确认 赠品
-  selectGift (e) {  
-    console.log(e)
-    console.log(this.data)
+  selectGift (e) { 
     const selectedGift = e.detail
     const showSelectMzgoods = false
     const selectedGiftNum = Object.keys(selectedGift).length
@@ -258,20 +264,23 @@ Page({
     selectedGiftNum || (this.selectedGiftType = 'no')
     this.baseSelectedGift = selectedGift
     if (!selectedGiftNum){ // 清空 BF 赠品
-      goodsList.forEach((item, index) => {
-        console.log(888, item)
+      goodsList = goodsList.map((item, index) => {
         if (item.BF && item.isGift) {
-          console.log(887,item)
-          goodsList.splice(index,1)
+          return 
         }
+        return item
       })
+      goodsList = notEmpty(goodsList)
     } else { // 添加赠品至明细
       let giftListObj = this.giftListTransObj(giftList) // 赠品数组转 obj
+      let goodsListObj = this.goodsListTransObj(goodsList) // 对象数组转 Obj
       const selectedGiftArr = Object.keys(selectedGift)
+      console.log(goodsListObj, selectedGiftArr, giftListObj)
       // 将赠品加入商品列表中
       selectedGiftArr.forEach((key) => {
         let goodItem = giftListObj[key].items[selectedGift[key]].items
         goodItem.forEach(item => {
+          if (goodsListObj[item.itemNo]) return
           item.BF = true
           item.isGift = true
           item.subtotal = 0
@@ -281,6 +290,7 @@ Page({
         })
       })
     }
+    console.log(goodsList)
     this.setData({ selectedGift, showSelectMzgoods, selectedGiftNum, goodsList })
   },
   getUserInfo () {
@@ -479,11 +489,12 @@ Page({
   setOrderAction () {
     if (this.mjmzLoading) {
       hideLoading()
-      let { totalMoney, couponsList, payWay, selectedCoupons, selectedGiftNum, giftList, realPayAmt, singlePromoAmt } = this.data
+      let { allTotalMoney, totalMoney, couponsList, payWay, selectedCoupons, selectedGiftNum, giftList, realPayAmt, singlePromoAmt } = this.data
       realPayAmt = Number(realPayAmt)
       totalMoney = Number(totalMoney)
+      allTotalMoney = Number(allTotalMoney)
       const { transportFeeType }  = wx.getStorageSync('configObj') 
-      if (singlePromoAmt == 0) singlePromoAmt = Number((totalMoney - realPayAmt).toFixed(2)) // 单品优惠 ZK SD FS MS
+      if (singlePromoAmt == 0) singlePromoAmt = Number((allTotalMoney - realPayAmt).toFixed(2)) // 单品优惠 ZK SD FS MS
       realPayAmt = totalMoney
       let discountsMoney = 0 
       let mjObj = []
@@ -1008,12 +1019,14 @@ Page({
     console.log(sourceType)
     console.log('obj', obj)
     this.supcustNo = obj.items[0].sourceNo
-    let totalMoney = 0
+    let totalMoney = 0    // 计算单品优惠
+    let allTotalMoney = 0 // 未计算优惠
     let requestItemList = []
     let itemNos = []
     goodsList.forEach(goods => { /* itemType 0组合商品 1 普通商品 2 赠品  */
       const itemNo = goods.itemNo
       itemNos.push(itemNo)
+      allTotalMoney += Number((goods.realQty * goods.orgiPrice).toFixed(2))
       totalMoney += Number((goods.realQty * goods.price).toFixed(2))
       let data = {itemNo, qty: String(goods.realQty), price: String(goods.price)} // 促销请求数据对象
       if (isNewCarts) {
@@ -1048,6 +1061,7 @@ Page({
       wxPayRate,
       wxPayRateOpen,
       goodsList,
+      allTotalMoney,
       // totalMoney: obj.sheetAmt,
       totalMoney: totalMoney.toFixed(2),
       realPayAmt: obj.sheetAmt,

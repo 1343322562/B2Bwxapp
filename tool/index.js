@@ -135,6 +135,18 @@ export const getGoodsImgSize = (url,type = 0) => { // 获取多规格的图片�
   const name = url.indexOf(',') != -1 ? url.split(',')[0] : url
   return name.substring(0,name.indexOf('-')+1) + type + name.substr(name.indexOf('.'))
 }
+
+export const notEmpty = (arrList) => { // 去除数组空位
+  var arr = [];
+  arrList.map(function(val, index) {
+    //过滤规则为，不为空串、不为null、不为undefined，也可自行修改
+    if (val !== "" && val != undefined) {
+        arr.push(val);
+    }
+  });
+    return arr;
+}
+
 export const setTabBarNum = (num) => { // 设置底部购物车数量
   const cartsIndex = 2
   if (num) {
