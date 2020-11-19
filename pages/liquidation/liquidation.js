@@ -639,18 +639,18 @@ Page({
         } else {
           const orgiPrice = String(goods.orgiPrice)
           const tag = getGoodsTag(goods, this.promotionObj)
-          if (goods.promotionType == 'MS') {
+          if (goods.currentPromotionNo.includes('MS')) {
             data.oldPrice = orgiPrice
             data.limitedQty = String(goods.maxSupplyQty)
             data.promotionSheetNo = goods.promotionSheetNo
-          } else if (tag.SD && goods.realQty<=tag.drMaxQty) { // 单日限购
+          } else if (goods.currentPromotionNo.includes('SD') && goods.realQty<=tag.drMaxQty) { // 单日限购
             data.promotionSheetNo = goods.promotionSheetNo
             data.oldPrice = orgiPrice
             data.limitedQty = String(tag.limitedQty)
-          } else if (tag.FS && goods.realQty <= tag.sdMaxQty){
+          } else if (goods.currentPromotionNo.includes('FS') && goods.realQty <= tag.sdMaxQty){
             data.fsPromotionSheetNo = goods.promotionSheetNo
             data.oldPrice = orgiPrice
-          } else if (tag.ZK) {
+          } else if (goods.currentPromotionNo.includes('ZK')) {
             data.promotionSheetNo = goods.promotionSheetNo
             data.discount = String(tag.discountNum)
           }
@@ -757,7 +757,6 @@ Page({
     // }
     if (this.data.partnerCode == 1059 && payWay == 0) return toast('货到付款暂未开启，请重新选择')
     console.log(dhCouponsList)
-    
     API.Liquidation.saveOrder({
       data: request,
       success: res => {
@@ -1027,11 +1026,13 @@ Page({
       const itemNo = goods.itemNo
       itemNos.push(itemNo)
       allTotalMoney += Number((goods.realQty * goods.orgiPrice).toFixed(2))
+      console.log(allTotalMoney, goods.realQty,goods.orgiPrice)
       totalMoney += Number((goods.realQty * goods.price).toFixed(2))
       let data = {itemNo, qty: String(goods.realQty), price: String(goods.price)} // 促销请求数据对象
       if (isNewCarts) {
         data['clsNo'] = goods['itemClsno']
         data['currentPromotionNo'] = goods['currentPromotionNo']
+        data['currentPromotionType'] = goods['currentPromotionType']
       } else {
         if ('promotionCollections' in goods && goods.promotionCollections.includes('RMJ')) goods['RMJ'] = '满减商品'
         if ('promotionCollections' in goods && goods.promotionCollections.includes('RBF')) goods['RBF'] = '满赠商品'

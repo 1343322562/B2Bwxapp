@@ -12,7 +12,7 @@
 .goods>.info .name{display:block;width:90%;overflow:hidden;display: -webkit-box; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp:2;text-overflow:ellipsis;}
 .goods>.info .size{font-size:26rpx;color:#888;}
 .goods>.info .now{font-size:35rpx;color:#FF0000;font-weight:bold}
-.goods>.info .before{color:#999;text-decoration:line-through;}
+.goods>.info .before{color:#999;text-decoration:line-through;margin-left: 10rpx;}
 .goods>.info .tag text{display: inline-block;line-height: 30rpx;font-size: 22rpx;border: 1px solid red;color: red;margin-left: 10rpx;border-radius: 10rpx;padding: 0 6rpx;}
 .goods>.delete{position:absolute;top:0;right:-180rpx;background-color:#e60012;color:#fff;height:180rpx;line-height:180rpx;width:180rpx;text-align:center;}
 .switchPromotiom{color: #fff;background-color: #999999;display: inline-block;font-size: 22rpx;border-radius: 20rpx;width: 100rpx;padding: 2rpx 0rpx 4rpx 14rpx;margin-left: 15rpx;position: relative;}
