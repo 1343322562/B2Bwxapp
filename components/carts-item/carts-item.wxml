@@ -81,8 +81,8 @@
     >
     <!-- {{goods.currentPromotionType}} -->
       <view class="goods{{leftAnimation?' act':''}}"  data-index="{{index}}" style="left:-{{(good.goodsLeft||0)}}px" bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend" bindtouchcancel="touchend">
-        <view  class="checkbox{{!good.cancelSelected?' act':''}}" data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}"  bindtap="selectGoods">
-          <image class="icon" src="../../images/hook.png" />
+        <view  class="checkbox{{!good.cancelSelected?' act':''}}">
+          <image data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}"  bindtap="selectGoods" class="icon {{!good.cancelSelected?'':'def-icon'}}" src="../../images/hook.png" />
         </view>
         <view class="img" data-index="{{index}}" bindtap="goGoodsDetails">
           <image class="icon" src="{{good.goodsImgUrl}}" />
@@ -97,7 +97,7 @@
             <!-- <text wx:if="{{good.currentPromotionType == 'MS' && good.msMaxQty > good.realQty}}" class="now">￥{{good.msPrice}}/{{good.deliveryUnit}}</text>
             <text wx:elif="{{good.currentPromotionType == 'FS'}}" class="now">￥{{good.sdPrice}}/{{good.deliveryUnit}}</text>
             <text wx:elif="{{good.currentPromotionType == 'SD'}}" class="now">￥{{good.drPrice}}/{{good.deliveryUnit}}</text> -->
-            <text class="now">￥{{good.price}}/{{good.deliveryUnit}}</text>
+            <text class="now">￥{{good.price}}/<text class="span">{{good.deliveryUnit}}</text></text>
             <text class="before" wx:if="{{good.orgiPrice!=good.price}}">￥{{good.orgiPrice}}</text>
           </view>
           <view class='tag'>
@@ -195,7 +195,7 @@
   <view class="liquidation">
     <view class="select" bindtap="selectAllGoods">
       <view class="checkbox{{isSelectAll?' act':''}}" >
-        <image class="icon" src="../../images/hook.png" />
+        <image class="icon {{isSelectAll?'':'def-icon'}}" src="../../images/hook.png" />
       </view>
       <text class="text">全选</text>
     </view>

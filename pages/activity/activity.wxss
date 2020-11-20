@@ -8,19 +8,19 @@
 .goodsList>.li .price>.now{color: red;font-size: 38rpx;}
 .goodsList>.li .price>.before{font-size: 24rpx;color: #777;text-decoration: line-through;margin-left: 15rpx;}
 .goodsList>.li .tag{height: 45rpx;}
-.goodsList>.li .tag text{display: inline-block;line-height: 30rpx;font-size: 22rpx;border: 1px solid red;color: red;margin-right: 10rpx;border-radius: 10rpx;padding: 0 6rpx;}
+
+.goodsList>.li .tag text{display: inline-block;line-height: 29rpx;font-size: 21rpx;color: #ffffff;margin-left: 10rpx;border-radius: 10rpx;padding: 3rpx 10rpx;background-color: #f15221;}
 .goodsList>.li .productionTime{font-size: 20rpx;color: #666;}
-.goodsList>.li .goCarts{position: absolute;right: 0;bottom: 0rpx;width: 190rpx}
-.goodsList>.li .goCarts>.type{text-align: right;font-size: 24rpx;padding-right: 18rpx}
+.goodsList>.li .goCarts{position: absolute;right: 15rpx;bottom: 0rpx;}
+.goodsList>.li .goCarts>.type{text-align: right;font-size: 24rpx;margin-bottom: 4rpx;}
 .goodsList>.li .goCarts>.type.cw{color: #ffb400}
 .goodsList>.li .goCarts>.type.dw{color:#04a1ff;}
-.goodsList>.li .goCarts>.btn{position: relative;height: 80rpx;text-align: center}
-.goodsList>.li .goCarts>.btn .item{height: 100%;width: 80rpx;position: absolute;top: 0}
-.goodsList>.li .goCarts>.btn .item>.icon{width: 50rpx;height: 50rpx;margin-top: 15rpx;background-color:#fff;}
+.goodsList>.li .goCarts>.btn{position: relative;text-align: center;float: right;min-width: 135rpx;display: flex;justify-content: flex-end;align-items: center;}
+.goodsList>.li .goCarts>.btn .item>.icon{width: 47rpx;height: 47rpx;background-color:#fff;}
 .goodsList>.li .goCarts>.btn .minus{left: 0}
-.goodsList>.li .goCarts>.btn .num{display: inline-block;line-height:80rpx}
+.goodsList>.li .goCarts>.btn .num{display: inline-block;margin: 0 10rpx;}
 .goodsList>.li .goCarts>.btn .add{right: 0}
 .goCartsPage{text-align: center;position: fixed;z-index: 10;bottom:180rpx;right: 50rpx;width: 100rpx;height: 100rpx;border-radius: 100%;background-color: #fff;border:1px solid #e4e4e4;box-shadow: 5rpx 5rpx 10rpx #ddd;color: #777;font-size: 20rpx;}
 .goCartsPage>.icon{width: 50rpx;height: 50rpx;margin-top: 10rpx;}
 .goCartsPage>text{display: block;margin-top: -5rpx;}
-.minSupplyQty{position: absolute;bottom: 26rpx;right: 81rpx;font-size: 24rpx;background-color: #fff;color:#04a1ff }
+.minSupplyQty{position: absolute;bottom: 8rpx;right: 70rpx;font-size: 24rpx;color:#04a1ff }

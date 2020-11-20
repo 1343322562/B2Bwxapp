@@ -49,7 +49,7 @@
               配送数量:<text class="b_red">{{goods.shippedSpecQty + '/' + goods.itemUnit || '件'}}</text>
             </view>
             <view>
-              要货数量:{{goods.yhQty + '/' + goods.deliveryUnit}}
+              要货数量:{{goods.yhQty + ((goods.deliveryUnit || '') && '/') + (goods.deliveryUnit || '')}}
             </view>
           </view>
             <view class=".outInfo" wx:if="{{goods.differAmt}}"> 
@@ -96,7 +96,7 @@
     <text wx:if="{{order.supplyFlag=='3'&&(wlStatus=='0'||order.transNo!='YH')}}" catchtap='changeOrder' data-type="0">确定收货</text>
     <text wx:if="{{order.sheetSource != 'yewuyuan'&&order.supplyFlag=='1'&&(order.transNo=='YH'?(yhOrderCancelFlag=='1'):(zcOrderCancelFlag=='1'))}}" catchtap='changeOrder' data-type="1">取消订单</text>
     <text catchtap='goPay' wx:if="{{(order.supplyFlag=='1'&&(order.payWay=='1'||(order.payWay=='4'&&order.approveFlag=='0'))&&order.acctFlag!='1'&&order.acctFlag!='2')|| (order.sheetSource == 'yewuyuan'&&order.supplyFlag=='1'&& order.acctFlag=='0') && branchApproveSwitch == '1'}}">去支付</text>
-    <text wx:if="{{(order.transNo=='YH'&&(order.supplyFlag=='4'||order.supplyFlag=='5'))||(order.approveFlag =='0'&&order.sheetSource=='yewuyuan')}}" catchtap='afreshOrder'>{{(order.approveFlag =='0'&&order.sheetSource=='yewuyuan')?'加入购物车':'重下此单'}}</text>
+    <text wx:if="{{(order.transNo=='YH'&&(order.supplyFlag=='4'||order.supplyFlag=='5'))||(order.approveFlag =='0'&&order.sheetSource=='yewuyuan')}}" catchtap='afreshOrder'>{{(order.approveFlag=='0'&&order.sheetSource=='yewuyuan')?'加入购物车':'重下此单'}}</text>
   </block>
   <text wx:else catchtap='goIndex' >我也要买</text>
 </view>
