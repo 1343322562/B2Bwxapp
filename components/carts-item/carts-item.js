@@ -949,6 +949,7 @@ Component({
       // console.log(949,goodsData)
       if (this.sourceType == 0) { // 统配
         dispatch[types.GET_ALL_PROMOTION]({
+          type: 'updata',
           success: (res) => {
             console.log('resaaa', deepCopy(res))
             goodsData.data.forEach(nowGoods => {

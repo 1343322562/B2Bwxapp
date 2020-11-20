@@ -69,7 +69,7 @@ const actions = {
     const beforeObj = wx.getStorageSync('allPromotion')
     if (!beforeObj) wx.setStorageSync('allPromotion', obj)
     const newTime = +new Date()
-    if (!beforeObj || !beforeTime || (newTime - beforeTime) >= (1000 * 60 * 1)) { // (1000 * 60 * 5)
+    if (!beforeObj || !beforeTime || (newTime - beforeTime) >= (1000 * 60 * 1) || param.type == 'updata') { // (1000 * 60 * 5)
       API.Public.getAllPromotion({
         data: { branchNo, token, username, platform, dbranchNo },
         success: (res) => {
