@@ -771,7 +771,12 @@ Page({
         } else {
           this.isClickLoading = false
           hideLoading()
-          alert(res.msg || '下单请求失败,请与管理员联系。')
+          alert((res.msg || '下单请求失败,请与管理员联系。'), {
+            confirmText: '返回',
+            success() {
+              wx.reLaunch({ url: '/pages/carts/carts' })
+            }
+          })
         }
       },
       error: ()=>{

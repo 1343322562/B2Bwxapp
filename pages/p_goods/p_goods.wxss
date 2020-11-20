@@ -27,7 +27,7 @@ z-index:100}
 .goodsList>.li .info>.size{font-size: 26rpx;color: #888}
 .goodsList>.li .info>.price{color: red;font-size: 32rpx}
 .goodsList>.li .info>.price .before{margin-left: 10rpx;text-decoration:line-through;font-size: .8em;color: #999}
-.goodsList>.li .info>.tag text{display: inline-block;line-height: 30rpx;font-size: 22rpx;border: 1px solid red;color: red;margin-left: 10rpx;border-radius: 10rpx;padding: 0 6rpx;}
+.goodsList>.li .info>.tag text{display: inline-block;line-height: 29rpx;font-size: 21rpx;color: #ffffff;margin-left: 10rpx;border-radius: 10rpx;padding: 3rpx 10rpx;background-color: #f15221;}
 .goodsList>.li .info>.productionTime{font-size: 22rpx;color: #666;}
 .goodsList>.li .goCarts{position: absolute;right: 0;bottom: 0rpx;width: 190rpx}
 .goodsList>.li .goCarts>.type{text-align: right;font-size: 24rpx;padding-right: 18rpx}

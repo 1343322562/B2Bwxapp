@@ -27,12 +27,12 @@
     
   </view>
   <view class='block'>
-    <view class='blockTitle'>订单商品</view>
+    <view class='blockTitle' id="repeatAdd">订单商品</view>
     <view class='goodsList'>
   
       <view class='li' wx:for="{{order.orderDetails}}" wx:for-item="goods" wx:key="index">
-        <view  wx:if="{{goods.cancelSelected != 'hide' && goods.itemType != 2 }}" class="checkbox{{goods.cancelSelected?' act':''}}" data-index="{{index}}"  bindtap="selectGoods">
-          <image class="icon" src="../../images/hook.png" />
+        <view  wx:if="{{goods.cancelSelected != 'hide' && goods.itemType != 2 }}" class="checkbox" data-index="{{index}}"  bindtap="selectGoods">
+          <image class="icon" src="{{goods.cancelSelected?'../../images/hook.png':''}}" />
         </view>
         <view class='img'><image class="icon" src="{{goods.goodsImgUrl}}" /></view>
         <view class='info'>
@@ -96,7 +96,7 @@
     <text wx:if="{{order.supplyFlag=='3'&&(wlStatus=='0'||order.transNo!='YH')}}" catchtap='changeOrder' data-type="0">确定收货</text>
     <text wx:if="{{order.sheetSource != 'yewuyuan'&&order.supplyFlag=='1'&&(order.transNo=='YH'?(yhOrderCancelFlag=='1'):(zcOrderCancelFlag=='1'))}}" catchtap='changeOrder' data-type="1">取消订单</text>
     <text catchtap='goPay' wx:if="{{(order.supplyFlag=='1'&&(order.payWay=='1'||(order.payWay=='4'&&order.approveFlag=='0'))&&order.acctFlag!='1'&&order.acctFlag!='2')|| (order.sheetSource == 'yewuyuan'&&order.supplyFlag=='1'&& order.acctFlag=='0') && branchApproveSwitch == '1'}}">去支付</text>
-    <text wx:if="{{(order.transNo=='YH'&&(order.supplyFlag=='4'||order.supplyFlag=='5'))||(order.approveFlag =='0'&&order.sheetSource=='yewuyuan')}}" catchtap='afreshOrder'>{{(order.approveFlag=='0'&&order.sheetSource=='yewuyuan')?'加入购物车':'重下此单'}}</text>
+    <text wx:if="{{(order.transNo=='YH'&&(order.supplyFlag=='4'||order.supplyFlag=='5'))||(order.approveFlag =='0'&&order.sheetSource=='yewuyuan')||order.statusStr=='已完成'}}" catchtap='afreshOrder'>{{(order.approveFlag=='0'&&order.sheetSource=='yewuyuan')?'加入购物车':'重下此单'}}</text>
   </block>
   <text wx:else catchtap='goIndex' >我也要买</text>
 </view>

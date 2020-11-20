@@ -374,7 +374,6 @@ const actions = {
         success: (res) => {
           if (!('data' in res)) res['data'] = [] 
           console.log('购物车信息:', JSON.parse(JSON.stringify(res)))
-          console.log(JSON.parse(JSON.stringify(res.data)))
           let newCartsObj = { num: 0, keyArr:[]}
           if (res.code == 0 && res.data) {
             res.data.forEach(config => {

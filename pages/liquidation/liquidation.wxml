@@ -5,7 +5,7 @@
     <image class="icon" src="../../images/liquidation_page_{{item.icon}}.png" />
     <text class='text'>{{item.name}}</text>
     <text class='msg' wx:if="{{item.type == '2'}}">(下单可用余额: ￥{{storedValue}})</text>
-    <view class="checkbox{{item.type == payWay?' act':(isUseBlendWay&&item.type=='2'?' use':'')}}"><image class="icon" src="../../images/hook.png" /></view>
+    <view class="checkbox{{item.type == payWay?' act':(isUseBlendWay&&item.type=='2'?' use':'')}}"><image class="icon" src="{{item.type == payWay?'../../images/hook.png': ''}}" /></view>
     <view  class='right' wx:if="{{item.type == '0' && partnerCode != '1029'}}">部分优惠不能享用</view>
     <view  class='right' wx:if="{{item.type == '1'&&wxPayRateOpen=='1'}}">收取手续费{{wxPayRate}}%</view>
   </view>

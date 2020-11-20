@@ -5,6 +5,7 @@ import * as types from '../../store/types.js'
 import commit from '../../store/mutations.js'
 Page({
   data: {
+    currentScrollTop: '',
     tabIndex: 0,
     tabTitle: ['订单详情', '订单状态'],
     order: null,
@@ -248,7 +249,23 @@ Page({
     })
     return obj
   },
+  
+  onPageScroll:function(e){ // 获取滚动条当前位置
+    this.data.currentScrollTop = e.scrollTop //获取滚动条当前位置的值
+  },
   afreshOrder () {
+    const currentScrollTop = this.data.currentScrollTop
+    wx.createSelectorQuery().select('#repeatAdd').fields({
+      id:true,//是否返回节点id
+      rect:true,//是否返回节点布局位置
+      dataset: true,//返回数据集
+      size: true,//返回宽高
+      scrollOffset: true,//返回 scrollLeft,scrollTop
+    }, function(res){
+      console.log(res.top, currentScrollTop)
+      const scrollTop = currentScrollTop + res.top - 55
+      wx.pageScrollTo({ scrollTop: scrollTop })
+    }).exec()
     const { token, platform, username, branchNo, dbBranchNo } = this.userObj
     const { orderDetails } = this.data.order
     const selectedItemObj = this.selectedItemHandle(orderDetails)
@@ -256,6 +273,7 @@ Page({
     console.log(selectedItemObj)
     const _this = this
     const yhSheetNo = this.ordersNo
+    
     alert('是否把商品加入购物车',{
       showCancel: true,
       success: ret => {
@@ -326,6 +344,7 @@ Page({
     this.getOrdersDetail()
   },
   onLoad (opt) {
+    const _this = this
     this.openType = opt.openType
     this.ordersNo = opt.sheetNo
     this.userObj = wx.getStorageSync('userObj')

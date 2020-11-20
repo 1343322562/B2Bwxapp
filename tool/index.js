@@ -20,6 +20,7 @@ export const alert = (c, o) => {
     showCancel: false
   }
   if (o) for (let i in o) obj[i] = o[i]
+  console.log(obj)
   wx.showModal(obj)
 }
 export const deepCopy = (p, c) => { // 对象拷贝
