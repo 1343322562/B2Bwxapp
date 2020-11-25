@@ -42,7 +42,8 @@
     "pages/myList/myList",
     "pages/myListDetail/myListDetail",
     "pages/currentMonthOrder/currentMonthOrder",
-    "pages/p_goods/p_goods"
+    "pages/p_goods/p_goods",
+    "pages/pcSearch/pcSearch"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,4 +1,6 @@
+import * as types from '../../store/types.js'
 import API from '../../api/index.js'
+import dispatch from '../../store/actions.js'
 import { goPage,toast,alert } from '../../tool/index.js'
 import { tim, timCurrentDay } from '../../tool/date-format.js'
 const app = getApp()
@@ -59,12 +61,25 @@ Page({
     const value = Object.keys(collectObj).join(',')
     goPage('activity', { type, value })
   },
+  // 退出登录时,保存购物车
+  saveCarts() {
+    return new Promise(resolve => {
+      dispatch[types.GET_CHANGE_CARTS]({
+        success: (ret) => {
+          console.log(ret)
+          resolve(ret)
+        }
+      })
+    })
+  },
   quit () {
     alert('确定是否退出?',{
       showCancel: true,
       title:'温馨提示',
-      success: ret => {
+      success: async ret => {
         if (ret.confirm) {
+          // 保存购物车 并退出
+          await this.saveCarts().then(res => res)
           getApp().backLogin()
         }
       }
@@ -115,6 +130,10 @@ Page({
     this.getSalesman()
     this.getOrderData()
     this.setData({ partnerCode })
+  },
+  // 跳转批次查询
+  goPCPage() {
+    goPage('pcSearch')
   },
   getOrderNum () {
     

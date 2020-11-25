@@ -216,8 +216,8 @@ Page({
     const { dbBranchNo, branchNo } = this.userObj
     if (goods.specType != '2') {
       const config = {
-        sourceType: '0',
-        sourceNo: dbBranchNo,
+        sourceType:  goods.supcustNo ? '1' : '0',
+        sourceNo: goods.supcustNo ? goods.supcustNo : dbBranchNo,
         branchNo: branchNo
       }
       const cartsObj = dispatch[types.CHANGE_CARTS]({ goods, type, config })

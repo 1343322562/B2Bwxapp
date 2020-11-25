@@ -1,6 +1,7 @@
 // import { getIp } from './tool/index.js'
 App({
   data: { 
+    // 13337212848 123456
     // partnerCode: '1027',
     // baseImgUrl:'http://39.98.78.85:8080/',
     partnerCode: '1029',

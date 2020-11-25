@@ -18,6 +18,10 @@
       <image class="icon" src="../../images/my_page_icon_sc.png" />
       <text class='text'>收藏</text>
     </view>
+    <view class='item' catchtap='goPCPage' wx:if="{{partnerCode == '1029' || true}}">
+      <image mode="aspectFit" class="icon" src="../../images/pz.png" />
+      <text class='text'>批次</text>
+    </view>
     <view class='item' catchtap='toSeach' wx:if="{{partnerCode == '1024'}}">
       <image mode="aspectFit" class="icon" src="../../images/box.png" />
       <text class='text'>箱货</text>

@@ -218,6 +218,12 @@
 					"pathName": "pages/t_goods/t_goods",
 					"query": "platform=1&username=18569429872&orderNo=YH2007241537392915&payAmt=11.7",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/pcSearch/pcSearch",
+					"pathName": "pages/pcSearch/pcSearch",
+					"scene": null
 				}
 			]
 		}

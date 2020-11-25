@@ -77,6 +77,7 @@
     </view>
   </view>
 </view>
+
 <view class="block">
   <view class='title'>费用明细</view>
   <view class='detail'>
@@ -171,14 +172,14 @@
             <text wx:if="{{goods.currentPromotionType == 'SZ'}}">首赠</text>
             <text wx:if="{{goods.currentPromotionType == 'BG'}}">买赠</text>
             <text wx:if="{{goods.currentPromotionType == 'FS'}}">首单特价</text>
-            <text wx:if="{{goods.currentPromotionType == 'SD'}}">单日限购</text>
+            <text wx:if="{{goods.currentPromotionType == 'SD'}}">特价促销</text>
             <text wx:if="{{goods.currentPromotionType == 'BF'}}">买满赠</text>
           </view>
           <!-- 直配促销信息 -->
           <view class='tag'>
             <text wx:if="{{goods.currentPromotionType == 'RBF'}}">买满赠</text>
             <text wx:if="{{goods.currentPromotionType == 'RMJ'}}">满减</text>
-            <text wx:if="{{goods.currentPromotionType == 'RSD'}}">限时促销</text>
+            <text wx:if="{{goods.currentPromotionType == 'RSD'}}">特价促销</text>
           </view>
         </view>
         <view class='size' wx:if="{{goods.deliveryUnit}}">单位:{{goods.deliveryUnit}}</view>

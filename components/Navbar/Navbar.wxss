@@ -17,6 +17,7 @@
   align-items: center;
   position: absolute;
   left: 10rpx;
+  bottom: 0rpx;
 }
 .code .content {
   font-size: 27rpx;
@@ -33,7 +34,7 @@
   left: 50rpx;
   height: auto;
   width: auto;
-  top: -1rpx;
+  bottom: 0rpx;
   position: absolute;
   font-size: 32rpx;
 }

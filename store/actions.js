@@ -362,7 +362,7 @@ const actions = {
     const updateCarts = wx.getStorageSync('updateCarts')
     const { branchNo, token, username, platform } = getApp().data['userObj'] || wx.getStorageSync('userObj')
     const cartsObj = commit[types.GET_CARTS]()
-    if (param.nowUpdate && updateCarts && cartsObj.num) param.success(cartsObj)
+    if (param.nowUpdate && updateCarts && cartsObj.num) return param.success(cartsObj)
     let items = []
     cartsObj.keyArr.forEach(itemNo => items.push(cartsObj[itemNo]))
     const beforeTime = wx.getStorageSync('updateCartsTime')

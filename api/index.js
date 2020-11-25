@@ -21,7 +21,8 @@ export default {
     getCouponsBatchNo: (param) => ajax.post(`supplymini/getCouponsBatchNo.do`, param),      // 获取优惠券
     getPopup: (param) => ajax.post(`supplymini/getPopup.do`, param),                         // 首页弹窗配置信息
     getHotItem: (param) => ajax.post(`supplymini/getHotItem.do`, param),                     // 常购商品
-    searchItemByPromotionNo: (param) => ajax.post(`supplymini/searchItemByPromotionNo.do`, param) // 获取促销单据的凑单商品
+    searchItemByPromotionNo: (param) => ajax.post(`supplymini/searchItemByPromotionNo.do`, param), // 获取促销单据的凑单商品
+    queryItemBatch: (param) => ajax.post(`supplymini/queryItemBatch.do`, param)  // 搜索批次
     
   },
   Login: {

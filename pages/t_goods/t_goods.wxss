@@ -81,7 +81,7 @@ z-index:100}
   /* 导航栏 */
   .nav-seach-bar-box {
     position: absolute;
-    top: 5rpx;
+    bottom: 2rpx;
     left: 165rpx;
     background: #fff;
     height: 56rpx;

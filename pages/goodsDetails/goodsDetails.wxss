@@ -34,7 +34,7 @@
 .recommend>.price2 text{color: #000;}
 .promotionList{padding: 6rpx 0;}
 .promotionList>.item{overflow: hidden;padding: 16rpx 0;}
-.promotionList>.item .type{line-height: 30rpx;font-size: 22rpx;border: 1px solid red;color: red;margin-left: 10rpx;border-radius: 10rpx;padding: 0 6rpx;float: left}
+.promotionList>.item .type{line-height: 30rpx;font-size: 22rpx;color: #f1f1f1;background: #f15221;margin-left: 10rpx;border-radius: 10rpx;padding: 4rpx 8rpx;float: left}
 .promotionList>.item .msg{float: left;width: 75%;margin-left: 10rpx;font-size: 26rpx;color: #383838;}
 .promotionList>.item .msg>.li{position: relative;}
 .promotionList .lookDetails{position: absolute;top: 0;right: -70rpx ;display: block;width: 75rpx;line-height: 40rpx;text-align: center;font-size:54rpx;font-family:'Gill Sans'}

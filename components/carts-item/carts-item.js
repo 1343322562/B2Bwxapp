@@ -836,7 +836,7 @@ Component({
         || (tag.ZK && nowGoods['promotionCollections'].includes('ZK'))
       ) {
         promotionList.push({
-          name: tag.FS ? '首单特价' : (tag.SD ? '单日限购' : (tag.zkType + '折扣')),
+          name: tag.FS ? '首单特价' : (tag.SD ? '特价促销' : (tag.zkType + '折扣')),
           msg: {[itemNo]: (tag.FS ? ('活动期间,首次下单且购买数量不超过 '+ tag.sdMaxQty + nowGoods.unit +' 享受优惠价格￥'+tag.sdPrice) : (tag.SD ? ('购买数量不超过 ' + tag.drMaxQty + nowGoods.unit + ' 参与促销活动，特价￥' + tag.drPrice) : ('当前' + tag.zkType + '下单立即享受' + tag.discount + '优惠')))},
           promotionNo: _this.addPromotionNo(nowGoods, ((tag.FS && 'FS') || (tag.SD && 'SD') || (tag.ZK && 'ZK')))
         })

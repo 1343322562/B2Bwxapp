@@ -253,7 +253,7 @@ Page({
   onPageScroll:function(e){ // 获取滚动条当前位置
     this.data.currentScrollTop = e.scrollTop //获取滚动条当前位置的值
   },
-  afreshOrder () {
+  afreshOrder (type) {
     const currentScrollTop = this.data.currentScrollTop
     wx.createSelectorQuery().select('#repeatAdd').fields({
       id:true,//是否返回节点id
@@ -274,7 +274,7 @@ Page({
     const _this = this
     const yhSheetNo = this.ordersNo
     
-    alert('是否把商品加入购物车',{
+    alert((type == 'yewuyuan' ? '未达到起送金额，是否将商品加入购物车' : '是否把商品加入购物车'),{
       showCancel: true,
       success: ret => {
         if (ret.confirm) {
@@ -337,6 +337,14 @@ Page({
     this.setData({ showPay: false})
   },
   goPay () {
+    const _this = this
+    const { order } = this.data
+    const { normal } = wx.getStorageSync('configObj') // 起送金额
+    if(order.sheetSource == 'yewuyuan' && normal && order.realPayAmt < normal) {
+      _this.afreshOrder('yewuyuan')
+      return
+    }
+    console.log(this.data)
     this.setData({ showPay: true})
   },
   getPageData () {
@@ -381,10 +389,4 @@ Page({
   onReachBottom() {
     console.log(this.data.order)
   }
-  // onShareAppMessage() {
-  //   return {
-  //     title: '快来看看我买了什么好东西！',
-  //     path: '/pages/ordersDetails/ordersDetails?openType=share&sheetNo=' + this.ordersNo
-  //   }
-  // }
 })
