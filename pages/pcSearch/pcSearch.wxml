@@ -1,12 +1,13 @@
 <view class="nav-seach-bar-box" >
   <image src='../../images/search.png' bindtap="search" />
   <input type="text" value="{{sVal}}" bindconfirm='search' bindinput="inputBind" class="nav-seach-bar" placeholder='输入商品名称、条码、货号搜索' placeholder-style='font-size: 28rpx;' bindtap="toSearchPageClick" />
+  <image style="height: 42rpx;width: 42rpx;" bindtap="codeSearch" src="../../images/code1.png"></image>
 </view>
 <view class="c-goods-box">
   <view class="item" wx:if="{{selectGood}}">
     <image src="{{selectGood.goodsImgUrl}}"></image>
     <view class="content">
-      <view class="title">{{selectGood.itemName || '33阿松大'}}</view>
+      <view class="title">{{selectGood.itemName}}</view>
       <view class="info">
         <view class="props">
           <text class="label">货号 </text>  <text class="val">{{selectGood.itemNo}}</text>
@@ -30,31 +31,30 @@
     wx:if="{{item.batchNo}}"
   >
     <view class="content-1">
-      <text class="label">批 次 号 </text>  <text>{{item.batchNo}}</text>
+      <text class="label">批 次 号 </text><text>{{item.batchNo}}</text>
+    </view><view class="content-1">
+      <text class="label">单    号 </text><text>{{item.sheetNo}}</text>
     </view>
     <view class="content-1">
       <view class="content-2">
-        <text class="label">生产日期 </text>  <text>{{item.productionDate}}</text>
+        <text class="label">生产日期 </text><text class="content">{{item.productionDate}}</text>
       </view>
       <view class="content-2">
-        <text class="label">到期日期 </text>  <text>{{item.effcetDate}}</text>
+        <text class="label">有效日期 </text><text class="content">{{item.effcetDate}}</text>
       </view>
     </view>
     
     <view class="content-1">
       <view class="content-2">
-        <text class="label">入库日期 </text>  <text>{{item.inDate}}</text>
+        <text class="label">入库日期 </text><text class="content">{{item.inDate}}</text>
       </view>
       <view class="content-2">
-        <text class="label">出库日期 </text>  <text>{{item.outDate}}</text>
+        <text class="label">出库日期 </text><text class="content">{{item.outDate}}</text>
       </view>
     </view>
     <view class="content-1">
       <view class="content-2">
-        <text class="label">单    号 </text>  <text>{{item.sheetNo}}</text>
-      </view>
-      <view class="content-2">
-        <text class="label">数    量 </text>  <text class="price">{{item.outQty}}</text>
+        <text class="label">数    量 </text><text class="price">{{item.outQty}}</text>
       </view>
     </view>
   </view>
@@ -85,3 +85,10 @@
     </view>
   </view>
 </view>
+
+<view class="null" wx:if="{{selectGood && !goodBatch.length}}">
+  <image src="../../images/null.png"></image>
+  <text>暂无数据....</text>
+</view>
+
+

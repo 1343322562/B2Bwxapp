@@ -18,7 +18,7 @@
       <image class="icon" src="../../images/my_page_icon_sc.png" />
       <text class='text'>收藏</text>
     </view>
-    <view class='item' catchtap='goPCPage' wx:if="{{partnerCode == '1029' || true}}">
+    <view class='item' catchtap='goPCPage' wx:if="{{partnerCode == '1029'}}">
       <image mode="aspectFit" class="icon" src="../../images/pz.png" />
       <text class='text'>批次</text>
     </view>

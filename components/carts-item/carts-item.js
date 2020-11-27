@@ -437,7 +437,7 @@ Component({
         const promotionNo = cDataObj[goods.itemNo].currentPromotionNo || ''
         const ty = (sourceType == '1' && promotionNo) ? promotionNo.slice(0, 3) : promotionNo.slice(0, 2)
         goods.currentPromotionType = ty
-        if (ty == 'BG' || ty == 'BF' || ty == 'MQ' || ty == 'MJ' || ty == 'SZ') {
+        if (ty == 'BG' || ty == 'BF' || ty == 'MQ' || ty == 'MJ' || ty == 'SZ' || ty == 'RMJ' || ty == 'RBF') {
           goods.price = cDataObj[goods.itemNo].orgiPrice
         } else if (ty == 'MS' && goods.realQty <= goods.msMaxQty) {
           goods.price = cDataObj[goods.itemNo].msPrice
@@ -445,9 +445,9 @@ Component({
           goods.price = cDataObj[goods.itemNo].sdPrice
         } else if (ty == 'ZK') {
           goods.price = cDataObj[goods.itemNo].zkPrice
-        } else if (ty == 'SD' && (goods.drMaxQty > goods.realQty || goods.drMaxQty == 0)) {
+        } else if ((ty == 'SD' || ty == 'RSD') && (goods.drMaxQty > goods.realQty || goods.drMaxQty == 0)) {
           goods.price = cDataObj[goods.itemNo].drPrice
-        } 
+        }
         sheetAmt += goods.price * goods.realQty
       })
       data.sheetAmt = Number(sheetAmt.toFixed(2))

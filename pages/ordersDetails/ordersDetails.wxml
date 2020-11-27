@@ -18,7 +18,7 @@
     <view class='blockTitle'>付款信息</view>
     <view class='p'><text class='name'>商品总价</text><text class='content'>￥{{order.orgiSheetAmt}}</text></view>
     <view class='p'><text class='name'>优惠金额</text><text class='content'>￥{{order.discountsTotalAmt}}</text></view>
-    <view class='p'><text class='name'>代金卷</text><text class='content'>￥{{order.vouchersAmt}}</text></view>
+    <view class='p'><text class='name'>代金券</text><text class='content'>￥{{order.vouchersAmt}}</text></view>
     <view class='p' wx:if="{{order.doAmt}}"><text class='name' >缺货金额</text><text class='content'>￥{{order.stockoutAmt}}</text></view>
     <view class='p' wx:if="{{order.transportFeeAmt}}"><text class='name'>配送费</text><text class='content'>￥{{order.transportFee}}</text></view>
     <view class='p' wx:if="{{!order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{order.realPayAmt}}</text></view>
@@ -30,32 +30,31 @@
     <view class='blockTitle' id="repeatAdd">订单商品</view>
     <view class='goodsList'>
   
-      <view class='li' wx:for="{{order.orderDetails}}" wx:for-item="goods" wx:key="index">
-        <view  wx:if="{{goods.cancelSelected != 'hide' && goods.itemType != 2 }}" class="checkbox" data-index="{{index}}"  bindtap="selectGoods">
+      <view class='li' bindtap="selectGoods" data-index="{{index}}" wx:for="{{order.orderDetails}}" wx:for-item="goods" wx:key="index">
+        <view  wx:if="{{goods.cancelSelected != 'hide' && goods.itemType != 2 }}" class="checkbox">
           <image class="icon" src="{{goods.cancelSelected?'../../images/hook.png':''}}" />
         </view>
         <view class='img'><image class="icon" src="{{goods.goodsImgUrl}}" /></view>
         <view class='info'>
           <view class='name'><text class='red' wx:if="{{goods.itemType=='2'}}">[赠品]</text>{{goods.itemName}}</view>
-          <view class='size'>规格:{{goods.itemSize}}</view>
+          <view class="prop">
+            <view class='props1'>货号 <text class="i-content">{{goods.itemNo}}</text></view>
+            <view class='props2'>规格 <text class="i-content">{{goods.itemSize}}</text></view>
+            <view class='props1'>条码 <text class="i-content">{{goods.itemSubno}}</text></view>
+            <view class='props2'>单价 <text class="i-content b_red">{{goods.itemType=='2'?'￥0':('￥'+goods.price)}}</text></view>
+            <view class='props1'>
+              要货数量 <text class="i-content">{{goods.yhQty + ((goods.deliveryUnit || 0) && '/') + (goods.deliveryUnit || '')}}</text>
+            </view>
+            <view class='props2'>小计 <text class="i-content b_red">￥{{goods.subAmt}}</text></view>
+            <view class='props1' wx:if="{{goods.shippedSpecQty}}">
+              配送数量 <text class="i-content">{{(goods.shippedSpecQty || 0) + '/' + (goods.itemUnit || '件')}}</text>
+            </view>
+            <text class="props2" wx:if="{{goods.differAmt}}">差异金额 <text class="c_red">￥{{goods.differAmt || 0.0}}</text></text>
+            <text class="props1" wx:if="{{goods.differAmt && goods.shippedSpecAmt && partnerCode != 1029}}">发货金额 <text class="b_red">￥{{goods.shippedSpecAmt || 0.0}}</text></text>
+          </view>
         </view>
         <view class='total'>
-          <view class='price'>{{goods.itemType=='2'?'免费':('￥'+goods.price)}}</view>
-          <view class='subtotal'>小计:￥{{goods.subAmt}}</view>
-        </view>
-        <view class="out">
-          <view class='num outInfo'>
-            <view class='num' wx:if="{{goods.shippedSpecQty}}">
-              配送数量:<text class="b_red">{{goods.shippedSpecQty + '/' + goods.itemUnit || '件'}}</text>
-            </view>
-            <view>
-              要货数量:{{goods.yhQty + ((goods.deliveryUnit || '') && '/') + (goods.deliveryUnit || '')}}
-            </view>
-          </view>
-            <view class=".outInfo" wx:if="{{goods.differAmt}}"> 
-               <text class="num">差异金额:<text class="c_red">￥{{goods.differAmt}}</text></text>
-                <text wx:if="{{goods.shippedSpecAmt}}">发货金额:<text class="b_red">￥{{goods.shippedSpecAmt}}</text></text>
-            </view>
+          <view class='price'>{{goods.itemType=='2'?'免费': ''}}</view>
         </view>
       </view>
 

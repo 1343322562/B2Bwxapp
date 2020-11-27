@@ -22,6 +22,7 @@ Page({
   },
   // 是否选择商品
   selectGoods(e) {
+    console.log(e)
     const { index } = e.currentTarget.dataset
     const { orderDetails } = this.data.order
     orderDetails[index].cancelSelected = !orderDetails[index].cancelSelected
@@ -43,6 +44,7 @@ Page({
     }
   },
   getOrderStatusStr(item) {
+    // approveFlag 审核状态 0未审核  1已审核  3未处理
     const status = item.supplyFlag
     return (status == '1' ?
       (item.approveFlag == '0' ? '未提交' : '已提交') :

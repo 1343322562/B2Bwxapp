@@ -225,8 +225,9 @@ const actions = {
   },
   // （直配）今日促销商品，达到最大值停止添加商品
   maxLimitAdd(goods, type, cartsObjs) {  // goods：当前 ADD 的商品对象; type：当前增添的 type; 若有 cartsObj ，则是在采页面增加\
+    console.log(goods, type, cartsObjs)
     if (cartsObjs == 0) { // 0: 在结算页添加商品 ； 1：在商品采购页添加商品
-      let currentRealQty = goods.realQty  // 当前商品真实数量
+      let currentRealQty = goods.realQty || wx.getStorageSync('cartsObj')[goods.itemNo].realQty  // 当前商品真实数量
       let currentLimitedQty = goods.todayPromotion.limitedQty  // 当前商品今日促销的限购数量
       if (currentRealQty >= currentLimitedQty) {
         toast('已达限时促销最大限购数')
@@ -252,12 +253,13 @@ const actions = {
   },
 
   [types.CHANGE_CARTS](param, cartsObjs = 0) { // add delete minus； cartsObj 为促销信息，主要用来实现直配的限时促销，达到限购值，停止加购
-    console.log(deepCopy(param))
+    console.log(deepCopy(param), cartsObjs)
     console.log(param)
+    console.log(param.config.sourceType, ('RSD' || 'todayPromotion') in param.goods, param.type, this)
   // 直配中商品数量若满足限时促销中的 限购值，则停止加购
     if (
       param.config.sourceType == "1"     // 直配
-      && ('todayPromotion' in param.goods || 'RSD' in param.goods)  // todayPromotion：限时促销(采购页);  'RSD'：采购页面
+      && ('RSD' in param.goods || 'todayPromotion' in param.goods)  // todayPromotion：限时促销(采购页);  'RSD'：采购页面
       && param.type == "add"             // 增加商品
       && this.maxLimitAdd(param.goods, param.type, cartsObjs) == 1 // 1：达到最大限购值,停止执行
     ){

@@ -165,7 +165,7 @@
 							<view class='sub-amt'>{{item.subAmt}}</view>
 							<view class='text'>
 								<text class='en'>RMB</text>
-								<text class='cn'>优惠卷</text>
+								<text class='cn'>优惠券</text>
 							</view>
 						</view>
 						<view class='tag' bindtap="byCoupons" data-index="index">领取</view>

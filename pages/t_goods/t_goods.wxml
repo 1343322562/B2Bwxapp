@@ -74,6 +74,7 @@
         <text wx:if="{{goodsObj[itemNo].FS}}">首单特价</text>
         <text wx:if="{{goodsObj[itemNo].BG}}">买赠</text>
         <text wx:if="{{goodsObj[itemNo].SD}}">特价促销</text>
+        <text wx:if="{{goodsObj[itemNo].todayPromotion}}">特价促销</text>
         <text wx:if="{{goodsObj[itemNo].MJ}}">满减</text>
         <text wx:if="{{goodsObj[itemNo].SZInfo}}">首赠</text>
         <text wx:if="{{goodsObj[itemNo].MQ}}">数量满减</text>

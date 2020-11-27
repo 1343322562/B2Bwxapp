@@ -17,10 +17,13 @@ Page({
         data: { username: item.user, password: item.pwd, platform: '3' },
         success: (res) => {
           if (res.code == 0) {
+            console.log(50)
             let data = res.data
             data.platform = '3'
             wx.setStorageSync('userObj', data)
             wx.setStorage({key: 'userName',data: item.user})
+            wx.removeStorageSync('cartsObj')
+            wx.removeStorageSync('configObj')
             wx.reLaunch({
               url: '/pages/index/index'
             })

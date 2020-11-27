@@ -10,15 +10,17 @@ Page({
     sVal: '',
     goodsData: [],
     selectGood: '',
-    goodBatch: [{  // 批次数据
-      effcetDate: '', // 到期日期
-      batchNo: '',    // 批次号
-      inDate: '',     // 入库日期
-      outDate: '',    // 出库日期
-      productionDate: '', // 生产日期
-      sheetNo: '',    // 要货单号
-      outQty: 0       // 出库数量
-    }], 
+    goodBatch: [
+      // {  批次数据
+      // effcetDate: '',  到期日期
+      // batchNo: '',     批次号
+      // inDate: '',      入库日期
+      // outDate: '',     出库日期
+      // productionDate: '',  生产日期
+      // sheetNo: '',     要货单号
+      // outQty: 0        出库数量
+      // }
+  ], 
   },
   // 统配
   getGoodsList(condition) {
@@ -69,9 +71,10 @@ Page({
     })
   },
   // 搜索商品
-  async search() {
+  async search(text) {
     showLoading('请稍后...')
-    const { sVal: condition } = this.data
+    const condition = ((typeof text != 'object') && text) || this.data.sVal
+    console.log(condition)
     let goodsData = [] // 总商品
     let goodsList = [] // 统配
     let supGoodsList = [] // 直配
@@ -83,28 +86,63 @@ Page({
     })
     goodsData = [ ...goodsList, ...supGoodsList ]
     hideLoading()
-    this.setData({ goodsData })
+    if (text && typeof text != 'object') {
+      console.log(text, 50)
+      this.data.goodsData = goodsData
+      this.searchPC(text)
+    } else {
+      this.setData({ goodsData })
+    }
     if (!goodsData.length) toast('无商品数据')
     console.log(goodsData)
     
   },
+  // 扫码查询
+  codeSearch() {
+    const _this = this
+    // 只允许从相机扫码
+    wx.scanCode({
+      onlyFromCamera: true,
+      success (res) {
+        console.log(res)
+        const itemNo = res.result.replace('↵', '')
+        console.log(itemNo)
+        _this.search(itemNo)
+      }
+    })
+  },
   // 批次查询
   searchPC(e) {
+    console.log(e)
+    let itemNo
+    let i // 下标
     const _this = this
-    const { i } = e.currentTarget.dataset
     const { goodsData } = this.data
-    console.log(i, goodsData, e)
-    const itemNo = goodsData[i].itemNo
+    if (typeof e == 'object') { // 点击商品进入
+      i = e.currentTarget.dataset.i
+      itemNo = goodsData[i].itemNo
+    } else { // 扫码进入
+      i = 0
+      itemNo = goodsData[i].itemNo
+    }
     const { branchNo, token, platform, username } = wx.getStorageSync('userObj')
     API.Public.queryItemBatch({
       data: { itemNo, branchNo, token, platform, username },
       success(res) {
-        console.log(res)
-        if (res.data.length) {
-          _this.setData({ goodsData: [], selectGood: goodsData[i], goodBatch: res.data })
+        const data = res.data
+        data.forEach(item => {
+          item.productionDate = item.productionDate.slice(0, 10)
+          item.effcetDate = item.effcetDate.slice(0, 10)
+          item.inDate = item.inDate.slice(0, 19)
+          item.outDate = item.outDate.slice(0, 19)
+        })
+        console.log(goodsData, i, e, res)
+        if (data.length) {
+          _this.setData({ goodsData: [], selectGood: goodsData[i], goodBatch: data })
         } else {
           toast('暂无批次数据')
-          _this.setData({ goodsData: [], selectGood: goodsData[i] })
+          console.log(goodsData[0])
+          _this.setData({ goodsData: [], selectGood: goodsData[i], goodBatch: [] })
         }
       }
     })
