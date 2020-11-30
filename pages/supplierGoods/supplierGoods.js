@@ -1,7 +1,7 @@
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
-import { showLoading, hideLoading, alert, getGoodsImgSize, goPage, toast } from '../../tool/index.js'
+import { showLoading, hideLoading, alert, getGoodsImgSize, goPage, toast, MsAndDrCount } from '../../tool/index.js'
 const maxNum = 20
 let baseGoodsList
 Page({
@@ -18,6 +18,9 @@ Page({
     nowSelectCls: '',
     cartsObj: {},
     searchValue: '' // 搜索框 value
+  },
+  loadDef(err) {
+    this.setData({ [`config.goodsImgUrl`]: '../../images/sup-h.png' })
   },
   // 确认搜索
   searchConfirm() {
@@ -47,7 +50,9 @@ Page({
     
     const cartsObj = dispatch[types.CHANGE_CARTS]({ goods, type, config }, this.data.cartsObj)
     if (!cartsObj) return 
-    cartsObj && this.setData({ cartsObj: cartsObj })
+    const newGoods = MsAndDrCount(goods, cartsObj[no], type) || goods
+    console.log(newGoods, this.data.goodsObj, no )
+    cartsObj && this.setData({ cartsObj: cartsObj, [`goodsObj.${no}`]: newGoods })
   },
   getCartsData() {
     dispatch[types.GET_CHANGE_CARTS]({
@@ -131,9 +136,16 @@ Page({
             todayPromotionKeyArr.map(item => {
               for (let key in goodsObj) {
                 if (goodsObj[key].itemNo == item) {
+                  const cartsObj = wx.getStorageSync('cartsObj')
+                  console.log(cartsObj, key)
                   todayPromotion[key].endDate = todayPromotion[key].endDate.slice(0, 10)      // 截取年月日
                   todayPromotion[key].startDate = todayPromotion[key].startDate.slice(0, 10)  // 截取年月日
                   goodsObj[key].todayPromotion = todayPromotion[key]
+                  goodsObj[key].drPrice = todayPromotion[key].price
+                  goodsObj[key].drMaxQty = todayPromotion[key].limitedQty
+                  if (!(key in cartsObj) || cartsObj[key].realQty < goodsObj[key].drMaxQty) {
+                    goodsObj[key].price = todayPromotion[key].price
+                  }
                 }
               }
             })
@@ -170,6 +182,7 @@ Page({
           let goodsObj = {}
           const promotionObj = this.promotionObj
           list.forEach(goods => {
+            goods.orgiPrice = goods.price 
             goods.stockQty = 9999
             const itemNo = goods.itemNo
             goods.goodsImgUrl = this.zcGoodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)

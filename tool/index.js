@@ -275,7 +275,9 @@ export const setParentGoodsCartsObj = (cartsObj) => { // 计算多规格主商�
 export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单日限购 判断计算
   const warn = (openType == 'add' || openType == 'input')
   const ty = goods.currentPromotionNo || ''
-  if (ty.includes('MS') || ty.includes('SD') || ty.includes('ZK') || ty.includes('FS')) {
+  let isRSD = (goods['promotionNos'] && goods.promotionNos.includes('RSD')) || (goods['promotionCollections'] && goods.promotionCollections.includes('RSD')) 
+  if ('currentPromotionNo' in goods && !ty.includes('RSD')) isRSD = false 
+  if (ty.includes('MS') || ty.includes('SD') || ty.includes('ZK') || ty.includes('FS') || isRSD) {
     goods.msMaxQty || (goods.msMaxQty=0)
     goods.drMaxQty || (goods.drMaxQty=0)
     goods.sdMaxQty || (goods.sdMaxQty = 0)
@@ -284,23 +286,30 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
     const isMs = (cartsGoodsNum > goods.msMaxQty) && (cartsGoodsNum <= goods.msMaxQty + stop )
     const isDr = goods.drMaxQty > goods.msMaxQty
     const isSd = goods.sdMaxQty > goods.msMaxQty
+    console.log(goods, cartsGoodsNum)
     // console.log(273,deepCopy(goods))
     if (ty.includes('MS') && cartsGoodsNum <= goods.msMaxQty) {
       goods.price = goods.msPrice
     } else if (ty.includes('SD') && cartsGoodsNum <= goods.drMaxQty) {
       goods.price = goods.drPrice
       if (warn && ty.includes('MS') && isDr && isMs ) {
-        alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
+        alert('商品购买数量已超上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
     } else if (ty.includes('ZK') && cartsGoodsNum <= goods.zkMaxQty) {
       goods.price = goods.zkPrice
       if (warn && goods.MS  && isMs) {
-        alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
+        alert('商品购买数量已超上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
+    } else if (isRSD && cartsGoodsNum <= goods.todayPromotion['limitedQty']) {
+      console.log(goods, cartsGoodsNum)
+      goods.price = goods.todayPromotion.price
+      // if (warn && 'todayPromotion' in goods) {
+      //   alert('商品购买数量已超上限[' + goods.todayPromotion['limitedQty'] + '],商品将恢复促销价')
+      // }
     } else if (ty.includes('FS') && cartsGoodsNum <= goods.sdMaxQty) {
       goods.price = goods.sdPrice
       if (warn && goods.MS && isSd && isMs) {
-        alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
+        alert('商品购买数量已超上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
     } else {
       goods.price = goods.orgiPrice
@@ -308,8 +317,13 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
         (ty.includes('MS') && isMs)
         || (ty.includes('SD') && (cartsGoodsNum > goods.drMaxQty) && (cartsGoodsNum <= goods.drMaxQty + stop))
         || (ty.includes('FS') && (cartsGoodsNum > goods.sdMaxQty) && (cartsGoodsNum <= goods.sdMaxQty + stop))
+        || (isRSD && cartsGoodsNum > goods.todayPromotion['limitedQty'] && cartsGoodsNum <= goods.todayPromotion['limitedQty'] + stop)
         )) {
-        alert('商品购买数量已超' + ((isDr || isSd) ? '促销' : '秒杀') + '上限[' + goods[isDr ? 'drMaxQty' : (isSd ? 'sdMaxQty' :'msMaxQty')] + '],商品将恢复原价')
+          if(isRSD) {
+            alert('商品购买数量已超上限[' +  goods.todayPromotion['limitedQty'] + '],商品将恢复促销价')
+          } else {
+            alert('商品购买数量已超' + ((isDr || isSd) ? '促销' : '秒杀') + '上限[' + goods[isDr ? 'drMaxQty' : (isSd ? 'sdMaxQty' :'msMaxQty')] + '],商品将恢复原价')
+          }
       }
     }
     return goods
@@ -375,10 +389,17 @@ export const HANDLE_SUP_PROMOTION = function(param) {
         } else if (key.includes('RBF') && data[key].length) {
           obj.RBF.reachVal = data[key][0].reachVal
           obj.RBF.memo = data[key][0].memo
-        } else if (key.includes('RSD') && data[key].length) {
+        } else if (key.includes('RSD')) {
           for(let rsdKey in data[key]) {
+            const goodsData = param.data.data
             obj.RSD.itemNo.push(rsdKey)
             obj.RSD.endDate = data[key][rsdKey].endDate.slice(0, 10)
+            goodsData.forEach(item => {
+              if (item.itemNo == rsdKey) {
+                item.drMaxQty = data[key][rsdKey].limitedQty
+                item.drPrice = data[key][rsdKey].price
+              }
+            })
           }
         }
       }

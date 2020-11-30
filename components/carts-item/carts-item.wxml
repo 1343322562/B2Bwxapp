@@ -86,7 +86,7 @@
         </view>
         <view class="img" data-index="{{index}}" bindtap="goGoodsDetails">
           <image class="icon" src="{{good.goodsImgUrl}}" />
-          <image wx:if="{{good.currentPromotionType == 'RSD'}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image> 
+          <!-- <image wx:if="{{good.currentPromotionType == 'RSD'}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image>  -->
           <view wx:if="{{good.enReturnGoods=='0'||good.isProhibit=='1'}}" class="noReturn">不可退</view>
         </view>
         <view class="info">
@@ -112,6 +112,10 @@
             <text wx:if="{{good.currentPromotionType == 'MS'}}">秒杀</text>
             <text wx:if="{{good.currentPromotionType == 'ZK'}}">{{good.discount}}</text>
             <text wx:if="{{good.rewardPoint > 0 }}">积分</text>
+          
+            <text wx:if="{{good.currentPromotionType == 'RBF'}}">买满赠</text>
+            <text wx:if="{{good.currentPromotionType == 'RMJ'}}">满减</text>
+            <text wx:if="{{good.currentPromotionType == 'RSD'}}">特价促销</text>
             <view 
               class="switchPromotiom" 
               bindtap="showSwitchPromotionDialog" 
@@ -126,10 +130,6 @@
           <!-- <text wx:if="{{good.RBF}}">买满赠</text>
           <text wx:if="{{good.RMJ}}">满减</text>
           <text wx:if="{{good.RSD}}">限时促销</text> -->
-          
-          <text wx:if="{{good.currentPromotionType == 'RBF'}}">买满赠</text>
-          <text wx:if="{{good.currentPromotionType == 'RMJ'}}">满减</text>
-          <text wx:if="{{good.currentPromotionType == 'RSD'}}">特价促销</text>
             <!-- <text>{{(good.enReturnGoods=='0'||good.isProhibit=='1')?'不可退':'可退'}}</text> -->
           </view>
         </view>

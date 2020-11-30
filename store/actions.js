@@ -255,16 +255,15 @@ const actions = {
   [types.CHANGE_CARTS](param, cartsObjs = 0) { // add delete minus； cartsObj 为促销信息，主要用来实现直配的限时促销，达到限购值，停止加购
     console.log(deepCopy(param), cartsObjs)
     console.log(param)
-    console.log(param.config.sourceType, ('RSD' || 'todayPromotion') in param.goods, param.type, this)
   // 直配中商品数量若满足限时促销中的 限购值，则停止加购
-    if (
-      param.config.sourceType == "1"     // 直配
-      && ('RSD' in param.goods || 'todayPromotion' in param.goods)  // todayPromotion：限时促销(采购页);  'RSD'：采购页面
-      && param.type == "add"             // 增加商品
-      && this.maxLimitAdd(param.goods, param.type, cartsObjs) == 1 // 1：达到最大限购值,停止执行
-    ){
-      return 
-    }
+    // if (
+    //   param.config.sourceType == "1"     // 直配
+    //   && ('RSD' in param.goods || 'todayPromotion' in param.goods)  // todayPromotion：限时促销(采购页);  'RSD'：采购页面
+    //   && param.type == "add"             // 增加商品
+    //   && this.maxLimitAdd(param.goods, param.type, cartsObjs) == 1 // 1：达到最大限购值,停止执行
+    // ){
+    //   return 
+    // }
     if (param.goods.fillState == 1) return toast('商品补货中')
     if(app.data.partnerCode == 1050 && 'msMaxQty' in param.goods && param.type != 'minus' && param.goods.realQty >= param.goods.msMaxQty) {
       return toast('此商品已达秒杀最大限购数量!')
@@ -344,11 +343,6 @@ const actions = {
         cartsObj.num += Number(count); if(String(cartsObj.num).includes('.')) cartsObj.num = Number(Number(cartsObj.num).toFixed(1))
        
       }
-      // if (sourceType == '0' && param.type != 'minus' && (item.realQty > maxSupplyQty || (item.realQty > (deliveryType == '3' ? 9999 : stockQty)))) {
-      //   toast(item.realQty > maxSupplyQty ? '已达到最大购买数量' :'库存不足')
-      //   return
-      // }
-      // 直配和统配都判断了库存, 上面是没判断的
       if (param.type != 'minus' && (item.realQty > maxSupplyQty || (item.realQty > (deliveryType == '3' ? 9999 : stockQty)))) {
         toast(item.realQty > maxSupplyQty ? '已达到最大购买数量' :'库存不足')
         return
@@ -356,6 +350,7 @@ const actions = {
       cartsObj[itemNo] || cartsObj.keyArr.push(itemNo)
       cartsObj[itemNo] = item
     }
+    console.log(cartsObj)
     commit[types.SAVE_CARTS](cartsObj) // 缓存 cartsObj
     wx.setStorageSync('updateCarts', true)
     return cartsObj

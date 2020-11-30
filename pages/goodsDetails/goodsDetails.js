@@ -194,13 +194,21 @@ Page({
             }
           }
           if ('todayPromotion' in goods) {
+            const cartsObj = wx.getStorageSync('cartsObj')
             let startDate = goods.todayPromotion.startDate.slice(0, 10) 
             let endDate = goods.todayPromotion.endDate.slice(0, 10)
+            goods.orgiPrice = goods.price
+            goods.drPrice = goods.todayPromotion.price
+            goods.drMaxQty = goods.todayPromotion.limitedQty
+            if (cartsObj[goods.itemNo].realQty < goods.drMaxQty) {
+              goods.price = goods.drPrice
+            }
             promoList.push({ name: '限时促销', msg: ['活动时间: ' + startDate + ' 至 ' + endDate] })
           }
           console.log(promoList)
           this.setData({
-            promotionList: promoList
+            promotionList: promoList,
+            goods
           })
         }
       }
@@ -220,10 +228,13 @@ Page({
         branchNo: this.requestObj.branchNo
       }
       const cartsObj = dispatch[types.CHANGE_CARTS]({ goods, type, config })
+      console.log(cartsObj)
+      console.log(cartsObj[goods.itemNo])
       if (cartsObj) {
         let obj = { cartsObj }
         const newGoods = MsAndDrCount(goods, cartsObj[goods.itemNo], type)
         if (newGoods) obj.goods = newGoods
+        console.log(obj, newGoods, deepCopy(this.data.goods))
         this.setData(obj)
       }
     } else {

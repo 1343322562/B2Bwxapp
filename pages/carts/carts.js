@@ -54,30 +54,17 @@ Page({
                   cartsTypeName: type == 'cw'?'常温统配':(type=='dw'?'低温统配':'商家直配')
                 }
               }
+              console.log(type)
+              if (type != 'cw' && type != 'dw' && !('orgiPrice' in goods)) {
+                goods.orgiPrice = goods.price
+                console.log(deepCopy(goods))
+              }
               goods.carstBasePrice =  goods.orgiPrice
               goods.currentPromotionNo = S_cartObj[goods.itemNo].currentPromotionNo || '' 
               goods.currentPromotionType = config.sourceType == 0 ? goods.currentPromotionNo.slice(0, 2) : goods.currentPromotionNo.slice(0, 3) 
               goods.promotionCollectionsArr = goods.promotionCollections.includes(',') ?  goods.promotionCollections.split(',') : [goods.promotionCollections]
               const tag = getGoodsTag(goods, promotionObj,true)
               goods = Object.assign(goods, tag)
-              // const ty = goods.currentPromotionType
-              // if (ty=='BF'||ty=='BG'||ty=='MQ'||ty=='SZ'||ty=='MJ'||ty=='BF') {
-              //   goods.price = goods.orgiPrice
-              // } else if (ty=='MS') {
-              //   if (goods.msPrice && goods.realQty <= goods.msMaxQty ) {
-              //     goods.price = goods.msPrice
-              //   } else {
-              //     goods['price'] = goods.orgiPrice
-              //     goods['currentPromotionNo'] = ''
-              //     goods['currentPromotionType'] = ''
-              //   }
-              // } else if (ty=='FS') {
-              //   goods.price = goods.sdPrice
-              // } else if (ty=='SD' && (goods.drMaxQty > goods.realQty || goods.drMaxQty == 0)) {
-              //   goods.price = goods.drPrice
-              // } else if (ty=='ZK') {
-              //   goods.price = goods.zkPrice
-              // }
               goods.goodsImgUrl = (config.sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl): zcGoodsUrl) + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
               cartsObj[type].data.push(goods)
             })
