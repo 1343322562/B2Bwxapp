@@ -35,7 +35,7 @@ Page({
         if (res.code == 0 && list) {
           let supplierObj = {}
           let supplierKey = this.data.supplierKey
-          list.forEach(item => {
+          list.forEach((item, index) => {
             const cls = item.managementType
             const no = item.supplierNo
             item.goodsImgUrl = imgUrl + '/upload/images/supplier/' + item.picUrl
@@ -45,6 +45,7 @@ Page({
               supplierKey[cls].push(no)
             }
           })
+          console.log(list, supplierObj)
           this.setData({ supplierObj})
           setTimeout(()=>{
             this.setData({ supplierKey })

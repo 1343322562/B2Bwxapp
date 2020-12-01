@@ -29,9 +29,10 @@ App({
     // partnerCode: '1026',
     
     // partnerCode: '1051',
-    // partnerCode: '10510',
+    // partnerCode: '1053',
     // baseImgUrl:'http://app.tmzyz.com/',
     // partnerCode: '1059',
+    // partnerCode: '05',
     // partnerCode: '1054',
     // partnerCode: '1055',
     // partnerCode: '2222',
@@ -39,8 +40,8 @@ App({
     // partnerCode: '1039',
     // partnerCode: '1058',
 
-    //  partnerCode: '1056', 
-     partnerCode: '1057',
+     partnerCode: '1056', 
+    //  partnerCode: '1057',
 
     // partnerCode: '1050',
     // baseImgUrl:'http://erp.wgjnh.com',

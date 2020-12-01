@@ -85,9 +85,16 @@ Page({
       success: res => {
         console.log(deepCopy(res))
         if (res.code == 0) {
-          const { transportFeeType } = wx.getStorageSync('configObj') // 配送费计算方式 0：没有配送费 1：按照固定金额 2：按照订单比例  
+     
+          const { 
+            transportFeeType,  // 配送费计算方式 0：没有配送费 1：按照固定金额 2：按照订单比例  
+            transportFeeChoice //配送方式配送费选择 1:配送  2:物流  1,2：配送和物流
+           } = wx.getStorageSync('configObj') 
+           // 配送方式配送费选择 0:配送  3:物流  4：配送和物流
+          const tWay = transportFeeChoice == 1 ? 0 : (transportFeeChoice == 2 ? 3 : 4)
           const { transportFee } = wx.getStorageSync('userObj')
           const order = res.data
+          const deliveryType = Number(order.deliveryType)
           let itemNos =[]
           order.orderDetails.forEach(goods => {
             goods.goodsImgUrl = (order.transNo == 'YH' ? (goods.itemType == '0' ? zhGoodsUrl : goodsUrl): zcGoodsUrl) + goods.itemNo + '/' + getGoodsImgSize(goods.imgName)
@@ -120,11 +127,10 @@ Page({
           
           
           order.transportFeeAmt = 0
-          if (transportFee != 0) {
+          if (transportFee != 0 && deliveryType != 1 && transportFeeType != 0 && (tWay === deliveryType || tWay === 4)) {
             console.log('transportFeeType', transportFeeType)
             const { realPayAmt } = order
-            // order.transportFeeAmt = transportFeeType == 1 ? transportFee : Number((realPayAmt * transportFee).toFixed(2)) 
-            order.transportFeeAmt = transportFee
+            order.transportFeeAmt = transportFeeType == 1 ? transportFee : Number((realPayAmt * transportFee).toFixed(2)) 
           }
           console.log(126, order.transportFeeAmt)
           order.discountsTotalAmt = Number((order.orgiSheetAmt - order.realPayAmt - (order.vouchersAmt || 0)).toFixed(2))

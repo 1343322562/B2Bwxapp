@@ -61,7 +61,7 @@ z-index:100}
 .alert>.btn text:last-child{background-color: #29323c;color: #fff;}
 .alert .scrollBox{height: 500rpx;}
 
-.minSupplyQty{position: absolute;bottom: 47rpx;right: 81rpx;font-size: 24rpx;background-color: #fff;color:#04a1ff }
+.minSupplyQty{position: absolute;bottom: 6rpx;right: 81rpx;font-size: 24rpx;background-color: #fff;color:#04a1ff }
 .loadingGoods{line-height: 80rpx;color: #fff;background-color: rgba(0, 0,0, .6);text-align: center;}
 
 .toTopIcon {position: fixed;height: 50rpx;width: 50rpx;bottom: 25px;right: 25rpx;z-index: 100;background-color: #059656;border-radius: 50%;padding: 16rpx;opacity: .8;display: flex;justify-content: center;}

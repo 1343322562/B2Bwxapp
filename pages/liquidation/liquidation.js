@@ -48,12 +48,15 @@ Page({
   },
   // 选择配送方式 0 配送  1 自提 3 第三方物流
   selectTransWayClick(e) {
+    console.log(e)
     const deliveryType = Number(e.currentTarget.dataset.type)
+    this.data.deliveryType = deliveryType
+    console.log(deliveryType)
     const { transportFeeType }= wx.getStorageSync('configObj')
+    const tWay = Number(this.data.transportFeeChoiceWay)
     let transportFeeAmt = 0 
-    if (deliveryType != 1 && transportFeeType != 0)  transportFeeAmt = this.transportFeeHandle()
+    if (deliveryType != 1 && transportFeeType != 0 && (tWay === deliveryType || tWay === 4))  transportFeeAmt = this.transportFeeHandle('',deliveryType)
     if (deliveryType == 1) return this.setData({ transportFeeAmt ,deliveryType, selectedStoreTime: true, storeTime: this.getStoreDefaultTime() })
-    console.log(deliveryType, this.data)
     this.setData({ deliveryType, transportFeeAmt })
   },
   showStoreTime() {
@@ -470,18 +473,24 @@ Page({
         this.setData({ selectedGift: bestGift }) 
       } 
       discountsMoney = discountsMoney.toFixed(2)
+      this.data.realPayAmt
       let transportFeeAmt = transportFeeType != 0 ? this.transportFeeHandle(realPayAmt) : 0
       
       this.setData({ transportFeeAmt, realPayAmt, discountsMoney, selectedCoupons, mjObj, showSelectMzgoods })
     }
   },
   // 计算配送费
-  transportFeeHandle(realPayAmt = this.data.realPayAmt) {
+  transportFeeHandle(realPayAmt = this.data.realPayAmt, deliveryType = this.data.deliveryType) {
+    if (!realPayAmt) realPayAmt = this.data.realPayAmt
+    const tWay = Number(this.data.transportFeeChoiceWay)
     const { transportFeeType, transportFee } = this.data
     let transportFeeAmt = 0 
-    if (transportFeeType) {
+    console.log(transportFeeType, tWay, deliveryType, realPayAmt)
+    if (transportFeeType != 0 && (tWay === deliveryType || tWay === 4) && deliveryType != 1) {
+      console.log(true)
       transportFeeAmt = Number(transportFeeType == 1 ? transportFee : (transportFee * realPayAmt).toFixed(2))
     }
+    console.log(transportFeeAmt, this)
     return (transportFeeAmt || 0)
   },
   // 选择最优惠的赠品(只计算第一组赠品)

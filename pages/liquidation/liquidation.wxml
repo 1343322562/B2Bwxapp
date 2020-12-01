@@ -25,14 +25,14 @@
 <view class="block" style="margin: 0;" wx:if="{{(partnerCode == 1000 || partnerCode == 1059 || partnerCode == 05) && !replenish}}" >
   <view class='title'>  
     <text>配送方式</text>
-    <!-- <view class="right act">
+    <view class="right act">
       <picker header-text="选择配送方式" bindchange="bindPickerChange" value="{{transWayIndex}}" range="{{transWayArray}}">
         <view class="picker">
           {{transWayArray[transWayIndex]}} 
           <image class="icon" src="../../images/goRight_icon.png" />
         </view>
       </picker>
-    </view> -->
+    </view>
   </view>
   <view class="transWayList" >
     <view class="transBlock" bindtap="selectTransWayClick" data-type="0">
