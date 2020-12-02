@@ -135,7 +135,7 @@ export const getGoodsImgSize = (url,type = 0) => { // 获取多规格的图片�
   return name.substring(0,name.indexOf('-')+1) + type + name.substr(name.indexOf('.'))
 }
 export const setTabBarNum = (num) => { // 设置底部购物车数量
-  const cartsIndex = 2
+  const cartsIndex = 3
   if (num) {
     wx.setTabBarBadge({
       index: cartsIndex,
@@ -144,6 +144,17 @@ export const setTabBarNum = (num) => { // 设置底部购物车数量
   }else {
     wx.removeTabBarBadge({ index: cartsIndex})
   }
+}
+export const toFixed = (num) => { // 4 舍 5 入
+  num = Number(num.toFixed(4))
+  const strNum = String(num)
+  const sliceSign = strNum.indexOf(".") 
+  const sliceNum = strNum.slice(sliceSign+1, sliceSign+1+3)
+  let newNum = Number(num.toFixed(2))
+  if (sliceNum.length >= 3 && sliceNum[2] === '5') {
+    newNum = newNum + 0.01
+  }
+  return newNum
 }
 export const getGoodsDataSize = (goods) => { // 获取商品必要字段
   return {

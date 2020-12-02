@@ -1,4 +1,4 @@
-import { showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, arrRemoveRepeat, toast, alert, getTime,goPage } from '../../tool/index.js'
+import { toFixed, showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, arrRemoveRepeat, toast, alert, getTime,goPage } from '../../tool/index.js'
 import API from '../../api/index.js'
 import { tim, timCurrentDay } from '../../tool/date-format.js'
 const app = getApp()
@@ -11,11 +11,11 @@ Page({
     totalMoney: 0, // 商品总金额
     totalNum: 0, // 普通商品总数量
     discountsMoney: 0,// 优惠总金额
-    sourceType: '', // 配送方式  0 统配 1 直配
-    couponsList: [], // 优惠券列表
-    dhCouponsList: [], // 兑换券列表
+    sourceType: '',        // 配送方式  0 统配 1 直配
+    couponsList: [],       // 优惠券列表
+    dhCouponsList: [],     // 兑换券列表
     selectedCoupons: null, // 所选优惠券
-    ticketType: 0,  // 发票类型 0 不开发票  1 个人 2增值税普通发票
+    ticketType: 0,         // 发票类型 0 不开发票  1 个人 2增值税普通发票
     selectedDhCoupons: { keyArr: [], num: 0 }, // 所选兑换券
     BGnum:  0, // 买赠数量
     isInvoice:'',// 是否开启发票
@@ -487,8 +487,8 @@ Page({
     let transportFeeAmt = 0 
     console.log(transportFeeType, tWay, deliveryType, realPayAmt)
     if (transportFeeType != 0 && (tWay === deliveryType || tWay === 4) && deliveryType != 1) {
-      console.log(true)
-      transportFeeAmt = Number(transportFeeType == 1 ? transportFee : (transportFee * realPayAmt).toFixed(2))
+      console.log(true, transportFee, realPayAmt)
+      transportFeeAmt = Number(transportFeeType == 1 ? transportFee : toFixed(transportFee * realPayAmt))
     }
     console.log(transportFeeAmt, this)
     return (transportFeeAmt || 0)
