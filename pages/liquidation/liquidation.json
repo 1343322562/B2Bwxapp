@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "结算页",
-  "navigationBarBackgroundColor": "#d40000",
+  "navigationBarBackgroundColor": "#ff9c01",
   "navigationBarTextStyle": "white",
   "usingComponents": {
     "select-coupons": "../../components/select-coupons/select-coupons",

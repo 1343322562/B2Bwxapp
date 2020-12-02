@@ -1,5 +1,5 @@
 <!-- 导航栏 -->
-<Navbar background='{{partnerCode == 1053?"#059656":"#d40000"}}' color='#ffffff' isShowLeftIcon='true'>
+<Navbar background='{{partnerCode == 1053? "#059656" : (partnerCode == 1060 ? "#ff9c01" : "#d40000")}}' color='#ffffff' isShowLeftIcon='true'>
 	<view class="nav-seach-bar-box" >
 		<image src='../../images/search.png' bindtap="searchOrder" />
 		<input type="text" disabled class="nav-seach-bar" placeholder='搜索您想要的商品' placeholder-style='font-size: 26rpx;' bindtap="toSearchPageClick" />

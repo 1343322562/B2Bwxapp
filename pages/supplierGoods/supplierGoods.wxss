@@ -15,8 +15,8 @@ Page{background-color: #fff}
 .head>.clsList .li{padding: 0 25rpx;line-height: 80rpx;display: inline-block;}
 .head>.clsList .li:first-child{margin-left: 20rpx;}
 .head>.clsList .li:last-child{margin-right: 20rpx;}
-.head>.clsList .li.act{position: relative;color: #d40000;}
-.head>.clsList .li.act::before{content: "";position: absolute;left: 50%;width: 60rpx;margin-left: -30rpx;height: 4rpx;background-color: #d40000;border-radius: 10rpx;bottom: 10rpx;}
+.head>.clsList .li.act{position: relative;color: #ff9c01;}
+.head>.clsList .li.act::before{content: "";position: absolute;left: 50%;width: 60rpx;margin-left: -30rpx;height: 4rpx;background-color: #ff9c01;border-radius: 10rpx;bottom: 10rpx;}
 /*商品列表*/
 .goodsList{background-color: #fff;padding-left: 20rpx;padding-top: 330rpx;}
 .goodsList>.li{padding: 20rpx 20rpx 20rpx 0;position: relative;border-bottom: 1px solid #e8e8e8;}

@@ -3,7 +3,7 @@ import { goPage,toast,alert } from '../../tool/index.js'
 import { tim, timCurrentDay } from '../../tool/date-format.js'
 Page({
   data: {
-    partnerCode: '',
+    partnerCode: getApp().data.partnerCode,
     userObj: {},
     salesmanObj:null,
     orderNum: {},
@@ -97,6 +97,7 @@ Page({
   },
   onLoad (opt) {
     const partnerCode = getApp().data.partnerCode
+    if (partnerCode == 1060) wx.setNavigationBarColor({ backgroundColor: '#ff9c01', frontColor: '#ffffff' })
     if (partnerCode == 1052) {wx.setNavigationBarColor({ backgroundColor: '#e6c210', frontColor: '#ffffff' })}
     
     const userObj = wx.getStorageSync('userObj')
@@ -159,6 +160,7 @@ Page({
   onReady () {
   },
   onShow () {
+    if (getApp().data.partnerCode == 1060) wx.setNavigationBarColor({ backgroundColor: '#ff9c01', frontColor: '#ffffff' })
     const userObj = wx.getStorageSync('userObj')
     if (userObj) {
       this.setData({ userObj })

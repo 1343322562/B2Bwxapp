@@ -487,7 +487,7 @@ Page({
     let transportFeeAmt = 0 
     console.log(transportFeeType, tWay, deliveryType, realPayAmt)
     if (transportFeeType != 0 && (tWay === deliveryType || tWay === 4) && deliveryType != 1) {
-      console.log(true)
+      console.log(true, transportFee, realPayAmt)
       transportFeeAmt = Number(transportFeeType == 1 ? transportFee : (transportFee * realPayAmt).toFixed(2))
     }
     console.log(transportFeeAmt, this)

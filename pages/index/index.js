@@ -317,8 +317,50 @@ Page({
       }
     })
   },
+  updataTabbar() {
+    wx.setTabBarStyle({
+      selectedColor: '#ff9c01',
+    })
+  
+    wx.setTabBarItem({
+      index: 0,
+      text: '首页',
+      iconPath: '/images/60-0.png',
+      selectedIconPath: '/images/60-01.png'
+    })
+    
+    wx.setTabBarItem({
+      index: 1,
+      text: '分类',
+      iconPath: '/images/60-2.png',
+      selectedIconPath: '/images/60-21.png'
+    })
+    
+    wx.setTabBarItem({
+      index: 2,
+      text: '直配进货',
+      iconPath: '/images/60-3.png',
+      selectedIconPath: '/images/60-31.png'
+    })
+    
+    wx.setTabBarItem({
+      index: 3,
+      text: '购物车',
+      iconPath: '/images/60-4.png',
+      selectedIconPath: '/images/60-41.png'
+    })
+    
+    wx.setTabBarItem({
+      index: 4,
+      text: '我的',
+      iconPath: '/images/60-1.png',
+      selectedIconPath: '/images/60-11.png'
+    })
+  },
   onShow() {
-    // if (!this.userObj) { this.userObj = wx.getStorageSync('userObj'); console.log(1000) }
+    if (getApp().data.partnerCode == 1060) {
+      this.updataTabbar()
+    }
     const userObj =  wx.getStorageSync('userObj')
     if (userObj) this.userObj = userObj
 
@@ -338,6 +380,9 @@ Page({
     }
   },
   onLoad (opt) {
+    if (getApp().data.partnerCode) {
+      this.updataTabbar()
+    }
     let partnerCode = this.data.partnerCode
     console.log(1)
     if(partnerCode == 1052) {

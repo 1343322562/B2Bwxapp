@@ -155,6 +155,7 @@ Page({
         setTimeout(() => {
           // hideLoading()
           this.setData({ pageLoading: true })
+          hideLoading()
         }, 1200)
         console.log(56456456456456)
       }

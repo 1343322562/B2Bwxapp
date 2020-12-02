@@ -68,6 +68,12 @@
         "text": "分类"
       },
       {
+        "pagePath": "pages/z_goods/z_goods",
+        "iconPath": "images/tab_icon_zp.png",
+        "selectedIconPath": "images/tab_icon_select_zp.png",
+        "text": "直配进货"
+      },
+      {
         "pagePath": "pages/carts/carts",
         "iconPath": "images/tab_icon_carts.png",
         "selectedIconPath": "images/tab_icon_select_carts.png",

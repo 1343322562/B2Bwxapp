@@ -2,8 +2,8 @@
 .clsList .li{padding: 0 25rpx;line-height: 80rpx;display: inline-block;}
 .clsList .li:first-child{margin-left: 20rpx;}
 .clsList .li:last-child{margin-right: 20rpx;}
-.clsList .li.act{position: relative;color: #d40000;border-bottom: 1px solid #e8e8e8;}
-.clsList .li.act::before{content: "";position: absolute;left: 50%;width: 60rpx;margin-left: -30rpx;height: 4rpx;background-color: #d40000;border-radius: 10rpx;bottom: 10rpx;}
+.clsList .li.act{position: relative;color: #ff9c01;border-bottom: 1px solid #e8e8e8;}
+.clsList .li.act::before{content: "";position: absolute;left: 50%;width: 60rpx;margin-left: -30rpx;height: 4rpx;background-color: #ff9c01;border-radius: 10rpx;bottom: 10rpx;}
 .supplierList{padding-top: 95rpx;padding-bottom: 95rpx;} /*padding-top: 185rpx;  95rpx */
 .supplierList>.li{background-color: #fff;position:relative;padding: 20rpx;min-height: 120rpx;margin-bottom: 10rpx}
 .supplierList>.li .img{position: absolute;top: 20rpx;left: 20rpx;width: 120rpx;height: 120rpx;border-radius: 20rpx;background-color: #f2f2f2;}

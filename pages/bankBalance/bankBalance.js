@@ -2,6 +2,7 @@ import API from '../../api/index.js'
 import { goPage } from '../../tool/index.js'
 Page({
   data: {
+    partnerCode: getApp().data.partnerCode,
     tabIndex: 0,
     list: [[],[]],
     tabBer: [
@@ -12,7 +13,6 @@ Page({
     czAmt: 0.00, // 余额
     minCzAmt: 0.00, // 信用额度
     rebateAmt: 0.00, // 待返利
-
   },
   goPage () {
     goPage('reconciliation')
@@ -67,6 +67,7 @@ Page({
   },
   onLoad(opt) {
     const partnerCode = getApp().data.partnerCode
+    if (partnerCode == 1060) wx.setNavigationBarColor({ backgroundColor: '#ff9c01', frontColor: '#ffffff' }) 
     if (partnerCode == 1052) wx.setNavigationBarColor({ backgroundColor: '#e6c210', frontColor: '#ffffff' })
 
     const { branchNo, token, platform, username } = wx.getStorageSync('userObj')

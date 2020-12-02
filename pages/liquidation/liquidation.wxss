@@ -6,11 +6,11 @@
 .contentBlock>.msg{font-size: .8em;color: #777}
 .contentBlock>.checkbox{float: right;width: 50rpx;height: 50rpx;border-radius: 100%;overflow: hidden;border:2rpx solid #e4e4e4;margin-top: 10rpx;}
 .contentBlock>.checkbox .icon{width: 100%;height: 100%;}
-.contentBlock>.checkbox.act{background-color: #d40000;border-color: #d40000}
+.contentBlock>.checkbox.act{background-color: #ff9c01;border-color: #ff9c01}
 .contentBlock>.checkbox.use{background-color: #999;border-color: #999}
 .contentBlock>.right,.block>.title .right{float: right;color: #777;margin-right: 10rpx;font-size: 24rpx;max-width: 60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .picker .icon{height: 30rpx; width: 30rpx;vertical-align: middle;margin-left: -5rpx;}
-.contentBlock>.right.act,.block>.title .right.act{color: #d40000}
+.contentBlock>.right.act,.block>.title .right.act{color: #ff9c01}
 .contentBlock>.right .icon,.block>.title .right>.icon{width: 30rpx;height: 30rpx;vertical-align: middle;}
 .detail{padding: 10rpx  30rpx;border-bottom: 2rpx solid #eee}
 .detail>.info{display: flex;color: #777;font-size: 24rpx;line-height: 50rpx;}
@@ -25,7 +25,7 @@
 .goodsList>.li .img>.icon{width: 100%;height: 100%;}
 .goodsList>.li .info{margin-left: 130rpx;color: #777}
 .goodsList>.li .info>.name{font-size: 26rpx;margin-bottom: 5rpx;width: 65%;display: -webkit-box; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp:2; overflow: hidden; text-overflow:ellipsis;color:#444}
-.goodsList>.li .info>.name .red{color: #d40000;margin-right: 5rpx;}
+.goodsList>.li .info>.name .red{color: #ff9c01;margin-right: 5rpx;}
 .goodsList>.li .info>.size{font-size: 24rpx;}
 .goodsList>.li .total{position: absolute;top: 15rpx;right: 30rpx;text-align: right;font-size: 23rpx;color: #555}
 .goodsList>.li .total>.price{color: #000;font-size: 1.3em}
@@ -38,7 +38,7 @@
 .pageBottomBtn .info .totalMoney .title{display: inline-block}
 .pageBottomBtn .info .totalMoney .text{display: inline-block;color: red}
 .pageBottomBtn .info .discountsMoney{color:#707070;font-size:24rpx;}
-.pageBottomBtn .okPay{background-color:red;color:#fff;float: right;line-height:100rpx;width: 220rpx;text-align: center;font-size: 34rpx;}
+.pageBottomBtn .okPay{background-color:ff9c01;color:#fff;float: right;line-height:100rpx;width: 220rpx;text-align: center;font-size: 34rpx;}
 .payWayWarning{padding: 20rpx 20rpx;position: relative}
 .payWayWarning>.icon{width: 50rpx;height: 50rpx;vertical-align: middle;margin-right: 20rpx}
 .payWayWarning>.text{color: #f98e37 ;font-size: 24rpx;display: inline-block;width: 460rpx ;vertical-align: middle;}
