@@ -38,7 +38,7 @@
 .pageBottomBtn .info .totalMoney .title{display: inline-block}
 .pageBottomBtn .info .totalMoney .text{display: inline-block;color: red}
 .pageBottomBtn .info .discountsMoney{color:#707070;font-size:24rpx;}
-.pageBottomBtn .okPay{background-color:ff9c01;color:#fff;float: right;line-height:100rpx;width: 220rpx;text-align: center;font-size: 34rpx;}
+.pageBottomBtn .okPay{background-color:#ff9c01;color:#fff;float: right;line-height:100rpx;width: 220rpx;text-align: center;font-size: 34rpx;}
 .payWayWarning{padding: 20rpx 20rpx;position: relative}
 .payWayWarning>.icon{width: 50rpx;height: 50rpx;vertical-align: middle;margin-right: 20rpx}
 .payWayWarning>.text{color: #f98e37 ;font-size: 24rpx;display: inline-block;width: 460rpx ;vertical-align: middle;}
