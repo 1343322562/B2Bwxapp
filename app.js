@@ -9,7 +9,7 @@ App({
     // baseImgUrl:'http://erp.365wdyp.com/',
     // partnerCode: '1012',
     // baseImgUrl:'http://erp.hnhlgyl.net/',
-    // partnerCode: '00',
+    partnerCode: '01',
     // partnerCode: '05', 
     // partnerCode: '1000', 
     // baseImgUrl: 'http://mmj.zksr.cn:8888/',
@@ -45,8 +45,8 @@ App({
 
     // partnerCode: '1050',
     // baseImgUrl:'http://erp.wgjnh.com',
-    partnerCode: '1060',
-    baseImgUrl:'http://erp.djlscs.cn',
+    // partnerCode: '1060',
+    // baseImgUrl:'http://erp.djlscs.cn',
     // partnerCode: '01',
     // 18569429872
     supplierNo: '', // 首页跳转入驻商类别
