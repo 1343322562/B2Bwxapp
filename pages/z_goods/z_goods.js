@@ -35,7 +35,9 @@ Page({
         if (res.code == 0 && list) {
           let supplierObj = {}
           let supplierKey = this.data.supplierKey
+          const { username } = wx.getStorageSync('userObj')
           list.forEach((item, index) => {
+            if (username == 'zksr') return
             const cls = item.managementType
             const no = item.supplierNo
             item.goodsImgUrl = imgUrl + '/upload/images/supplier/' + item.picUrl
