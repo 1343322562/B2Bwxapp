@@ -11,8 +11,8 @@ App({
     // baseImgUrl:'http://erp.hnhlgyl.net/',
     // partnerCode: '01',
     // partnerCode: '05', 
-    partnerCode: '1000', 
-    baseImgUrl: 'http://mmj.zksr.cn:8888/',
+    // partnerCode: '1000', 
+    // baseImgUrl: 'http://mmj.zksr.cn:8888/',
     // 15576615400 
     // partnerCode: '1005',
     // baseImgUrl: 'http://erp.djlscs.cn/',
@@ -43,8 +43,8 @@ App({
     //  partnerCode: '1056', 
     //  partnerCode: '1057',
 
-    // partnerCode: '1050',
-    // baseImgUrl:'http://erp.wgjnh.com',
+    partnerCode: '1050',
+    baseImgUrl:'http://erp.wgjnh.com',
     // partnerCode: '1060',
     // baseImgUrl:'http://erp.djlscs.cn',
     // partnerCode: '01',
