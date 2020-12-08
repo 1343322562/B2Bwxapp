@@ -795,6 +795,7 @@ Component({
               break;
             case 1:
               item['currentPromotionType'] = item['currentPromotionNo'].slice(0, 3)
+              this.promoPriceCheck(item, item['currentPromotionType']) // 促销价格核对
               if (backSign == 'return') return   // 不保留重复的单据, 并过滤无需凑单的单据
               promoObj.type = item['currentPromotionNo'].slice(0, 3)
               promoObj.currentPromotionNo = item['currentPromotionNo']
@@ -822,6 +823,7 @@ Component({
       this.data.currentPromotion = currentPromotion
       this.data.currentPromotionNo = currentPromotionNo
       this.data.goodsData = goodsData
+      console.log(deepCopy(goodsData))
       this.getAllPromotions(goodsData) // 处理所有促销
       this.setData({ currentPromotion, currentPromotionNo, goodsData })
       return goodsData
@@ -1111,7 +1113,8 @@ Component({
     },
     // 促销价格核对
     promoPriceCheck (item, ty) {
-      if (ty=='BF'||ty=='BG'||ty=='MQ'||ty=='SZ'||ty=='MJ'||ty=='BF') {
+      console.log(88614,deepCopy(item), ty)
+      if (ty=='BF'||ty=='BG'||ty=='MQ'||ty=='SZ'||ty=='MJ'||ty=='RMJ'||ty=='RBF'||ty=='BF') {
         item.price = item.orgiPrice
       } else if (ty=='MS') {
         if (item.msPrice && item.realQty <= item.msMaxQty ) {
@@ -1125,7 +1128,10 @@ Component({
         item.price = item.drPrice
       } else if (ty=='ZK' && (item.zkMaxQty >= item.realQty)) {
         item.price = item.zkPrice
+      } else if (ty=='RSD' && (item.drMaxQty >= item.realQty)) {
+        item.price = item.zkPrice
       }
+      console.log(8861488,deepCopy(item),)
     },
     
     // 计算是否满足促销条件
