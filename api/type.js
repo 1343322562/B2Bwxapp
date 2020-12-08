@@ -58,7 +58,7 @@ export default {
   '1044': 'https://xcx.jxlgn.com/zksrb2b-web/', //   江西老果农果宜佳  erp.jxlgn.com 
   '1045': 'https://wx.jzsmshop.com/zksrb2b-web/', //   铜仁零商通  erp.jzsmshop.com
   '1046': 'https://app.jinbeiyuan2019.com/zksrb2b-web/', //  宜昌金贝源  erp.jinbeiyuan2019.com
-  '1047': 'https://wxxj.zksr.cn/', //  新疆店搭档 106.124.142.203:8081    (隐藏直配)
+  '1047': 'https://wx.xjdiandadang.com/', //  新疆店搭档 wx67adab4c37bd9c50 106.124.142.203:8081    (隐藏直配) zksr 1234
   '1048': 'https://mp.baibaoxiang2018.com/zksrb2b-web/', //  丹江口  erp.baibaoxiang2018.com
   '1049': 'https://wx.hongrinongye.com/zksrb2b-web/', //  新红日  erp.hongrinongye.com  wx5d91e1c91a9a3848 (1. 价格在商品列表页不显示 2. 隐藏直配，统配改分类)
   '1050': 'https://xcx.wgjnh.com/zksrb2b-web/', // 重庆旺购  图片 erp.wgjnh.com    wxb1a96fdeb3dae970  (1. 隐藏直配 2. 统配改自营分类)

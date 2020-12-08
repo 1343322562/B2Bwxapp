@@ -16,8 +16,8 @@ App({
     // 15576615400 
     // partnerCode: '1005',
     // baseImgUrl: 'http://erp.djlscs.cn/',
-    // partnerCode: '1047',
-    // baseImgUrl: 'http://106.124.142.203:8081/',
+    partnerCode: '1047',
+    baseImgUrl: 'http://106.124.142.203:8081/',
     // lttest001
     // partnerCode: '1034',
     // baseImgUrl:'https://39.100.103.135:8080/',
@@ -38,8 +38,8 @@ App({
     // partnerCode: '2222',
 
     // partnerCode: '1039',
-    partnerCode: '1061',
-    baseImgUrl:'http://139.9.102.226:8080',
+    // partnerCode: '1061',
+    // baseImgUrl:'http://139.9.102.226:8080',
 
     //  partnerCode: '1056', 
     //  partnerCode: '1057',

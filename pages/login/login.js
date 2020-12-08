@@ -385,7 +385,7 @@ Page({
       console.log(1)
       showLoading()
       let request = {
-        url: 'https://mmj.zksr.cn/zksrb2b-web/scj.json',
+        url: 'https://mmj.zksr.cn/zksrb2b-web/dsk.json',
         method: 'POST',
         header: {
           'content-type': 'application/json'
