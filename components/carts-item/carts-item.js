@@ -819,6 +819,7 @@ Component({
 
       this.data.currentPromotion = currentPromotion
       this.data.currentPromotionNo = currentPromotionNo
+      this.data.goodsData = goodsData
       this.getAllPromotions(goodsData) // 处理所有促销
       this.setData({ currentPromotion, currentPromotionNo, goodsData })
       return goodsData
