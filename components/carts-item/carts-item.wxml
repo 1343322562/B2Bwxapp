@@ -68,7 +68,7 @@
         <view class="promoInfo">{{allPromotion[item.currentPromotionNo].msg[0]}}</view>
       </view>
       <view class="typeInfo">
-        <text class="content">{{allPromotion[item.currentPromotionNo].pInfo || 0}}</text>
+        <text class="content">{{allPromotion[item.currentPromotionNo].pInfo || (allPromotion[item.currentPromotionNo].name == '数量满减' ? ('请选择促销商品, 还差' + allPromotion[item.currentPromotionNo].qty + '件商品') : ('请选择促销商品, 金额差￥' + allPromotion[item.currentPromotionNo].reachVal))}}</text>
         <text class="go" bindtap="goAddGoodsClick" data-items="{{allPromotion[item.currentPromotionNo]}}">{{allPromotion[item.currentPromotionNo].pInfo == '已满足'?'再逛逛 >':'去凑单 >'}}</text>
       </view>
     </view>

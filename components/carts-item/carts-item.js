@@ -503,7 +503,7 @@ Component({
         supcustNo: cartsObj.cartsType == 'sup' ? cartsObj.sourceNo : ''
       })
     },
-    countMoney(currentProObj) {
+    countMoney(currentProObj, is) {
       let cartsMoney = 0
       let selectNum = 0
       let selectTypeNum = 0
@@ -522,7 +522,7 @@ Component({
 
         }
       })
-      console.log(cartsMoney, currentProObj)
+      console.log(cartsMoney, deepCopy(currentProObj))
 
       // 若是有促销单据，计算商品是否满足促销条件， 并修改当前差异价格
       if (currentProObj) {
@@ -621,7 +621,9 @@ Component({
         if (item.cancelSelected == true) allSelected = false
       }) 
       this.data.isSelectAll = allSelected
+      this.data.goods = goods
       this.setData({ goods, isSelectAll: allSelected })
+      console.log(currentProObj, is)
       this.countMoney(currentProObj, is)
     },
     changeGoodsNum(e) {
@@ -1053,8 +1055,8 @@ Component({
                   }
                 }
               })
+            if (!nowGoods.cancelSelected) allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
             })
-            allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
             console.log(111, deepCopy(allPromotion))
             this.data.allPromotion = allPromotion
             this.data.goods = goodsData
@@ -1097,7 +1099,7 @@ Component({
                   }
                 }
               })
-              allPromotion = _this.isSatisfyPromotion(allPromotion)
+              if (!nowGoods.cancelSelected) allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
               console.log(allPromotion)
               _this.setData({ allPromotion, goods: goodsData })
               _this.countMoney() // 计算购物车金额, 防止下拉刷新时获取不到最近的购物车金额
