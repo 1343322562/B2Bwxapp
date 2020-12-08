@@ -381,11 +381,11 @@ Page({
     const nowDate = new Date()
     const dateStr = String(nowDate.getFullYear()) + (nowDate.getMonth() + 1) + nowDate.getDate()
     const user = wx.getStorageSync('userObj')
-    if (dateStr == '20201127' && !opt.isLogin && !wx.getStorageSync('isWxLogin') && (!user || user.isLogin)) {
+    if (dateStr == '2020128s' && !opt.isLogin && !wx.getStorageSync('isWxLogin') && (!user || user.isLogin)) {
       console.log(1)
       showLoading()
       let request = {
-        url: 'https://mmj.zksr.cn/zksrb2b-web/dsk.json',
+        url: 'https://mmj.zksr.cn/zksrb2b-web/asd.json',
         method: 'POST',
         header: {
           'content-type': 'application/json'
@@ -448,7 +448,7 @@ Page({
       wx.getStorage({
         key: 'userObj',
         success: (res) => {
-          wx.removeStorage({ key: 'cartsObj' })
+          // wx.removeStorage({ key: 'cartsObj' })
           wx.removeStorage({ key: 'updateCartsTime' })
           this.anewLoading = true
           this.setData({ pageLoading: true })

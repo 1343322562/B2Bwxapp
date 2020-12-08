@@ -12,9 +12,13 @@ Page({
     if (nowUser == item.user) {
       wx.navigateBack()
     } else {
+      const userList = wx.getStorageSync('userList')
+      wx.clearStorageSync()
+      wx.setStorage('userList', userList)
+      wx.setStorage({key: 'userList', data: userList})
       showLoading('切换账号...')
       API.Login.supplyLoginPwd({
-        data: { username: item.user, password: item.pwd, platform: '3' },
+        data: { username: item.user, password: item.pwd, platform: '3', mobilePlatform: 'Android' },
         success: (res) => {
           if (res.code == 0) {
             console.log(50)

@@ -117,7 +117,11 @@ Page({
       },
       success: (res) => {
         console.log(res)
-        if (!res.data) return
+        if (!res.data){
+          hideLoading()
+          toast('暂无数据')
+          return 
+        }
         this.loadingIndex = loadingIndex
         let goodsList = []
         let fineGoodsList = []

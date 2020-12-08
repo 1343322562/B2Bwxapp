@@ -510,6 +510,7 @@ Component({
       let isSelectAll = this.data.isSelectAll
       const cartsObj = this.data.goods
       cartsObj.data.length && cartsObj.data.map(goods => {
+        console.log(513, goods)
         if (!goods.cancelSelected) {
           console.log(deepCopy(goods))
           cartsMoney = Number((cartsMoney + (goods.price * goods.realQty)).toFixed(2))
@@ -543,6 +544,7 @@ Component({
           currentProObj = this.isSatisfyPromotion({ [promotionNo]: currentProObj }) // 促销信息对象计算处理
           allPromotion = Object.assign(allPromotion, currentProObj)
         }
+        console.log(4564654564, allPromotion)
         this.setData({ cartsMoney, selectNum, selectTypeNum, isSelectAll, allPromotion })
       } else {
         cartsObj.data.length === selectTypeNum && (isSelectAll = true)
@@ -604,10 +606,14 @@ Component({
       const currentPromotionNo = e.currentTarget.dataset.currentpromotionno
       const allPromotion = this.data.allPromotion
       const currentProObj = allPromotion[currentPromotionNo]
-      
+      const cartsObj = wx.getStorageSync('cartsObj')
+
+
       const index = e.currentTarget.dataset.index
       let { goods } = this.data
       const is = !goods.data[index].cancelSelected
+      cartsObj[goods.data[index].itemNo].cancelSelected = is
+      wx.setStorage({key: 'cartsObj', data: cartsObj})
       goods.data[index].cancelSelected = is
       // 是否全选
       let allSelected = true
@@ -729,25 +735,30 @@ Component({
             sourceNo = goodsData.sourceNo
 
       goodsData.data.forEach((item, i) => {
+        console.log('item', deepCopy(item))
         // 首次加载，默认选第一个促销
         if (item['promotionCollections']) {
-          if (item['promotionCollections'].includes(',')) {
-            const promoArr = item['promotionCollections'].split(',')
-            item['promotionCollectionsArr'] = promoArr
-            // 商品促销数组的排序  'MS', 'FS', 'SD', 'ZK', 'BF', 'SZ' , 'BG', 'MJ', 'MQ'
-            item['promotionCollectionsArr'] = promoArrSort(promoArr, sourceType)
-          } else if (item['promotionCollections'] == '') {
-            item['promotionCollectionsArr'] = [item['promotionCollections']]
+          // 无 currentPromotionno
+          if (!(item['currentPromotionNo'] && item['promotionCollections'].includes(item['currentPromotionNo']))) {
+            if (item['promotionCollections'].includes(',')) {
+              const promoArr = item['promotionCollections'].split(',')
+              item['promotionCollectionsArr'] = promoArr
+              // 商品促销数组的排序  'MS', 'FS', 'SD', 'ZK', 'BF', 'SZ' , 'BG', 'MJ', 'MQ'
+              item['promotionCollectionsArr'] = promoArrSort(promoArr, sourceType)
+            } else if (item['promotionCollections'] == '') {
+              item['promotionCollectionsArr'] = [item['promotionCollections']]
+            }
+  
+            if (item['promotionCollections']) {
+              item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
+            }
+  
+            if (this.sourceType == 1 && item['currentPromotionNo'].length < 19) {
+              console.log(deepCopy(item['promotionCollectionsArr']))
+              item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
+            }
           }
-
-          if (item['promotionCollections']) {
-            item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
-          }
-
-          if (this.sourceType == 1 && item['currentPromotionNo'].length < 19) {
-            console.log(deepCopy(item['promotionCollectionsArr']))
-            item['currentPromotionNo'] = item['promotionCollectionsArr'][0]
-          }
+          
           console.log(item['currentPromotionNo'], item)
           
           // if (item['promotionSheetNo'] && )
@@ -987,6 +998,8 @@ Component({
     getAllPromotions(goodsData = this.data.goods) {
       const _this = this
       let allPromotion = {} // 所有促销挂载在此对象中，以促销单号作为键名
+      let isSelectAll = true
+      const cartsObj = wx.getStorageSync('cartsObj')
       // console.log(949,goodsData)
       if (this.sourceType == 0) { // 统配
         dispatch[types.GET_ALL_PROMOTION]({
@@ -994,7 +1007,10 @@ Component({
           success: (res) => {
             console.log('resaaa', deepCopy(res))
             goodsData.data.forEach(nowGoods => {
-              nowGoods.cancelSelected = false
+              const cartsItem = cartsObj[nowGoods.itemNo]
+              if (nowGoods.cancelSelected === true) {
+                isSelectAll = false
+              }
               // console.log(954,`${nowGoods.itemNo}`, nowGoods)
               const promotionList = _this.allPromotionHandle(res, nowGoods, _this) // 每个商品的 促销列表 
               console.log('promotionList', promotionList)
@@ -1041,7 +1057,7 @@ Component({
             console.log(111, deepCopy(allPromotion))
             this.data.allPromotion = allPromotion
             this.data.goods = goodsData
-            _this.setData({ allPromotion, goods: goodsData })
+            _this.setData({ allPromotion, goods: goodsData, isSelectAll })
             hideLoading()
           },
           error:() => {
@@ -1053,7 +1069,10 @@ Component({
           data: goodsData,
           success(res) {
             goodsData.data.forEach(nowGoods => {
-              nowGoods.cancelSelected = false
+              const cartsItem = cartsObj[nowGoods.itemNo]
+              if (nowGoods.cancelSelected === true) {
+                isSelectAll = false
+              }
               const suplierPromotionList = _this.suplierPromotionHandle(res, nowGoods)
               suplierPromotionList.length && suplierPromotionList.forEach((item) => {
                 const type = item.promotionNo.slice(0, 3)

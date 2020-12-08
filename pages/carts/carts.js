@@ -24,10 +24,12 @@ Page({
   getCartsData() {
     const { goodsUrl,zcGoodsUrl,zhGoodsUrl} = getApp().data
     const promotionObj = wx.getStorageSync('allPromotion')
+    const oldCartsObj = wx.getStorageSync('cartsObj')
     wx.setStorageSync('updateCarts', true)
+    console.log(wx.getStorageSync('cartsObj'))
     dispatch[types.GET_CHANGE_CARTS]({
       success: (ret) => {
-        // console.log(JSON.parse(JSON.stringify(ret)))
+        console.log(JSON.parse(JSON.stringify(ret)))
         wx.stopPullDownRefresh()
         hideLoading()
         let obj = { pageLoading: true}
@@ -58,6 +60,12 @@ Page({
               if (type != 'cw' && type != 'dw' && !('orgiPrice' in goods)) {
                 goods.orgiPrice = goods.price
                 console.log(deepCopy(goods))
+              }
+              const cartsItem = oldCartsObj[goods.itemNo]
+              if ('cancelSelected' in cartsItem && (cartsItem['cancelSelected'] === true || cartsItem['cancelSelected'] === false)) {
+                goods.cancelSelected = oldCartsObj[goods.itemNo].cancelSelected
+              } else {
+                goods.cancelSelected = false
               }
               goods.carstBasePrice =  goods.orgiPrice
               goods.currentPromotionNo = S_cartObj[goods.itemNo].currentPromotionNo || '' 

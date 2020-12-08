@@ -248,7 +248,7 @@ const actions = {
   [types.CHANGE_CPROMOTION_CARTS](param) { // goods
     let { itemNo, currentPromotionNo, promotionCollections } = param.goods
     let cartsObj = commit[types.GET_CARTS]()
-    cartsObj[itemNo].currentPromotionNo = currentPromotionNo
+    'currentPromotionNo' in cartsObj[itemNo] && (cartsObj[itemNo].currentPromotionNo = currentPromotionNo)
     commit[types.SAVE_CARTS](cartsObj) // 缓存 cartsObj
   },
 
@@ -360,8 +360,12 @@ const actions = {
     const { branchNo, token, username, platform } = getApp().data['userObj'] || wx.getStorageSync('userObj')
     const cartsObj = commit[types.GET_CARTS]()
     if (param.nowUpdate && updateCarts && cartsObj.num) return param.success(cartsObj)
+    const oldCartsObj = deepCopy(cartsObj)
     let items = []
-    cartsObj.keyArr.forEach(itemNo => items.push(cartsObj[itemNo]))
+    cartsObj.keyArr.forEach(itemNo => {
+      delete cartsObj[itemNo].cancelSelected
+      items.push(cartsObj[itemNo])
+    })
     const beforeTime = wx.getStorageSync('updateCartsTime')
     const newTime = +new Date()
     items = JSON.stringify(updateCarts?items:[])
@@ -399,11 +403,14 @@ const actions = {
                   sourceType: config.sourceType,
                   sourceNo: config.sourceNo,
                   parentItemNo: goods.parentItemNo,
-                  currentPromotionNo
+                  currentPromotionNo,
+                  cancelSelected: (itemNo in oldCartsObj && oldCartsObj[itemNo].cancelSelected) ?  true : false
                 }
                 newCartsObj.num += goods.realQty
               })
             })
+            console.log(oldCartsObj)
+            console.log(newCartsObj)
             commit[types.SAVE_CARTS](newCartsObj)
             wx.setStorage({ key: 'updateCarts', data: false })
             wx.setStorage({ key: 'updateCartsTime', data: +new Date() })
