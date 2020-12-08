@@ -512,7 +512,7 @@ Component({
       cartsObj.data.length && cartsObj.data.map(goods => {
         console.log(513, goods)
         if (!goods.cancelSelected) {
-          console.log(deepCopy(goods))
+          console.log(deepCopy(goods), cartsMoney, goods.price * goods.realQty)
           cartsMoney = Number((cartsMoney + (goods.price * goods.realQty)).toFixed(2))
           console.log(cartsMoney)
           selectNum += goods.realQty
