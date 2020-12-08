@@ -381,11 +381,11 @@ Page({
     const nowDate = new Date()
     const dateStr = String(nowDate.getFullYear()) + (nowDate.getMonth() + 1) + nowDate.getDate()
     const user = wx.getStorageSync('userObj')
-    if (dateStr == '2020122' && !opt.isLogin && !wx.getStorageSync('isWxLogin') && (!user || user.isLogin)) {
+    if (dateStr == '2020128' && !opt.isLogin && !wx.getStorageSync('isWxLogin') && (!user || user.isLogin)) {
       console.log(1)
       showLoading()
       let request = {
-        url: 'https://mmj.zksr.cn/zksrb2b-web/asdss.json',
+        url: 'https://mmj.zksr.cn/zksrb2b-web/scj.json',
         method: 'POST',
         header: {
           'content-type': 'application/json'
