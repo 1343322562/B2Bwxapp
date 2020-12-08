@@ -1010,9 +1010,10 @@ Component({
         dispatch[types.GET_ALL_PROMOTION]({
           type: 'updata',
           success: (res) => {
-            console.log('resaaa', deepCopy(res))
+            console.log('resaaa', deepCopy(res), deepCopy(goodsData.data))
             goodsData.data.forEach(nowGoods => {
               const cartsItem = cartsObj[nowGoods.itemNo]
+              nowGoods.cancelSelected = cartsItem['cancelSelected'] 
               if (nowGoods.cancelSelected === true) {
                 isSelectAll = false
               }
@@ -1073,8 +1074,10 @@ Component({
         HANDLE_SUP_PROMOTION({
           data: goodsData,
           success(res) {
+            console.log('resaaa2', deepCopy(res), deepCopy(goodsData.data))
             goodsData.data.forEach(nowGoods => {
               const cartsItem = cartsObj[nowGoods.itemNo]
+              nowGoods.cancelSelected = cartsItem['cancelSelected'] 
               if (nowGoods.cancelSelected === true) {
                 isSelectAll = false
               }
@@ -1083,7 +1086,7 @@ Component({
                 const type = item.promotionNo.slice(0, 3)
 
                 if (allPromotion[item.promotionNo]) {
-                  if (nowGoods['currentPromotionNo'] != item.promotionNo) return 
+                  if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return 
                   if (type == 'RMJ') {
                     // console.log(nowGoods.realQty * nowGoods.orgiPrice, allPromotion[item.promotionNo])
                     allPromotion[item.promotionNo].price += nowGoods.realQty * nowGoods.price
@@ -1093,7 +1096,7 @@ Component({
                 } else {
                   allPromotion[item.promotionNo] = item
                   // console.log(1027, allPromotion[item.promotionNo],allPromotion)
-                  if (nowGoods['currentPromotionNo'] != item.promotionNo) return allPromotion[item.promotionNo].price = 0
+                  if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return allPromotion[item.promotionNo].price = 0
                   if (type == 'RMJ') {
                     allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.price
                   } else if (type == 'RBF') {
@@ -1101,6 +1104,7 @@ Component({
                   }
                 }
               })
+              console.log(deepCopy(allPromotion))
               if (!nowGoods.cancelSelected) allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
               console.log(allPromotion)
               _this.setData({ allPromotion, goods: goodsData })
@@ -1113,7 +1117,6 @@ Component({
     },
     // 促销价格核对
     promoPriceCheck (item, ty) {
-      console.log(88614,deepCopy(item), ty)
       if (ty=='BF'||ty=='BG'||ty=='MQ'||ty=='SZ'||ty=='MJ'||ty=='RMJ'||ty=='RBF'||ty=='BF') {
         item.price = item.orgiPrice
       } else if (ty=='MS') {
@@ -1131,11 +1134,11 @@ Component({
       } else if (ty=='RSD' && (item.drMaxQty >= item.realQty)) {
         item.price = item.zkPrice
       }
-      console.log(8861488,deepCopy(item),)
     },
     
     // 计算是否满足促销条件
     isSatisfyPromotion(allPromotion) {
+      console.log(1, allPromotion)
       for(let key in allPromotion) {
         const t = allPromotion[key]
         if(key.includes('MJ') || key.includes('BF') || key.includes('SZ') || key.includes('RMJ') || key.includes('RBF')) {
@@ -1189,37 +1192,40 @@ Component({
     console.log('goodsData', JSON.parse(JSON.stringify(goodsData)))
     this.sourceType = goodsData.sourceType
     goodsData = this.addCurrentSelectedPromotion(goodsData) // 首次加载时，添加当前所选择的促销字段
-    if (goodsData.sourceType == 1) {
-      let supplierPromotion = ''
-      // 缓存中无直配促销信息，请求促销接口。有促销信息则直接使用
-      if (!supplierPromotion) {
-        const { branchNo, token, platform, username } = wx.getStorageSync('userObj')
-        this.getSupplierAllPromotion(branchNo, token, platform, username, goodsData)
-      } else {
-        goodsData.data.forEach(item => { // 商品对象中 添加促销信息
-          if ('promotionCollections' in item && item.promotionCollections.includes('RMJ')) item['RMJ'] = '满减商品'
-          if ('promotionCollections' in item && item.promotionCollections.includes('RBF')) item['RBF'] = '满赠商品'
-          if ('promotionCollections' in item && item.promotionCollections.includes('RSD')) item['RSD'] = '限时抢购'
-          // 直配限时购买信息
-          for (let key in supplierPromotion) {
-            if (item['itemNo'] == key) {
-              const cartsObj = wx.getStorageSync('cartsObj')
-              supplierPromotion[key].startDate = supplierPromotion[key].startDate.slice(0, 10)
-              supplierPromotion[key].endDate = supplierPromotion[key].endDate.slice(0, 10)
-              supplierPromotion[key].limitedQty = supplierPromotion[key].limitedQty
-              item['todayPromotion'] = supplierPromotion[key]
-              item.drPrice = supplierPromotion[key].price
-              item.drMaxQty = supplierPromotion[key].limitedQty
-              if (!(key in cartsObj) || cartsObj[key].realQty < item.drMaxQty) {
-                item.price = supplierPromotion[key].price
-              }
-            }
-          }
-        })
-      }
-      this.data.goods = goodsData
-      this.setData({ goods: goodsData })
-    }
+    console.log(deepCopy(goodsData.data))
+    // if (goodsData.sourceType == 1) {
+    //   let supplierPromotion = ''
+    //   // 缓存中无直配促销信息，请求促销接口。有促销信息则直接使用
+    //   if (!supplierPromotion) {
+    //     const { branchNo, token, platform, username } = wx.getStorageSync('userObj')
+    //     this.getSupplierAllPromotion(branchNo, token, platform, username, goodsData)
+    //   } else {
+    //     goodsData.data.forEach(item => { // 商品对象中 添加促销信息
+    //       if ('promotionCollections' in item && item.promotionCollections.includes('RMJ')) item['RMJ'] = '满减商品'
+    //       if ('promotionCollections' in item && item.promotionCollections.includes('RBF')) item['RBF'] = '满赠商品'
+    //       if ('promotionCollections' in item && item.promotionCollections.includes('RSD')) item['RSD'] = '限时抢购'
+    //       // 直配限时购买信息
+    //       for (let key in supplierPromotion) {
+    //         console.log(item['currentPromotionNo'])
+    //         if (item['currentPromotionNo'] == key) {
+    //           const cartsObj = wx.getStorageSync('cartsObj')
+    //           supplierPromotion[key].startDate = supplierPromotion[key].startDate.slice(0, 10)
+    //           supplierPromotion[key].endDate = supplierPromotion[key].endDate.slice(0, 10)
+    //           supplierPromotion[key].limitedQty = supplierPromotion[key].limitedQty
+    //           item['todayPromotion'] = supplierPromotion[key]
+    //           item.drPrice = supplierPromotion[key].price
+    //           item.drMaxQty = supplierPromotion[key].limitedQty
+    //           if (!(key in cartsObj) || cartsObj[key].realQty < item.drMaxQty) {
+    //             item.price = supplierPromotion[key].price
+    //           }
+    //         }
+    //       }
+    //     })
+    //   }
+    //   console.log(deepCopy(goodsData.data))
+    //   this.data.goods = goodsData
+    // }
+    this.setData({ goods: goodsData })
     setTimeout(() => console.log(this.data.goods, this, getCurrentPages()), 1200)
   }
 })
