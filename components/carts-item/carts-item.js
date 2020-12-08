@@ -1027,7 +1027,7 @@ Component({
                   if (type == 'SD' || type == 'MS' || type == 'FS' || type == 'ZK') {
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
                   }
-                  if (nowGoods['currentPromotionNo'] != item.promotionNo) return 
+                  if (nowGoods['currentPromotionNo'] != item.promotionNo || !nowGoods.cancelSelected) return 
                   if (type == 'MJ') {
                     allPromotion[item.promotionNo].price += nowGoods.realQty * nowGoods.price
                   } else if (type == 'BF') {
@@ -1044,7 +1044,7 @@ Component({
                   if (type == 'SD' || type == 'MS' || type == 'FS' || type == 'ZK') {
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
                   }
-                  if (nowGoods['currentPromotionNo'] != item.promotionNo) return allPromotion[item.promotionNo].price = 0
+                  if (nowGoods['currentPromotionNo'] != item.promotionNo || !nowGoods.cancelSelected) return allPromotion[item.promotionNo].price = 0
                   if (type == 'MJ') {
                     allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.price
                   } else if (type == 'BF') {
