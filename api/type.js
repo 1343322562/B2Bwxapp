@@ -71,4 +71,6 @@ export default {
   '1057': 'https://xcx.lszx888.com/zksrb2b-web/', // 零食甄选 wxff89d54fc5013ad5  13212609585 123456  统配改分类,隐藏直配
   '1058': 'https://wx.yygyt.cn/zksrb2b-web/', // 益阳云商通 wx.yygyt.cn/zksrb2b-web wxb4ff1e1646959e36  15101512488 123456 
   '1059': 'https://xcx.jiuleshenghuo.com/zksrb2b-web/', // 新乐尔乐 wx.yygyt.cn/zksrb2b-web wxb4ff1e1646959e36  15101512488 123456 
+  '1060': 'https://mp.djlscs.cn/zksrb2b-web/', // 新顿洁 wxf6bfbf9d8c11bedb erp.djlscs.cn  55555密码123456
+  '1061': 'https://xcx.duoyangtong.com/', // 东莞喜洋洋 wxe4679f3af770b821 http://139.9.102.226:8080/   0000001   123456
 }
