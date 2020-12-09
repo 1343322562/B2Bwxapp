@@ -109,14 +109,14 @@ Component({
            * 切换前促销对象数量种类 == 1 ; 则删除此促销单据对象
            * 数量种类 > 1 ;则此单据促销对象数量 - 1
            */
-          console.log(94, currentPromotionObj)
+          // console.log(94, currentPromotionObj)
           if (currentPromotionObj.typeNum == 1) {
             currentPromotion.splice(currentPromotionIndex, 1)
           } else if (currentPromotionObj.typeNum > 1){
             currentPromotion[currentPromotionIndex].typeNum -= 1
           }
           console.log(881,currentPromotionObj)
-          console.log(882,nowGoods.cancelSelected, isPromotion, nowGoods)
+          // console.log(882,nowGoods.cancelSelected, isPromotion, nowGoods)
           if (!nowGoods.cancelSelected) {
             console.log(11111)
             if (currentPromotionType == 'MQ' || currentPromotionType == 'BG') {
@@ -151,13 +151,14 @@ Component({
           
           goods.data[index].currentPromotionNo = currentPromotionNo
           goods.data[index].currentPromotionType = currentPromotionType
-          console.log(currentPromotionNo, currentPromotionType)
+          // console.log(currentPromotionNo, currentPromotionType)
         }
       })
       dispatch[types.CHANGE_CPROMOTION_CARTS]({ goods: { itemNo, currentPromotionNo } })
       toast('已切换')
       wx.setStorageSync('updateCarts', true)
       console.log(goods)
+      console.log(allPromotion)
       this.setData({ goods, currentPromotion, allPromotion })
       this.data.goods = goods
       this.data.currentPromotion = currentPromotion
@@ -190,11 +191,24 @@ Component({
       console.log(promotionNoObj, allPromotion, this.data.allPromotion)
       cpnObj.setData({ data: promotionNoObj, itemNo, goods, promotionNo })
     },
+    // 去凑凑  中心仓跳转分类页  前置仓跳转对应前置仓页面
+    goCD() {
+      const { sourceType, sourceNo } = this.data.goods
+      switch (sourceType) {
+        case '0':
+          wx.switchTab({ url: '/pages/t_goods/t_goods' })
+          break;
+        case '1':
+          this.goAddGoodsClick(sourceNo)
+          break;
+      }
+
+    },
     // 跳转凑单页 
     goAddGoodsClick(e) {
-      const promotionNo = e.currentTarget.dataset.items.promotionNo
+      const promotionNo = typeof e == 'object' ? e.currentTarget.dataset.items.promotionNo : 'RMJ'
       if (promotionNo.includes('RMJ') || promotionNo.includes('RBF')) {
-        const { goodsData } = this.data 
+        const { goods: goodsData } = this.data 
         const config = {
           supplierName: goodsData.sourceName,
           supplierNo: goodsData.sourceNo,
@@ -360,7 +374,10 @@ Component({
         }
       })
       let items = []
-      cartsObj.keyArr.forEach(itemNo => items.push(cartsObj[itemNo]))
+      cartsObj.keyArr.forEach(itemNo => {
+        if ('cancelSelected' in cartsObj[itemNo]) delete cartsObj[itemNo].cancelSelected
+        items.push(cartsObj[itemNo])
+      })
       console.log(items, cartsObj, updateCarts)
       items = JSON.stringify(updateCarts ? items : [])
       API.Carts.getSettlementPageInfo({
@@ -557,13 +574,14 @@ Component({
       let goods = this.data.goods
       let selectObj = {}
       const isSelectAll = !this.data.isSelectAll
+      console.log(goods)
+      const goodsObj = this.backGoodObj(goods.data)
       goods.data.forEach(item => {
         item.cancelSelected = !isSelectAll
       })
       let cartsObj = wx.getStorageSync('cartsObj')
-      for(const key in cartsObj) { 
-        if (key === 'num' || key === 'keyArr') continue
-        cartsObj[key].cancelSelected = !isSelectAll
+      for(const key in goodsObj) {
+        key in cartsObj && (cartsObj[key].cancelSelected = !isSelectAll)
       }
       wx.setStorage({key: 'cartsObj', data: cartsObj })
       
@@ -738,7 +756,7 @@ Component({
       wx.setStorage({ key:"updateCarts", data: true })
       let currentPromotion = ['NO']  // 当前购物车商品的所选择促销数组
       let currentPromotionNo = ['']  // 当前购物车商品的所选择促销单据数组 
-      console.log(goodsData)
+      console.log(deepCopy(goodsData))
       const sourceType = Number(goodsData.sourceType),  // 0: 统配, 1: 直配
             branchNo = goodsData.branchNo,
             sourceNo = goodsData.sourceNo
@@ -830,7 +848,7 @@ Component({
 
       this.data.currentPromotion = currentPromotion
       this.data.currentPromotionNo = currentPromotionNo
-      this.data.goodsData = goodsData
+      this.data.goods = goodsData
       console.log(deepCopy(goodsData))
       this.getAllPromotions(goodsData) // 处理所有促销
       this.setData({ currentPromotion, currentPromotionNo, goodsData })
@@ -880,6 +898,7 @@ Component({
           msg: { [nowGoods.itemNo]: `活动至${res['RSD'].endDate}结束`},
           promotionNo: _this.addPromotionNo(nowGoods, 'RSD')
         })
+
       }
       return sPromotionList
     },
@@ -1068,6 +1087,7 @@ Component({
               })
             if (!nowGoods.cancelSelected) allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
             })
+            console.log('resaaa', deepCopy(res), deepCopy(goodsData.data))
             console.log(111, deepCopy(allPromotion))
             this.data.allPromotion = allPromotion
             this.data.goods = goodsData
@@ -1094,6 +1114,9 @@ Component({
                 const type = item.promotionNo.slice(0, 3)
 
                 if (allPromotion[item.promotionNo]) {
+                  if (type == 'RSD') {
+                    allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
+                  }
                   if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return 
                   if (type == 'RMJ') {
                     // console.log(nowGoods.realQty * nowGoods.orgiPrice, allPromotion[item.promotionNo])
@@ -1103,7 +1126,9 @@ Component({
                   }
                 } else {
                   allPromotion[item.promotionNo] = item
-                  // console.log(1027, allPromotion[item.promotionNo],allPromotion)
+                  if (type == 'RSD') {
+                    allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
+                  }
                   if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return allPromotion[item.promotionNo].price = 0
                   if (type == 'RMJ') {
                     allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.price
@@ -1140,7 +1165,7 @@ Component({
       } else if (ty=='ZK' && (item.zkMaxQty >= item.realQty)) {
         item.price = item.zkPrice
       } else if (ty=='RSD' && (item.drMaxQty >= item.realQty)) {
-        item.price = item.zkPrice
+        item.price = item.drPrice
       }
     },
     

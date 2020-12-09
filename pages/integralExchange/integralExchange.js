@@ -23,6 +23,7 @@ Page({
     API.Integral.searchIntegralStoreGoods({
       data: this.requestData,
       success: res => {
+        console.log(res)
         if (res.code == 0&& res.data) {
           const list = res.data
           list.forEach(goods => {

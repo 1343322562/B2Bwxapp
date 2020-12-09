@@ -380,7 +380,7 @@ export const HANDLE_SUP_PROMOTION = function(param) {
   API.Public.getSupplierAllPromotion({
     data: { branchNo, token, platform, username, supplierNo: param.data.sourceNo },
     success: res => {
-      console.log(res)
+      console.log(75421,res)
       let data = res.data
       for(let key in data) {
         if (key.includes('RMJ') && data[key].length) {

@@ -124,6 +124,7 @@ Page({
   onPullDownRefresh() {
     // this.refreshCarts()
     const cpn = this.selectAllComponents('.carts-items')
+    console.log(1)
     // 刷新组件
     cpn.forEach(item => {
       console.log(item.pullUpdata())
