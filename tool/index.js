@@ -286,6 +286,7 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
     const isMs = (cartsGoodsNum > goods.msMaxQty) && (cartsGoodsNum <= goods.msMaxQty + stop )
     const isDr = goods.drMaxQty > goods.msMaxQty
     const isSd = goods.sdMaxQty > goods.msMaxQty
+    const maxRSDQty = ('todayPromotion' in goods ? goods.todayPromotion['limitedQty'] : goods['drMaxQty'])
     console.log(goods, cartsGoodsNum)
     // console.log(273,deepCopy(goods))
     if (ty.includes('MS') && cartsGoodsNum <= goods.msMaxQty) {
@@ -300,11 +301,11 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
       if (warn && goods.MS  && isMs) {
         alert('商品购买数量已超上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
-    } else if (isRSD && cartsGoodsNum <= goods.todayPromotion['limitedQty']) {
+    } else if (isRSD && cartsGoodsNum <= maxRSDQty) {
       console.log(goods, cartsGoodsNum)
       goods.price = goods.todayPromotion.price
       // if (warn && 'todayPromotion' in goods) {
-      //   alert('商品购买数量已超上限[' + goods.todayPromotion['limitedQty'] + '],商品将恢复促销价')
+      //   alert('商品购买数量已超上限[' + maxRSDQty + '],商品将恢复促销价')
       // }
     } else if (ty.includes('FS') && cartsGoodsNum <= goods.sdMaxQty) {
       goods.price = goods.sdPrice
@@ -317,10 +318,10 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
         (ty.includes('MS') && isMs)
         || (ty.includes('SD') && (cartsGoodsNum > goods.drMaxQty) && (cartsGoodsNum <= goods.drMaxQty + stop))
         || (ty.includes('FS') && (cartsGoodsNum > goods.sdMaxQty) && (cartsGoodsNum <= goods.sdMaxQty + stop))
-        || (isRSD && cartsGoodsNum > goods.todayPromotion['limitedQty'] && cartsGoodsNum <= goods.todayPromotion['limitedQty'] + stop)
+        || (isRSD && cartsGoodsNum > maxRSDQty && cartsGoodsNum <= maxRSDQty + stop)
         )) {
           if(isRSD) {
-            alert('商品购买数量已超上限[' +  goods.todayPromotion['limitedQty'] + '],商品将恢复促销价')
+            alert('商品购买数量已超上限[' +  maxRSDQty + '],商品将恢复促销价')
           } else {
             alert('商品购买数量已超' + ((isDr || isSd) ? '促销' : '秒杀') + '上限[' + goods[isDr ? 'drMaxQty' : (isSd ? 'sdMaxQty' :'msMaxQty')] + '],商品将恢复原价')
           }

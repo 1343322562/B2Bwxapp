@@ -13,7 +13,7 @@ Component({
   },
   data: {
     leftAnimation: false,
-    isSelectAll: true,
+    isSelectAll: false,
     cartsMoney: 0,
     selectNum: 0,
     selectTypeNum: 0,
@@ -510,11 +510,11 @@ Component({
       let isSelectAll = this.data.isSelectAll
       const cartsObj = this.data.goods
       cartsObj.data.length && cartsObj.data.map(goods => {
-        console.log(513, goods)
+        // console.log(513, goods)
         if (!goods.cancelSelected) {
           console.log(deepCopy(goods), cartsMoney, goods.price * goods.realQty)
           cartsMoney = Number((cartsMoney + (goods.price * goods.realQty)).toFixed(2))
-          console.log(cartsMoney)
+          // console.log(cartsMoney)
           selectNum += goods.realQty
           if (String(selectNum).includes('.')) selectNum = Number(Number(selectNum).toFixed(1))
           selectTypeNum += 1
@@ -560,6 +560,12 @@ Component({
       goods.data.forEach(item => {
         item.cancelSelected = !isSelectAll
       })
+      let cartsObj = wx.getStorageSync('cartsObj')
+      for(const key in cartsObj) { 
+        if (key === 'num' || key === 'keyArr') continue
+        cartsObj[key].cancelSelected = !isSelectAll
+      }
+      wx.setStorage({key: 'cartsObj', data: cartsObj })
       
       const allPromotion = this.data.allPromotion
       const isAllPromotion = Object.keys(allPromotion).length // 长度为 0 则无促销单据
@@ -732,6 +738,7 @@ Component({
       wx.setStorage({ key:"updateCarts", data: true })
       let currentPromotion = ['NO']  // 当前购物车商品的所选择促销数组
       let currentPromotionNo = ['']  // 当前购物车商品的所选择促销单据数组 
+      console.log(goodsData)
       const sourceType = Number(goodsData.sourceType),  // 0: 统配, 1: 直配
             branchNo = goodsData.branchNo,
             sourceNo = goodsData.sourceNo
@@ -745,6 +752,7 @@ Component({
             if (item['promotionCollections'].includes(',')) {
               const promoArr = item['promotionCollections'].split(',')
               item['promotionCollectionsArr'] = promoArr
+              console.log(promoArr, promoArrSort)
               // 商品促销数组的排序  'MS', 'FS', 'SD', 'ZK', 'BF', 'SZ' , 'BG', 'MJ', 'MQ'
               item['promotionCollectionsArr'] = promoArrSort(promoArr, sourceType)
             } else if (item['promotionCollections'] == '') {
@@ -1107,7 +1115,7 @@ Component({
               console.log(deepCopy(allPromotion))
               if (!nowGoods.cancelSelected) allPromotion = _this.isSatisfyPromotion(allPromotion) // 计算是否满足促销条件
               console.log(allPromotion)
-              _this.setData({ allPromotion, goods: goodsData })
+              _this.setData({ allPromotion, goods: goodsData, isSelectAll })
               _this.countMoney() // 计算购物车金额, 防止下拉刷新时获取不到最近的购物车金额
               hideLoading()
             })
