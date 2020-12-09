@@ -53,3 +53,15 @@ Page{background-color: #fff}
 .goCartsPage>.icon{width: 50rpx;height: 50rpx;margin-top: 10rpx;}
 .goCartsPage>text{display: block;margin-top: -5rpx;}
 .minSupplyQty{position: absolute;bottom: 47rpx;right: 81rpx;font-size: 24rpx;background-color: #fff;color:#04a1ff }
+
+.noReturn {
+  position: absolute;
+  right: 4rpx;
+  bottom: 2rpx;
+  background-color: #333333;
+  white-space: nowrap;
+  color: rgb(230, 187, 49);
+  font-size: 18rpx;
+  letter-spacing: 2rpx;
+  padding: 5rpx 8rpx;
+}

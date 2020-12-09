@@ -37,7 +37,6 @@ Page({
           let supplierKey = this.data.supplierKey
           const { username } = wx.getStorageSync('userObj')
           list.forEach((item, index) => {
-            if (username == 'zksr') return
             const cls = item.managementType
             const no = item.supplierNo
             item.goodsImgUrl = imgUrl + '/upload/images/supplier/' + item.picUrl
@@ -48,7 +47,7 @@ Page({
             }
           })
           console.log(list, supplierObj)
-          this.setData({ supplierObj})
+          this.setData({ supplierObj })
           setTimeout(()=>{
             this.setData({ supplierKey })
           },150)
