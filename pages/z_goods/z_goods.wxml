@@ -13,10 +13,11 @@
     <view class='img'><image class='icon' src="{{supplierObj[item].goodsImgUrl}}" /></view>
     <view class='info'>
       <view class='name'>{{supplierObj[item].supplierName}}</view>
-      <view class='manage'>简介:{{supplierObj[item].itemClsName}}</view>
-      <view class='phone'>商户电话:{{supplierObj[item].supplierTel}}</view>
+      <view class='startMoney'>起送价:<text>{{supplierObj[item].minDeliveryMomey}}元</text></view>
+      <view class='manage'>简 介:{{supplierObj[item].itemClsName || supplierObj[item].attachInfo}}</view>
+      <view class='phone' wx:if="{{supplierObj[item].supplierTel}}">商户电话:{{supplierObj[item].supplierTel}}</view>
     </view>
-    <view class='startMoney'>起送价:<text>{{supplierObj[item].minDeliveryMomey}}元</text></view>
+    
   </view>
 </view>
 

@@ -11,7 +11,7 @@
 .supplierList>.li .info{margin-left: 140rpx;color: #666;font-size: 22rpx;}
 .supplierList>.li .info>.name{color: #333;font-size: 32rpx;margin-bottom: 10rpx;}
 .supplierList>.li .info>.manage{width: 60%}
-.supplierList>.li .startMoney{position: absolute;top: 45%;right: 40rpx;color: #666;}
+.supplierList>.li .startMoney{color: #666;}
 .supplierList>.li .startMoney>text{color: red;margin-left: 5rpx;}
 /*搜索*/
 .searchShop-box{
