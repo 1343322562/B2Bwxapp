@@ -13,10 +13,10 @@ view{-webkit-overflow-scrolling: touch}
 swiper{overflow:hidden;}
 .swiper image{width:100%;}
 .btns{background-color:#fff;width:100%;overflow:hidden;text-align:center;font-size:24rpx;padding:5px 0 2px;}
-.btns>.li{float:left;width:25%;margin-top:20rpx;}
-.btns>.li image{width:75%;margin-bottom:12rpx;height: 120rpx;}
-.btns>.lis{float:left;width:20%;margin-top:12rpx;}
-.btns>.lis image{width:75%;margin-bottom:10rpx;height: 130rpx;}
+.btns>.li{float:left;width:25%;}
+.btns>.li image{width:75%;}
+.btns>.lis{float:left;width:20%;}
+.btns>.lis image{width:75%;}
 .md-storey{width:100%;overflow:hidden;background-color:#fff;}
 .md-storey image{float:left;margin: 0;padding: 0;}
 .md-storey image,.md-storey>.d1-x2 .x2{width:100%;}

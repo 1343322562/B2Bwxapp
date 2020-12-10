@@ -38,7 +38,7 @@ z-index:100}
 .goodsList>.li .goCarts>.type{text-align: right;font-size: 24rpx;margin-bottom: 4rpx;}
 .goodsList>.li .goCarts>.type.cw{color: #ffb400}
 .goodsList>.li .goCarts>.type.dw{color:#04a1ff;}
-.goodsList>.li .goCarts>.btn{position: relative;text-align: center;float: right;min-width: 135rpx;display: flex;justify-content: flex-end;align-items: center;}
+.goodsList>.li .goCarts>.btn{width: 140rpx;position: relative;text-align: center;float: right;min-width: 135rpx;display: flex;justify-content: flex-end;align-items: center;}
 /* .goodsList>.li .goCarts>.btn .item{height: 100%;position: absolute;top: 0} */
 .goodsList>.li .goCarts>.btn .item>.icon{width: 46rpx;height: 46rpx;background-color:#fff;}
 .goodsList>.li .goCarts>.btn .minus{left: 0}
