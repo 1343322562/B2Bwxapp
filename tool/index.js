@@ -149,10 +149,14 @@ export const toFixed = (num) => { // 4 舍 5 入
   num = Number(num.toFixed(4))
   const strNum = String(num)
   const sliceSign = strNum.indexOf(".") 
-  const sliceNum = strNum.slice(sliceSign+1, sliceSign+1+3)
+  const sliceNum = strNum.slice(sliceSign+1, sliceSign+4)
   let newNum = Number(num.toFixed(2))
-  if (sliceNum.length >= 3 && sliceNum[2] === '5') {
-    newNum = newNum + 0.01
+  const newNumStr = String(newNum)
+  const oldN = strNum.slice(sliceSign+2, sliceSign+3)
+  const newN = newNumStr.slice(sliceSign+2, sliceSign+3)
+  console.log(strNum, newNum, oldN, newN)
+  if (sliceNum.length >= 3 && sliceNum[2] === '5' && (oldN === newN && !isNaN(oldN) && !isNaN(oldN))) {
+    newNum = Number((newNum + 0.01).toFixed(2))
   }
   return newNum
 }

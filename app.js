@@ -16,8 +16,8 @@ App({
     // 15576615400 
     // partnerCode: '1005',
     // baseImgUrl: 'http://erp.djlscs.cn/',
-    partnerCode: '1047',
-    baseImgUrl: 'http://106.124.142.203:8081/',
+    // partnerCode: '1047',
+    // baseImgUrl: 'http://106.124.142.203:8081/',
     // lttest001
     // partnerCode: '1034',
     // baseImgUrl:'https://39.100.103.135:8080/',
@@ -31,7 +31,7 @@ App({
     // partnerCode: '1051',
     // partnerCode: '1053',
     // baseImgUrl:'http://app.tmzyz.com/',
-    // partnerCode: '1059',
+    partnerCode: '1059',
     // partnerCode: '05',
     // partnerCode: '1054',
     // partnerCode: '1055',
