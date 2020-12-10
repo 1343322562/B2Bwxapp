@@ -12,11 +12,11 @@ view{-webkit-overflow-scrolling: touch}
 .oftenBuy{z-index:100;width:150rpx;height:150rpx;line-height:150rpx;background:rgba(229,110, 110,.8);color:#fff;text-align:center;font-size:28rpx;border-radius:100%;position:fixed;}
 swiper{overflow:hidden;}
 .swiper image{width:100%;}
-.btns{background-color:#fff;width:100%;overflow:hidden;text-align:center;font-size:24rpx;padding:5px 0 2px;}
+.btns{background-color:#fff;width:100%;overflow:hidden;text-align:center;font-size:24rpx;}
 .btns>.li{float:left;width:25%;}
 .btns>.li image{width:75%;}
-.btns>.lis{float:left;width:20%;}
-.btns>.lis image{width:75%;}
+.btns>.lis{float:left;width:20%;display: flex;}
+.btns>.lis image{width:100%;max-height: 150rpx;}
 .md-storey{width:100%;overflow:hidden;background-color:#fff;}
 .md-storey image{float:left;margin: 0;padding: 0;}
 .md-storey image,.md-storey>.d1-x2 .x2{width:100%;}
