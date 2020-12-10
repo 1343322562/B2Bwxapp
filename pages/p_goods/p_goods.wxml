@@ -1,22 +1,4 @@
 <block wx:if="{{pageLoading}}">
-<!-- <view class='pageLeft' wx:if="{{classifyList.length}}">
-  <view class='search' bindtap='goSearchPage'>
-    <image class='icon' src='../../images/goodsList_page_search.png' />
-    <text class='text'>搜索</text>
-  </view>
-  <scroll-view scroll-y class="category">
-    <block wx:for="{{classifyList}}" wx:for-index="oneIndex" wx:for-item="clsOne" wx:key="clsOne">
-      <view class="oneCls{{nowSelectOneCls==clsOne?' act':''}}" animation="{{ nowSelectOneCls==clsOne?animtionObjShow:(beforeOneCls==clsOne?animtionObjHide:null)}}">
-        <view class='oneClsTitle' bindtap="tapOneCls" data-no="{{clsOne}}"><text>{{classifyObj[clsOne].title}}</text></view>
-        <view class='twoClsList'>
-          <block wx:for="{{classifyObj[clsOne].children}}" wx:for-index="twoIndex" wx:for-item="clsTwo" wx:key="twoIndex">
-            <view class="twoClsTitle{{nowSelectTwoCls==clsTwo.clsNo?' act':''}}" bindtap="tapTwoCls" data-no="{{clsTwo.clsNo}}"><text>{{clsTwo.clsName}}</text></view>
-          </block>
-        </view>
-      </view>
-    </block>
-  </scroll-view>
-</view> -->
 <view class='goodsList'>
   <view class='screen'>
     <view catchtap='selectScreen' data-type="0" class="item{{screenSelect=='0'?' act':''}}">综合</view>
@@ -32,10 +14,7 @@
       <view class='goodsType' wx:if="{{goodsObj[itemNo].specType=='2'}}">多规格</view>
       <view class='goodsType' wx:if="{{goodsObj[itemNo].isBind=='1'}}">组合</view>
       <view class='c-stock_null' wx:if="{{!goodsObj[itemNo].isStock}}">补货中</view>
-      <!-- 之前的不可退货图标 -->
-      <!-- <image class='noReturnAllowed' wx:if="{{goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1'}}" src="../../images/noReturnAllowed.png" /> -->
       <view wx:if="{{goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1'}}" class="noReturn">不可退</view>
-      <!-- <view class="yesReturn">{{(goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1')?'不可退':'可退'}}</view> -->
     </view>
     <view class='info'>
       <view class='name'>{{goodsObj[itemNo].itemName}}</view>

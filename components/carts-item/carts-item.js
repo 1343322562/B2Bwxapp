@@ -200,14 +200,15 @@ Component({
           break;
         case '1':
           this.goAddGoodsClick(sourceNo)
+          console.log(sourceNo)
           break;
       }
 
     },
     // 跳转凑单页 
     goAddGoodsClick(e) {
-      const promotionNo = typeof e == 'object' ? e.currentTarget.dataset.items.promotionNo : 'RMJ'
-      if (promotionNo.includes('RMJ') || promotionNo.includes('RBF')) {
+      const promotionNo = typeof e == 'object' ? e.currentTarget.dataset.items.promotionNo : 'RBF'
+      if (promotionNo.includes('RBF')) {
         const { goods: goodsData } = this.data 
         const config = {
           supplierName: goodsData.sourceName,
@@ -883,13 +884,21 @@ Component({
           promotionNo: _this.addPromotionNo(nowGoods, 'RBF')
         })
       }
-      if (nowGoods.promotionCollections.includes('RMJ')) {
+      if (res['RMJ'][nowGoods.itemNo]) {
+        const goodPromo = nowGoods['promotionCollections']
+        if (goodPromo) {
+          nowGoods['promotionCollections'] = goodPromo + ',' + res['RMJ'][nowGoods.itemNo].promotionNo
+          nowGoods['promotionCollectionsArr'].push(res['RMJ'][nowGoods.itemNo].promotionNo)
+        } else {
+          nowGoods['promotionCollections'] = res['RMJ'][nowGoods.itemNo].promotionNo
+          nowGoods['promotionCollectionsArr'] = [res['RMJ'][nowGoods.itemNo].promotionNo]
+        }
         sPromotionList.push({
           name: '满减',
-          reachVal: res['RMJ'].reachVal,
-          subMoney: res['RMJ'].subMoney,
-          msg: [res['RMJ'].memo || `满￥${res['RMJ'].reachVal}减￥${res['RMJ'].subMoney}`],
-          promotionNo: _this.addPromotionNo(nowGoods, 'RMJ')
+          reachVal: res['RMJ'][nowGoods.itemNo].reachVal,
+          subMoney: res['RMJ'][nowGoods.itemNo].subMoney,
+          msg: [res['RMJ'][nowGoods.itemNo].memo || `满￥${res['RMJ'][nowGoods.itemNo].reachVal}减￥${res['RMJ'][nowGoods.itemNo].subMoney}`],
+          promotionNo: res['RMJ'][nowGoods.itemNo].promotionNo
         })
       }
       if (nowGoods.promotionCollections.includes('RSD')) {
@@ -1111,6 +1120,7 @@ Component({
               }
               const suplierPromotionList = _this.suplierPromotionHandle(res, nowGoods)
               suplierPromotionList.length && suplierPromotionList.forEach((item) => {
+                console.log(item)
                 const type = item.promotionNo.slice(0, 3)
 
                 if (allPromotion[item.promotionNo]) {
@@ -1132,6 +1142,7 @@ Component({
                   if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return allPromotion[item.promotionNo].price = 0
                   if (type == 'RMJ') {
                     allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.price
+                    
                   } else if (type == 'RBF') {
                     allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.price
                   }

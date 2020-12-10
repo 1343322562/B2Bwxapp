@@ -384,9 +384,14 @@ export const HANDLE_SUP_PROMOTION = function(param) {
       let data = res.data
       for(let key in data) {
         if (key.includes('RMJ') && data[key].length) {
-          obj.RMJ.reachVal = data[key][0].reachVal
-          obj.RMJ.subMoney = data[key][0].subMoney
-          obj.RMJ.memo = data[key][0].memo
+          const filterArr = data[key][0].filterValue.split(',')
+          filterArr.forEach((itemNo, index) => {
+            obj.RMJ[itemNo] = {}
+            obj.RMJ[itemNo].reachVal = data[key][0].reachVal
+            obj.RMJ[itemNo].subMoney = data[key][0].subMoney
+            obj.RMJ[itemNo].promotionNo = data[key][0].sheetNo
+            obj.RMJ[itemNo].memo = data[key][0].memo
+          })
         } else if (key.includes('RBF') && data[key].length) {
           obj.RBF.reachVal = data[key][0].reachVal
           obj.RBF.memo = data[key][0].memo
