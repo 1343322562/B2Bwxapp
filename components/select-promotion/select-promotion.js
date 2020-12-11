@@ -24,7 +24,7 @@ Component({
   },
   methods: {
     close() { this.setData({ isShow: false }) },    // 关闭促销选择框
-    showClick() { this.setData({ isShow: true }) },  // 显示Dialog
+    showClick() { this.setData({ isShow: true }); console.log(this.data) },  // 显示Dialog
     selectPromotionClick(e) {
       const promotionNo = e.currentTarget.dataset.promotion,
             itemNo = this.data.itemNo,

@@ -82,7 +82,7 @@
         <text wx:if="{{goodsObj[itemNo].ZK}}">{{goodsObj[itemNo].discount}}</text>
         <text wx:if="{{goodsObj[itemNo].discountMoney}}">优惠{{goodsObj[itemNo].discountMoney}}元</text>
         <text wx:if="{{goodsObj[itemNo].rewardPoint>0}}">积分</text>
-        <text wx:if="{{goodsObj[itemNo].supcustNo && rmj}}">满减</text>
+        <text wx:if="{{goodsObj[itemNo].supcustNo && (rmj[itemNo] || rmj === true)}}">满减</text>
         <text wx:if="{{goodsObj[itemNo].supcustNo && rbf}}">满赠</text>
       </view>
       

@@ -40,7 +40,7 @@
         <view class='limitPromotionTime' wx:if="{{!!goodsObj[itemNo].todayPromotion}}">{{goodsObj[itemNo].todayPromotion.startDate}} 至 {{goodsObj[itemNo].todayPromotion.endDate}}</view> -->
       </view>
         <view class="tag">
-          <text wx:if="{{ rmj }}">满减</text>
+          <text wx:if="{{rmj[itemNo] || rmj === true}}">满减</text>
           <text wx:if="{{ rbf }}">满赠</text>
           <text wx:if="{{ goodsObj[itemNo].todayPromotion }}">特价</text>
         </view> 

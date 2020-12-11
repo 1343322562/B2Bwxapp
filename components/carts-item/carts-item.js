@@ -183,6 +183,7 @@ Component({
       promotionNoArr.forEach((item, index) => {
         console.log(item, promotionNoObj)
         promotionNoObj[item] = p[item]
+        console.log( p ,item)
         if (item.includes('SD') || item.includes('MS') || item.includes('FS') || item.includes('ZK')) {
           const msg = p[item].msg[itemNo]
           promotionNoObj[item].msg = [msg]
@@ -767,7 +768,7 @@ Component({
         // 首次加载，默认选第一个促销
         if (item['promotionCollections']) {
           // 无 currentPromotionno
-          if (!(item['currentPromotionNo'] && item['promotionCollections'].includes(item['currentPromotionNo']))) {
+          if (!(item['currentPromotionNo'] && item['promotionCollectionsArr'].includes(item['currentPromotionNo']))) {
             if (item['promotionCollections'].includes(',')) {
               const promoArr = item['promotionCollections'].split(',')
               item['promotionCollectionsArr'] = promoArr
@@ -861,13 +862,15 @@ Component({
      */ 
     addPromotionNo(nowGoods, tagType) {
       // if (this.sourceType == 1) tagType = nowGoods.currentPromotionType
-      if (nowGoods.currentPromotionType == tagType) return nowGoods.currentPromotionNo 
+      console.log(nowGoods['promotionCollections'], nowGoods['currentPromotionNo'], nowGoods['promotionCollectionsArr'].includes(nowGoods['currentPromotionNo']))
+      if (nowGoods.currentPromotionType == tagType && nowGoods['promotionCollectionsArr'].includes(nowGoods['currentPromotionNo'])) return nowGoods.currentPromotionNo 
       const promotionCollectionsArr = nowGoods.promotionCollectionsArr
       
       let promoIndex
       promotionCollectionsArr.forEach((item, index) => {
         if (item.includes(tagType)) promoIndex = index
       })
+      console.log(promotionCollectionsArr[promoIndex], promotionCollectionsArr)
       return promotionCollectionsArr[promoIndex]
     },
 
@@ -902,6 +905,7 @@ Component({
         })
       }
       if (nowGoods.promotionCollections.includes('RSD')) {
+        console.log(res, nowGoods)
         sPromotionList.push({
           name: '限时促销',
           msg: { [nowGoods.itemNo]: `活动至${res['RSD'].endDate}结束`},

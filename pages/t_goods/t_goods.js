@@ -171,7 +171,12 @@ Page({
           if (res.code == 0 && res.data) {
             let promKey // 获取 以 RSD 开头的下标 (促销信息)
             for (let key in data) {
-              if (key.includes('RMJ') && data[key].length != 0) { this.setData({ rmj: true }) }  
+              if (key.includes('RMJ') && data[key].length != 0) {
+                const filterArr = data[key][0].filterValue.split(',')
+                const rmjObj  = {}
+                filterArr.forEach((itemNo) => { rmjObj[itemNo] = 1 })
+                this.setData({ rmj: rmjObj })
+              } 
               if (key.includes('RBF') && data[key].length != 0) { this.setData({ rbf: true }) }    
               if (key.includes('RSD')) { promKey = key }
             }
