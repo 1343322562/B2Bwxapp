@@ -73,4 +73,5 @@ export default {
   '1059': 'https://xcx.jiuleshenghuo.com/zksrb2b-web/', // 新乐尔乐 wx.yygyt.cn/zksrb2b-web wxb4ff1e1646959e36  15101512488 123456 
   '1060': 'https://mp.djlscs.cn/zksrb2b-web/', // 新顿洁 wxf6bfbf9d8c11bedb erp.djlscs.cn  55555密码123456
   '1061': 'https://xcx.duoyangtong.com/', // 东莞喜洋洋 wxe4679f3af770b821 http://139.9.102.226:8080/   0000001   123456
+  '1062': 'https://xcx.sljsp.com/zksrb2b-web/', // 叁陆玖食品  wx5bfeb7a12854450a http://erp.sljsp.com;   18569429872 密码123456
 }
