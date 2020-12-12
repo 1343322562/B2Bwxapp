@@ -879,19 +879,35 @@ Component({
       
       let sPromotionList = [],
             _this = this
-      if (nowGoods.promotionCollections.includes('RBF')) {
+      if (res['RBF'][nowGoods.itemNo]) {
+        const goodPromo = nowGoods['promotionCollections']
+        console.log(goodPromo)
+        console.log(res, nowGoods)
+        if (goodPromo) {
+          if (!nowGoods['promotionCollectionsArr'].includes(res['RBF'][nowGoods.itemNo].promotionNo)) {
+            nowGoods['promotionCollections'] = goodPromo + ',' + res['RBF'][nowGoods.itemNo].promotionNo
+            nowGoods['promotionCollectionsArr'].push(res['RBF'][nowGoods.itemNo].promotionNo)
+          }
+        } else {
+          nowGoods['promotionCollections'] = res['RBF'][nowGoods.itemNo].promotionNo
+          nowGoods['promotionCollectionsArr'] = [res['RBF'][nowGoods.itemNo].promotionNo]
+        }
         sPromotionList.push({
           name: '满赠',
-          reachVal: res['RBF'].reachVal,
-          msg: [res['RBF'].memo || `满￥${res['RBF'].reachVal}送赠品`],
-          promotionNo: _this.addPromotionNo(nowGoods, 'RBF')
+          reachVal: res['RBF'][nowGoods.itemNo].reachVal,
+          msg: [res['RBF'][nowGoods.itemNo].memo || `满￥${res['RBF'][nowGoods.itemNo].reachVal}送赠品`],
+          promotionNo: res['RBF'][nowGoods.itemNo].promotionNo
         })
       }
       if (res['RMJ'][nowGoods.itemNo]) {
         const goodPromo = nowGoods['promotionCollections']
+        console.log(goodPromo)
+        console.log(res, nowGoods)
         if (goodPromo) {
-          nowGoods['promotionCollections'] = goodPromo + ',' + res['RMJ'][nowGoods.itemNo].promotionNo
-          nowGoods['promotionCollectionsArr'].push(res['RMJ'][nowGoods.itemNo].promotionNo)
+          if (!nowGoods['promotionCollectionsArr'].includes(res['RMJ'][nowGoods.itemNo].promotionNo)) {
+            nowGoods['promotionCollections'] = goodPromo + ',' + res['RMJ'][nowGoods.itemNo].promotionNo
+            nowGoods['promotionCollectionsArr'].push(res['RMJ'][nowGoods.itemNo].promotionNo)
+          }
         } else {
           nowGoods['promotionCollections'] = res['RMJ'][nowGoods.itemNo].promotionNo
           nowGoods['promotionCollectionsArr'] = [res['RMJ'][nowGoods.itemNo].promotionNo]
@@ -1067,7 +1083,7 @@ Component({
                   if (type == 'SD' || type == 'MS' || type == 'FS' || type == 'ZK') {
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
                   }
-                  if (nowGoods['currentPromotionNo'] != item.promotionNo || !nowGoods.cancelSelected) return 
+                  if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return 
                   if (type == 'MJ') {
                     allPromotion[item.promotionNo].price += nowGoods.realQty * nowGoods.price
                   } else if (type == 'BF') {
@@ -1084,7 +1100,7 @@ Component({
                   if (type == 'SD' || type == 'MS' || type == 'FS' || type == 'ZK') {
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
                   }
-                  if (nowGoods['currentPromotionNo'] != item.promotionNo || !nowGoods.cancelSelected) return allPromotion[item.promotionNo].price = 0
+                  if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return allPromotion[item.promotionNo].price = 0
                   if (type == 'MJ') {
                     allPromotion[item.promotionNo].price = nowGoods.realQty * nowGoods.price
                   } else if (type == 'BF') {

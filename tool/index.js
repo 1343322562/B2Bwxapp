@@ -370,10 +370,10 @@ export const filterArr = (arr) => {
 
 // 直配促销处理
 export const HANDLE_SUP_PROMOTION = function(param) {
-  // console.log(43, param)
+  console.log(43, param)
   let obj = {
-    RMJ: { reachVal: '', subMoney: '', memo: '' },
-    RBF: { reachVal: '', memo: ''  },
+    RMJ: { reachVal: '', subMoney: '', memo: '', promotionNo: '' },
+    RBF: { reachVal: '', memo: '', promotionNo: ''  },
     RSD: { itemNo: [], memo: '', endDate: '' }
   }
   const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = getApp().data['userObj'] || wx.getStorageSync('userObj')
@@ -384,17 +384,55 @@ export const HANDLE_SUP_PROMOTION = function(param) {
       let data = res.data
       for(let key in data) {
         if (key.includes('RMJ') && data[key].length) {
-          const filterArr = data[key][0].filterValue.split(',')
-          filterArr.forEach((itemNo, index) => {
-            obj.RMJ[itemNo] = {}
-            obj.RMJ[itemNo].reachVal = data[key][0].reachVal
-            obj.RMJ[itemNo].subMoney = data[key][0].subMoney
-            obj.RMJ[itemNo].promotionNo = data[key][0].sheetNo
-            obj.RMJ[itemNo].memo = data[key][0].memo
+          console.log( data[key])
+          data[key].forEach(item => { 
+            console.log(item)
+            if (item.filterType == '3') { // 按条件 (商品)
+              const filterArr = item.filterValue.split(',')
+              filterArr.forEach((itemNo, index) => {
+                if(itemNo in obj.RMJ) return
+                obj.RMJ[itemNo] = {}
+                obj.RMJ[itemNo].reachVal = item.reachVal
+                obj.RMJ[itemNo].subMoney = item.subMoney
+                obj.RMJ[itemNo].promotionNo = item.sheetNo
+                obj.RMJ[itemNo].memo = item.memo
+              })
+            } else if (item.filterType == '0') { // 全场
+              param.data.data.forEach(goodItem => {
+                obj.RMJ[goodItem.itemNo] = {}
+                obj.RMJ[goodItem.itemNo].reachVal = item.reachVal
+                obj.RMJ[goodItem.itemNo].subMoney = item.subMoney
+                obj.RMJ[goodItem.itemNo].promotionNo = item.sheetNo
+                obj.RMJ[goodItem.itemNo].memo = item.memo
+              })
+            }
           })
+          console.log( obj.RMJ)
         } else if (key.includes('RBF') && data[key].length) {
-          obj.RBF.reachVal = data[key][0].reachVal
-          obj.RBF.memo = data[key][0].memo
+          data[key].forEach(item => {
+            if (item.filterType == '3') {
+              const filterArr = item.filterValue.split(',')
+              filterArr.forEach((itemNo, index) => {
+                if(itemNo in obj.RBF) return
+                obj.RBF[itemNo] = {}
+                obj.RBF[itemNo].reachVal = item.reachVal
+                obj.RBF[itemNo].subMoney = item.subMoney
+                obj.RBF[itemNo].promotionNo = item.sheetNo
+                obj.RBF[itemNo].memo = item.memo
+              })
+            } else if (item.filterType == '0') {
+              param.data.data.forEach(goodItem => {
+                if(itemNo in obj.RBF) return
+                obj.RBF[goodItem.itemNo] = {}
+                obj.RBF[goodItem.itemNo].reachVal = item.reachVal
+                obj.RBF[goodItem.itemNo].subMoney = item.subMoney
+                obj.RBF[goodItem.itemNo].promotionNo = item.sheetNo
+                obj.RBF[goodItem.itemNo].memo = item.memo
+              })
+            }
+          })
+          // obj.RBF.reachVal = data[key][0].reachVal
+          // obj.RBF.memo = data[key][0].memo
         } else if (key.includes('RSD')) {
           for(let rsdKey in data[key]) {
             const goodsData = param.data.data

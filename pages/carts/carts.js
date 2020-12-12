@@ -62,6 +62,8 @@ Page({
                 console.log(deepCopy(goods))
               }
               const cartsItem = oldCartsObj[goods.itemNo]
+              console.log(cartsItem)
+              console.log(oldCartsObj, goods.itemNo)
               if ('cancelSelected' in cartsItem && (cartsItem['cancelSelected'] === true || cartsItem['cancelSelected'] === false)) {
                 goods.cancelSelected = oldCartsObj[goods.itemNo].cancelSelected
               } else {
