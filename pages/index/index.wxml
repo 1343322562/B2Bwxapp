@@ -50,7 +50,7 @@
 		<!-- 商品列表 -->
 		<view id="{{list.moduleId}}" class="ind-goodsList" wx:if="{{list.templetType=='6'}}" style="{{'margin:'+list.marginTop+'px 0 '+list.marginBottom+'px 0;'}}">
 			<view id="{{list.templetStyle == '2' ? 'li-three' : ''}}" class="li" wx:for="{{list.details}}" wx:for-index="annIndex" wx:for-item="zItem" wx:key="annIndex" bindtap="goPage" data-type="{{zItem.connectionType}}" data-supplier="{{zItem.supplierNo}}" data-val="{{zItem.connectionNo}}" data-title="{{zItem.btnName}}">
-				<view class="img" style="background-image:url({{goodsUrl + zItem.connectionNo}}/{{zItem.picUrl}})"></view>
+				<view class="img" style="background-image:url({{(zItem.supplierNo ?  zItem.supGoodsUrl : goodsUrl) + zItem.connectionNo}}/{{zItem.picUrl}})"></view>
 				<view class="info">
 					<view class="name">{{zItem.itemName}}</view>
 					<view class="goods_info_date" wx:if="{{zItem.productionTime}}">生产日期: {{zItem.productionTime}}</view>

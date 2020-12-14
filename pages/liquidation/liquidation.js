@@ -734,6 +734,7 @@ Page({
     }
     itemNos = arrRemoveRepeat(itemNos) // 数组去重，捆绑和兑换可能重复添加
     request.itemNos = itemNos.join(',')
+    console.log('goodsData', goodsData)
     request.data = JSON.stringify(goodsData)
     console.log(this.isReplenish)
     if (!this.isReplenish) {

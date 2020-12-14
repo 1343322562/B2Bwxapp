@@ -399,6 +399,7 @@ export const HANDLE_SUP_PROMOTION = function(param) {
               })
             } else if (item.filterType == '0') { // 全场
               param.data.data.forEach(goodItem => {
+                if(goodItem.itemNo in obj.RMJ) return
                 obj.RMJ[goodItem.itemNo] = {}
                 obj.RMJ[goodItem.itemNo].reachVal = item.reachVal
                 obj.RMJ[goodItem.itemNo].subMoney = item.subMoney
@@ -422,7 +423,7 @@ export const HANDLE_SUP_PROMOTION = function(param) {
               })
             } else if (item.filterType == '0') {
               param.data.data.forEach(goodItem => {
-                if(itemNo in obj.RBF) return
+                if(goodItem.itemNo in obj.RBF) return
                 obj.RBF[goodItem.itemNo] = {}
                 obj.RBF[goodItem.itemNo].reachVal = item.reachVal
                 obj.RBF[goodItem.itemNo].subMoney = item.subMoney

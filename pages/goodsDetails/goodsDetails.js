@@ -159,10 +159,12 @@ Page({
         let data = res.data
         if (res.code == 0 && res.data) {
           let promoList = this.data.promotionList
+          console.log(goods)
           for (let key in data){
             // 满减
             if (key.includes('RMJ') && goods['promotionNos'].includes('RMJ')) {
               let dataRMJ = data[key]
+              console.log(dataRMJ)
               dataRMJ.map(item => {
                 let startIndex = goods['promotionNos'].indexOf('RMJ')
                 let numRMJ = goods['promotionNos'].slice(startIndex, startIndex + 19)
@@ -178,6 +180,7 @@ Page({
             // 满赠
             if (key.includes('RBF') && goods['promotionNos'].includes('RBF')) {
               let dataRBF = data[key]
+              console.log(dataRBF)
               dataRBF.map((item, index) => {
                 let startIndex = goods['promotionNos'].indexOf('RBF')
                 let numRBF = goods['promotionNos'].slice(startIndex, startIndex + 19)

@@ -115,7 +115,9 @@ Page({
           item.itemImgUrls = this.goodsUrl + item.itemNo + '/' + getGoodsImgSize(item.picUrl)
           item.productionTime = 'productionTime' in item && item.productionTime.slice(0, 10)
         })
+        info.item = info.item.sort((a, b) => Number(a.serialNo) - Number(b.serialNo))
       })
+      
       nowSelectDate || (nowSelectDate = 0)
       this.setData({ list, nowSelectDate })
       hideLoading()

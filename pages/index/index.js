@@ -180,6 +180,7 @@ Page({
 
   },
   getPageData () {
+    const _this = this
     showLoading('请稍后...')
     const { branchNo, dbBranchNo: dbranchNo, token, platform, username } = this.userObj
     API.Index.getIndexSetting({
@@ -215,6 +216,7 @@ Page({
             } else {
               if (type == '6') {
                 list[i].details.forEach(a => {
+                  a.supGoodsUrl = _this.goodsUrl.replace('bdItemInfo', 'bdSupplierItem')
                   a.picUrl = getGoodsImgSize(a.picUrl, 1)
                   a.productionTime = 'productionTime' in a && a.productionTime.slice(0, 10)
                 })

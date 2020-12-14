@@ -10,11 +10,16 @@ var filters = {
   },
   includes: function (value, str) {
     return value.includes(str)
+  },
+  replace: function (value, cStr, str) {
+    return value.replace(cStr, str)
   }
 }
 
-module.exports = {   
+module.exports = {   //暴露接口调用
   toFixed: filters.toFixed,
   toStr: filters.toStr,
-  toNum: filters.toNum,//暴露接口调用
+  toNum: filters.toNum,
+  includes: filters.includes,
+  replace: filters.replace
 }

@@ -1142,6 +1142,7 @@ Component({
               suplierPromotionList.length && suplierPromotionList.forEach((item) => {
                 console.log(item)
                 const type = item.promotionNo.slice(0, 3)
+                console.log(type)
 
                 if (allPromotion[item.promotionNo]) {
                   if (type == 'RSD') {
