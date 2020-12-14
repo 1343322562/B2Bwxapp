@@ -12,6 +12,7 @@ Component({
     isReplenish: String,
   },
   data: {
+    inputBlurActive: false, // 当 inputBlur 在激活中(true)时，不能直接结算
     leftAnimation: false,
     isSelectAll: true,
     cartsMoney: 0,
@@ -74,9 +75,16 @@ Component({
     },
     inputBlur (e) {
       let goods = this.data.goods 
-      this.setData({ goods })
+      this.setData({ goods, inputBlurActive: false })
+    },
+    inputNum() {
+      this.setData({ inputBlurActive: true })
+      setTimeout(() => {
+        this.setData({ inputBlurActive: false })
+      },4000)
     },
     inputConfirm(e) {
+      this.setData()
       const value = Number(e.detail.value.trim()) || 0
       const index = e.currentTarget.dataset.index
       let cartsObj = this.data.goods
