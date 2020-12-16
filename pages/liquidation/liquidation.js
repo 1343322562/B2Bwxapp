@@ -758,6 +758,7 @@ Page({
     // }
     if (this.data.partnerCode == 1059 && payWay == 0) return toast('货到付款暂未开启，请重新选择')
     console.log(dhCouponsList)
+    const _this = this
     API.Liquidation.saveOrder({
       data: request,
       success: res => {
@@ -775,6 +776,8 @@ Page({
           alert((res.msg || '下单请求失败,请与管理员联系。'), {
             confirmText: '返回',
             success() {
+              const cartsObj = _this.initCarsObj() // 还原促销
+              wx.setStorageSync('cartsObj', cartsObj)
               wx.reLaunch({ url: '/pages/carts/carts' })
             }
           })
@@ -786,6 +789,14 @@ Page({
         alert('提交订单失败，请检查网络是否正常。')
       }
     })
+  },
+  initCarsObj() {
+    const cartsObj = wx.getStorageSync('cartsObj')
+    for (const key in cartsObj) {
+      if (key === 'num' || key === 'keyArr') continue
+      cartsObj[key].currentPromotionNo = ''
+    }
+    return cartsObj
   },
   goSuccessPage(type) {
     this.notAllowLoading = true
