@@ -21,6 +21,7 @@ Page({
     console.log(21, userIp)
     wx.login({
       success: (codeData) => {
+        console.log('获取code', codeData)
         let request = {
           code: codeData.code,
           out_trade_no: orderNo,
@@ -60,15 +61,18 @@ Page({
                 }
               })
             } else {
+              console.log(43, res)
               this.result(res.msg,3)
             }
           },
-          error: () => {
+          error: (err) => {
+            console.log(67, err)
             this.result('获取支付配置失败,请检查网络是否正常。',3)
           }
         })
       },
-      fail: () => {
+      fail: (err) => {
+        console.log(73, err)
         this.result('获取code失败',3)
       }
     })
@@ -106,6 +110,7 @@ Page({
       if (openId) {
         _this.repeatGetIp(openId, opt)
       }else {
+        console.log('获取微信支付配置失败 openid', openId)
         this.result('获取微信支付配置失败:openId',2)
       }
     })
