@@ -491,14 +491,16 @@ Component({
         goods.currentPromotionType = ty
         if (ty == 'BG' || ty == 'BF' || ty == 'MQ' || ty == 'MJ' || ty == 'SZ' || ty == 'RMJ' || ty == 'RBF') {
           goods.price = cDataObj[goods.itemNo].orgiPrice
-        } else if (ty == 'MS' && goods.realQty <= goods.msMaxQty) {
+        } else if (ty == 'MS' && cDataObj[goods.itemNo].realQty <= cDataObj[goods.itemNo].msMaxQty) {
           goods.price = cDataObj[goods.itemNo].msPrice
         } else if (ty == 'FS') {
           goods.price = cDataObj[goods.itemNo].sdPrice
         } else if (ty == 'ZK') {
           goods.price = cDataObj[goods.itemNo].zkPrice
-        } else if ((ty == 'SD' || ty == 'RSD') && (goods.drMaxQty > goods.realQty || goods.drMaxQty == 0)) {
+        } else if ((ty == 'SD' || ty == 'RSD') && (cDataObj[goods.itemNo].drMaxQty > cDataObj[goods.itemNo].realQty || cDataObj[goods.itemNo].drMaxQty == 0)) {
+          console.log(deepCopy(goods))
           goods.price = cDataObj[goods.itemNo].drPrice
+          console.log(deepCopy(goods))
         }
         sheetAmt += goods.price * goods.realQty
       })
