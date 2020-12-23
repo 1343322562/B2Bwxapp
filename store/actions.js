@@ -321,7 +321,8 @@ const actions = {
         sourceNo: sourceNo,
         parentItemNo: parentItemNo || '' 
       }
-      if (getApp().data.partnerCode == 1027) {
+      const partnerCode = getApp().data.partnerCode
+      if (partnerCode == 1027 || partnerCode == 1057 ) {
         item.createDate = Number(new Date().getTime())
       }
       console.log(timCurrentDay(0) + tim())
@@ -345,7 +346,7 @@ const actions = {
       console.log(339,'直配进来')
       if (param.type != 'minus' && (item.realQty > maxSupplyQty || (item.realQty > (deliveryType == '3' ? 9999 : stockQty)))) {
         toast(item.realQty > maxSupplyQty ? '已达到最大购买数量' :'库存不足')
-        return
+        return cartsObj
       }
       cartsObj[itemNo] || cartsObj.keyArr.push(itemNo)
       cartsObj[itemNo] = item
@@ -376,7 +377,8 @@ const actions = {
           if (res.code == 0 && res.data) {
             res.data.forEach(config => {
               // 按加购时间排序
-              if (getApp().data.partnerCode == 1027) {
+              const partnerCode = getApp().data.partnerCode
+              if (partnerCode == 1027 || partnerCode == 1057) {
                 config.datas.sort((a, b) => {
                   let aDate = Number(a.createDate)
                   let bDate = Number(b.createDate)

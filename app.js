@@ -9,7 +9,7 @@ App({
     // baseImgUrl:'http://erp.365wdyp.com/',
     // partnerCode: '1012',
     // baseImgUrl:'http://erp.hnhlgyl.net/',
-    partnerCode: '01',
+    // partnerCode: '01',
     // partnerCode: '05', 
     // partnerCode: '1000', 
     // baseImgUrl: 'http://mmj.zksr.cn:8888/',
@@ -44,7 +44,7 @@ App({
     // baseImgUrl:'http://139.9.102.226:8080',
 
     //  partnerCode: '1056', 
-    //  partnerCode: '1057',
+     partnerCode: '1057',
 
     // partnerCode: '1050',
     // baseImgUrl:'http://erp.wgjnh.com',

@@ -75,16 +75,13 @@ Component({
     },
     inputBlur (e) {
       let goods = this.data.goods 
-      this.setData({ goods, inputBlurActive: false })
+      this.data.inputBlurActive = false
     },
     inputNum() {
-      this.setData({ inputBlurActive: true })
-      setTimeout(() => {
-        this.setData({ inputBlurActive: false })
-      },4000)
+      this.data.inputBlurActive = true
+      console.log(this.data.inputBlurActive)
     },
     inputConfirm(e) {
-      this.setData()
       const value = Number(e.detail.value.trim()) || 0
       const index = e.currentTarget.dataset.index
       let cartsObj = this.data.goods
@@ -128,7 +125,8 @@ Component({
         }
       }
       
-      
+      this.data.inputBlurActive = false
+      console.log(this.data.inputBlurActive)
     },
     setSize(rex) {
       return (rex / 750) * this.ww
@@ -160,6 +158,10 @@ Component({
       this.setData({ goods })
     },
     goLiquidation (e) {
+      console.log(this.data.inputBlurActive)
+      if (this.data.inputBlurActive) {
+        return this.data.inputBlurActive = false
+      }
       const { branchNo, token, username, platform, isLogin } = wx.getStorageSync('userObj')
       if (isLogin) {
         goPage('login',{
@@ -259,7 +261,8 @@ Component({
       const sourceType = data.items[0].sourceType
       const replenishNo = this.data.isReplenish
       // 按加购时间排序
-      if (getApp().data.partnerCode == 1027) {
+      const partnerCode = getApp().data.partnerCode
+      if (partnerCode == 1027 || partnerCode == 1057) {
         data.items[0].datas.sort((a, b) => {
           let aDate = Number(a.createDate)
           let bDate = Number(b.createDate)

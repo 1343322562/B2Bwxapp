@@ -74,7 +74,7 @@
     </view>
     <view 
       class="btn {{transDateObj.isShow ? 'times' : ''}}" 
-      catchtap="{{transDateObj.isShow || inputBlurActive ? '' : 'goLiquidation'}}"
+      catchtap="{{transDateObj.isShow ? '' : 'goLiquidation'}}"
     >
       <view>去结算</view>
       <view class="areaDate">{{ transDateObj.isShow ? transDateObj.date : ''}}</view>

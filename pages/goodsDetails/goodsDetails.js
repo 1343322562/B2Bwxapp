@@ -257,7 +257,12 @@ Page({
         console.log(baseImgUrl, typeof baseImgUrl, getApp())
         // 富文本数据处理
         if (res.code == 0 && data) {
-          let imgDetailsList = data.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/src='/g, `src='${baseImgUrl}`).replace(/\<img/gi, '<img style="width:100%;height:auto" ')
+          // let imgDetailsList = data.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/src='/g, `src='${baseImgUrl}`).replace(/\<img/gi, '<img style="width:100%;height:auto;" ')
+          let imgDetailsList = data.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/src='/g, `src='${baseImgUrl}`)
+          .replace(/\<img/gi, '<div style="overflow: hidden;width:100%;margin: 0;padding: 0;line-height: 0;"> <img style="width:100%;height:auto;" ')
+          .replace(/\/>/gi, '/> </div>')
+          
+          console.log(imgDetailsList)
           this.setData({ imgDetailsList })
         }
       }
