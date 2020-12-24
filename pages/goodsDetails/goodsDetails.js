@@ -86,11 +86,11 @@ Page({
       API.Goods[goodsType ? 'supplierItemSearch' :'itemSearch']({
         data: request,
         success: res => {
-          console.log(res)
+          console.log(deepCopy(res), goodsType)
           if (res.code == 0 && res.data) {
             let goods = res.data.itemData[0]
             let imgList = []
-            goodsType && (goods.stockQty = 9999)
+            // goodsType && (goods.stockQty = 9999)
             if (goods.picUrl) {
               const arr = goods.picUrl.split(',')
               arr.forEach(url => {
@@ -203,7 +203,7 @@ Page({
             goods.orgiPrice = goods.price
             goods.drPrice = goods.todayPromotion.price
             goods.drMaxQty = goods.todayPromotion.limitedQty
-            if (cartsObj[goods.itemNo].realQty < goods.drMaxQty) {
+            if ((goods.itemNo in cartsObj && cartsObj[goods.itemNo].realQty) || 0 < goods.drMaxQty) {
               goods.price = goods.drPrice
             }
             promoList.push({ name: '限时促销', msg: ['活动时间: ' + startDate + ' 至 ' + endDate] })

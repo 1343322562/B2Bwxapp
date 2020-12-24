@@ -240,7 +240,7 @@ Page({
       data: { condition: '', modifyDate:'', supcustNo, pageIndex: 1, pageSize: 1000, itemClsNo, token, platform, username},
       success: async res => {
         if(res.code == 0 && res.data) {
-          console.log(res)
+          console.log(res, deepCopy(res))
           const list = res.data.itemData || []
           let goodsList = []
           let fineGoodsList = []
@@ -248,7 +248,7 @@ Page({
           const promotionObj = this.promotionObj
           list.forEach(goods => {
             goods.orgiPrice = goods.price 
-            goods.stockQty = 9999
+            // goods.stockQty = 9999
             const itemNo = goods.itemNo
             goods.goodsImgUrl = this.zcGoodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
             goods.stockQty > 0 ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
@@ -342,12 +342,12 @@ Page({
             if (goods.itemBrandname && !brandObj[goods.itemBrandno] && !itemBrandnos) {
               brandObj[goods.itemBrandno] = goods.itemBrandname
               brandList.push(goods.itemBrandno)
-            } 
+            }
             goods.goodsImgUrl = this.goodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
             const tag = getGoodsTag(goods, promotionObj)
             if (Object.keys(tag).length) { // 促销商品
               goods.stockQty > 0 ? promotionGoodsList.push(itemNo) : promotionFineGoodsList.push(itemNo)
-              if (tag.FS || tag.SD || tag.ZK|| tag.MS) {
+              if (tag.FS || tag.SD || tag.ZK || tag.MS) {
                 goods.orgiPrice = goods.price
                 goods.price
               }
