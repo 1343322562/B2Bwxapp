@@ -19,8 +19,8 @@ App({
     // partnerCode: '1047',
     // baseImgUrl: 'http://106.124.142.203:8081/',
     // lttest001
-    // partnerCode: '1034',
-    // baseImgUrl:'https://39.100.103.135:8080/',
+    partnerCode: '1034',
+    baseImgUrl:'https://39.100.103.135:8080/',
     // partnerCode: '10522',
     // partnerCode: '1014',
     // baseImgUrl:'https://bbladmin.bangbianli.com/',
@@ -44,7 +44,7 @@ App({
     // baseImgUrl:'http://139.9.102.226:8080',
 
     //  partnerCode: '1056', 
-     partnerCode: '1057',
+    //  partnerCode: '1057',
 
     // partnerCode: '1050',
     // baseImgUrl:'http://erp.wgjnh.com',
