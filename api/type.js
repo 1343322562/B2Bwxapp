@@ -13,8 +13,8 @@ export default {
   '1001': 'https://bmy.taodaqing.com/zksrb2b-web/', // 陶大庆  图片 erp.taodaqing.com/gold
   '1002': 'https://mp.jiuleshangmao.com/zksrb2b-web/', // 许昌久乐  图片 erp.jiuleshangmao.com (隐藏补货)
   '1003': 'https://www.yk5000.com/zksrb2b-web/', // 辽宁营口伍仟家  图片 www.yk5000.com
-  '1004': 'https://mp.gst100.com/zksrb2b-web/', // 贵商通  图片 erp.gst100.com
-  '1005': 'https://mp.djlscs.cn/zksrb2b-web/', // 河北顿洁  图片 erp.djlscs.cn (直配隐藏储值支付，余额页隐藏账户授信内容,组合促销子商品隐藏价格和商品优惠价格)
+  '1004': 'https://mp.gst100.com/zksrb2b-web/',  // 贵商通  图片 erp.gst100.com
+  '1005': 'https://mp.djlscs.cn/zksrb2b-web/',   // 河北顿洁  图片 erp.djlscs.cn (直配隐藏储值支付，余额页隐藏账户授信内容,组合促销子商品隐藏价格和商品优惠价格)
   '1006': 'https://wxmini.dmkx.top/zksrb2b-web/', // 济南大名快销  图片 erp.dmkx.top
   '1007': 'https://wx.zfyxok.com/zksrb2b-web/', // 鞍山佳泰华  图片 erp.zfyxok.com
   '1008': 'https://mp.jicaiyoupei.com/zksrb2b-web/', // 集采优配平台  图片 erp.jicaiyoupei.com  （零售指导价隐藏）
@@ -30,7 +30,7 @@ export default {
   '1016': 'https://b2b.58kdb.com/zksrb2b-web/', // 广宜家  图片 erp.58kdb.com
   '1017': 'https://kuailefeng100.com/zksrb2b-web/', // 北京快乐峰  图片 erp.kuailefeng100.com
   '1018': 'https://www.yihegongxiang.com/zksrb2b-web/', // 贵阳百宝袋  图片 erp.yihegongxiang.com
-  '1019': 'https://app.sdkgyl.com/zksrb2b-web/', // 时代客汕尾  图片 erp.sdkgyl.com  （隐藏直配进货按钮）
+  '1019': 'https://app.sdkgyl.com/zksrb2b-web/', // 时代客汕尾  图片 erp.sdkgyl.com（隐藏直配进货按钮）
   '1020': 'https://wx.jzsmshop.com/zksrb2b-web/', // 铜仁贵阳市  图片 erp.jzsmshop.com
   '1021': 'https://xcx.cqjiakechong.com/zksrb2b-web/', // 重庆甲壳虫  图片 erp.cqjiakechong.com
   '1022': 'https://app.tfgongyinglian.com/zksrb2b-web/', // 天津同发  图片 erp.tfgongyinglian.com 
