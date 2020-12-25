@@ -149,6 +149,9 @@ Page({
           this.setGoodsListTimer = setTimeout(() => {
             this.setGoodsList(list, 'goods')
           }, 60)
+        } else {
+          hideLoading()
+          toast(res.msg)
         }
       },
       complete: () => {

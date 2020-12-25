@@ -51,7 +51,7 @@
       <view class='btn'>
         <view class='minus item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="minus"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_sub.png':'../../images/goodsList_minus_carts.png'}}" /></view>
         <!-- <text class='num'>{{goods.realQty}}</text> -->
-        <input class='num' data-index="{{index}}" type="number" bindblur="inputConfirm"  value="{{goods.realQty}}" />
+        <input class='num' data-index="{{index}}" type="number" bindinput="inputNum" bindblur="inputConfirm"  value="{{goods.realQty}}" />
         <!-- <view class='add item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'':'Null')+'.png'}}" /></view> -->
         <view class='add item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'Null':'')+'.png'}}" /></view>
       </view>

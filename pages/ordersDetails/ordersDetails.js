@@ -1,6 +1,6 @@
 
 import API from '../../api/index.js'
-import { showLoading, hideLoading, getGoodsImgSize, alert, getTime,toast,goPage, deepCopy} from '../../tool/index.js'
+import { toFixed, showLoading, hideLoading, getGoodsImgSize, alert, getTime,toast,goPage, deepCopy} from '../../tool/index.js'
 import * as types from '../../store/types.js'
 import commit from '../../store/mutations.js'
 Page({
@@ -130,7 +130,7 @@ Page({
           if (transportFee != 0 && deliveryType != 1 && transportFeeType != 0 && (tWay === deliveryType || tWay === 4)) {
             console.log('transportFeeType', transportFeeType)
             const { realPayAmt } = order
-            order.transportFeeAmt = transportFeeType == 1 ? transportFee : Number((realPayAmt * transportFee).toFixed(2)) 
+            order.transportFeeAmt = transportFeeType == 1 ? transportFee : Number(toFixed(realPayAmt * transportFee)) 
           }
           console.log(126, order.transportFeeAmt)
           order.discountsTotalAmt = Number((order.orgiSheetAmt - order.realPayAmt - (order.vouchersAmt || 0)).toFixed(2))

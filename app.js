@@ -9,7 +9,7 @@ App({
     // baseImgUrl:'http://erp.365wdyp.com/',
     // partnerCode: '1012',
     // baseImgUrl:'http://erp.hnhlgyl.net/',
-    // partnerCode: '00',
+    // partnerCode: '01',
     // partnerCode: '05', 
     // partnerCode: '1000', 
     // baseImgUrl: 'http://mmj.zksr.cn:8888/',
@@ -34,19 +34,22 @@ App({
     // partnerCode: '1059',
     // partnerCode: '05',
     // partnerCode: '1054',
-    // partnerCode: '1055',
-    // partnerCode: '2222',
+    partnerCode: '1063',
+    baseImgUrl:'http://erp.tianhenglg.cn;',
+    // partnerCode: '1062',
+    // baseImgUrl:'http://erp.sljsp.com/',
 
     // partnerCode: '1039',
-    // partnerCode: '1058',
+    // partnerCode: '1061',
+    // baseImgUrl:'http://139.9.102.226:8080',
 
     //  partnerCode: '1056', 
     //  partnerCode: '1057',
 
     // partnerCode: '1050',
     // baseImgUrl:'http://erp.wgjnh.com',
-    partnerCode: '1060',
-    baseImgUrl:'http://erp.djlscs.cn',
+    // partnerCode: '1060',
+    // baseImgUrl:'http://erp.djlscs.cn',
     // partnerCode: '01',
     // 18569429872
     supplierNo: '', // 首页跳转入驻商类别

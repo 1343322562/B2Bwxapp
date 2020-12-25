@@ -212,7 +212,7 @@ Page({
     })
   },
   submit () {
-    const { bossName, branchName, selectedCity, shopAddrass, read, partnerCode,licencePic,doorPic} = this.data
+    const { bossName, branchName, selectedCity, shopAddrass, read, partnerCode,licencePic,doorPic, formatted_addresses} = this.data
     console.log(read)
     if (!read) return
     if (this.authorization === 'fail') {
@@ -249,13 +249,14 @@ Page({
       x: String(this.point[1]),
       y: String(this.point[0]),
       property:'9',
-      location: shopAddrass,
+      location: formatted_addresses || shopAddrass,
       platform:'2'
     }
     console.log(data)
 
     if(licencePic && licencePic.length >0)data.licencePic = licencePic;
     if(doorPic && doorPic.length >0)data.doorPic = doorPic;
+    console.log(1000, data)
     for (let i in data) {
       if (!data[i] && (partnerCode != '1035' || i != 'branchClsno')) {
         toast('信息填写不完整')
@@ -352,6 +353,7 @@ Page({
     const _this = this
     wx.chooseLocation({
       success: function (res) {
+        console.log(res)
         _this.setData({
           formatted_addresses: res.address
         })

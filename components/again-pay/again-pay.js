@@ -1,5 +1,5 @@
 import API from '../../api/index.js'
-import { toast, alert, showLoading, hideLoading } from '../../tool/index.js'
+import { toFixed, toast, alert, showLoading, hideLoading } from '../../tool/index.js'
 let app = getApp()
 Component({
   properties: {

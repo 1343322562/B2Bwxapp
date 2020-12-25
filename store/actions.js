@@ -1,7 +1,7 @@
 import API from '../api/index.js'
 import * as types from './types.js'
 import commit from './mutations.js'
-import { getGoodsImgSize, toast } from '../tool/index.js'
+import { getGoodsImgSize, toast, deepCopy } from '../tool/index.js'
 import { timCurrentDay, tim } from '../tool/date-format.js'
 
 const app = getApp()
@@ -264,8 +264,9 @@ const actions = {
       return toast('此商品已达秒杀最大限购数量!')
     }
     let cartsObj = commit[types.GET_CARTS]()
-    if (cartsObj.keyArr.length>=300){
+    if (cartsObj.keyArr.length>=300 && param.type != 'delete' && !(param.goods['itemNo'] in cartsObj)){
       toast('购物车已达到最大商品数量!')
+      console.log(9987, param.type, param.goods, deepCopy(cartsObj))
       return
     }
     const { sourceType, branchNo, sourceNo } = param.config
@@ -321,7 +322,8 @@ const actions = {
         sourceNo: sourceNo,
         parentItemNo: parentItemNo || '' 
       }
-      if (getApp().data.partnerCode == 1027) {
+      const partnerCode = getApp().data.partnerCode
+      if (partnerCode == 1027 || partnerCode == 1057 ) {
         item.createDate = Number(new Date().getTime())
       }
       console.log(timCurrentDay(0) + tim())
@@ -345,12 +347,18 @@ const actions = {
       console.log(339,'直配进来')
       if (param.type != 'minus' && (item.realQty > maxSupplyQty || (item.realQty > (deliveryType == '3' ? 9999 : stockQty)))) {
         toast(item.realQty > maxSupplyQty ? '已达到最大购买数量' :'库存不足')
-        return
+        return cartsObj
       }
       cartsObj[itemNo] || cartsObj.keyArr.push(itemNo)
       cartsObj[itemNo] = item
     }
     console.log(cartsObj)
+    // if (param.type != 'delete' && cartsObj[itemNo].realQty === 0) {
+    //   delete cartsObj[itemNo]
+    //   cartsObj.keyArr.forEach((itemKey, i) => {
+    //     if (itemKey === itemNo) cartsObj.keyArr.splice(i, 1)
+    //   })
+    // }
     commit[types.SAVE_CARTS](cartsObj) // 缓存 cartsObj
     wx.setStorageSync('updateCarts', true)
     // wx.setStorage({key: 'updateCarts',data: true})
@@ -376,7 +384,8 @@ const actions = {
           if (res.code == 0 && res.data) {
             res.data.forEach(config => {
               // 按加购时间排序
-              if (getApp().data.partnerCode == 1027) {
+              const partnerCode = getApp().data.partnerCode
+              if (partnerCode == 1027 || partnerCode == 1057) {
                 config.datas.sort((a, b) => {
                   let aDate = Number(a.createDate)
                   let bDate = Number(b.createDate)
