@@ -1,6 +1,6 @@
 .head{background-color:#fff;position:fixed;top:0;left:0;height:90rpx;width:100%;border-bottom:2rpx solid #e8e8e8;z-index:10}
 .head>.act{position:absolute;left:0;bottom:0;transition: left 0.2s ease-in-out;}
-.head>.act::before{content:"";height:3px;width:50%;position:absolute;left:25%;bottom:0;background-color:#d40000}
+.head>.act::before{content:"";height:3px;width:50%;position:absolute;left:25%;bottom:0;background-color:#ff9c01}
 .head>.btn2{display:flex;}
 .head>.btn2 view{flex-grow:1;text-align:center;color:#999;height:90rpx;line-height:90rpx;width:0px;}
 .head>.btn2 .act{color:#d40000}

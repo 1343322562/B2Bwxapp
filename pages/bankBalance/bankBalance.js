@@ -68,7 +68,7 @@ Page({
   },
   onLoad(opt) {
     const partnerCode = getApp().data.partnerCode
-    if (partnerCode == 1060) wx.setNavigationBarColor({ backgroundColor: '#ff9c01', frontColor: '#ffffff' }) 
+    if (partnerCode == 1060 || partnerCode == 1063) wx.setNavigationBarColor({ backgroundColor: '#ff9c01', frontColor: '#ffffff' }) 
     if (partnerCode == 1052) wx.setNavigationBarColor({ backgroundColor: '#e6c210', frontColor: '#ffffff' })
 
     const { branchNo, token, platform, username } = wx.getStorageSync('userObj')

@@ -1,5 +1,5 @@
-<view class='head'>
-  <view class='backMoney'>我的积分：{{money}}</view>
+<view class='head' id="{{(partnerCode == 1060 || partnerCode == 1063) ? 'bg' : ''}}">
+  <view class='backMoney' id="{{(partnerCode == 1060 || partnerCode == 1063) ? 'bg' : ''}}">我的积分：{{money}}</view>
 </view>
 <view class='list'>
   <view class='li' wx:for="{{list}}" wx:key="index">

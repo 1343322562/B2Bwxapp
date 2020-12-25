@@ -6,10 +6,10 @@
       </swiper-item>
     </block>
   </swiper>
-  <image class='noReturnAllowed' wx:if="{{(goods.enReturnGoods=='0'&&goods.deliveryType!='1')||goods.isProhibit=='1'}}" src="../../images/noReturnAllowed.png" />
+  <!-- <image class='noReturnAllowed' wx:if="{{(goods.enReturnGoods=='0'&&goods.deliveryType!='1')||goods.isProhibit=='1'}}" src="../../images/noReturnAllowed.png" /> -->
   <view class='block'>
     <view class='goodsName'>
-      <text class='goodsType' wx:if="{{goods.isBind!='1'}}">{{goods.deliveryType =='2'?'统配':(goods.deliveryType =='3'?'统配直送':'直配')}}</text>
+      <text class='goodsType' id='{{partnerCode == 1060 || partnerCode == 1063 ? "bg" : ""}}' wx:if="{{goods.isBind!='1'}}">{{goods.deliveryType =='2'?'统配':(goods.deliveryType =='3'?'统配直送':'直配')}}</text>
       <text>{{goods.itemName}}</text>
       <text wx:if="{{goods.isBind!='1'&&((goods.enReturnGoods=='0'&&goods.deliveryType!='1')||goods.isProhibit=='1')}}" class="noReturn">不可退</text>
       <text wx:if="{{goods.isBind=='1'}}" class="noReturn">{{goods.enReturnGoods==0?'不可退':'可退'}}</text>
@@ -77,7 +77,7 @@
   </view>
 
   <view class='goodsInfo block'>
-    <view class="contentTitle">商品详情</view>
+    <view class="{{(partnerCode == 1060 || partnerCode == 1063) ? 'contentTitle2' : 'contentTitle'}}">商品详情</view>
     <view class="goodsSize">
       <view class="item">
         <text class="name">商品规格</text>:

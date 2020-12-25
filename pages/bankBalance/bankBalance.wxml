@@ -1,4 +1,4 @@
-<view id="{{partnerCode == 1060 ? 'bg' : ''}}" class='head head-col'>
+<view id="{{(partnerCode == 1060 || partnerCode == 1063) ? 'bg' : ''}}" class='head head-col'>
 
   <view class='reconciliation' bindtap='goPage'>对账</view>
   <view class='title'>账户余额(元)</view>

@@ -1,6 +1,7 @@
 import API from '../../api/index.js'
 Page({
   data: {
+    partnerCode: getApp().data.partnerCode,
     list: [],
     money: 0
   },
@@ -32,6 +33,7 @@ Page({
   onLoad(opt) {
     const partnerCode = getApp().data.partnerCode
     if (partnerCode == 1052) wx.setNavigationBarColor({ backgroundColor: '#e6c210', frontColor: '#ffffff' })
+    if (partnerCode == 1060 || partnerCode == 1063) wx.setNavigationBarColor({ backgroundColor: '#ff9c01', frontColor: '#ffffff' })
 
     const { branchNo, token, platform, username } = wx.getStorageSync('userObj')
     this.requestData = { branchNo, token, platform, username }

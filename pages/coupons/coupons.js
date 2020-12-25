@@ -3,6 +3,7 @@ import {DateFormat,FetchDateLastDay,FetchDateLastMonth} from '../../tool/date-fo
 import { showLoading, hideLoading, alert, getTime } from '../../tool/index.js'
 Page({
   data: {
+    partnerCode: getApp().data.partnerCode,
     list: [[],[],[]],
     pageLoading: false,
     showList: [],

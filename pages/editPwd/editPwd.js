@@ -2,6 +2,7 @@ import API from '../../api/index.js'
 import { showLoading, hideLoading, alert,toast } from '../../tool/index.js'
 Page({
   data: {
+    partnerCode: getApp().data.partnerCode,
     pwd:'',
     pwd2:'',
     openType: '',

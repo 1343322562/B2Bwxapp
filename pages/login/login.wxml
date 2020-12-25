@@ -10,7 +10,7 @@
 </view>
 
 <view class='tapList'>
-  <view id="{{partnerCode == 1060 && tabBarIndex==index ? 'font-c' : ''}}" class="item{{tabBarIndex==index?' act':''}}" wx:for="{{tabBarList}}" data-type="{{index}}" bindtap="changeLoginType" wx:key="index">{{item}}</view>
+  <view id="{{(partnerCode == 1060 || partnerCode == 1063) && tabBarIndex==index ? 'font-c' : ''}}" class="item{{tabBarIndex==index?' act':''}}" wx:for="{{tabBarList}}" data-type="{{index}}" bindtap="changeLoginType" wx:key="index">{{item}}</view>
 </view>
 <view class='box'>
   <view class='form'>
@@ -38,8 +38,8 @@
   <text wx:if="{{agreementObj.secret}}" class='msg'catchtap="openUserAgreement" data-id='1'>《隐私协议》</text>
 </checkbox-group>
 </view>
-<view id="{{partnerCode == 1060 ? 'bg' : ''}}" class="login{{agreement?'':' null'}}" bindtap='login'>登录</view>
-<view id="{{partnerCode == 1060 ? 'bg' : ''}}" class='login null' wx:if="{{isLogin}}" bindtap='quit'>取消</view>
+<view id="{{partnerCode == 1060 || partnerCode == 1063 ? 'bg' : ''}}" class="login{{agreement?'':' null'}}" bindtap='login'>登录</view>
+<view id="{{partnerCode == 1060 || partnerCode == 1063 ? 'bg' : ''}}" class='login null' wx:if="{{isLogin}}" bindtap='quit'>取消</view>
 
 <view class='action'>
   <view class='l' wx:if="{{!isLogin}}" bindtap='goPage' data-type='password'>忘记密码?</view>
