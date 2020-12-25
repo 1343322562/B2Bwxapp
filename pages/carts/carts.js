@@ -64,7 +64,7 @@ Page({
               const cartsItem = oldCartsObj[goods.itemNo]
               console.log(cartsItem)
               console.log(oldCartsObj, goods.itemNo)
-              if ('cancelSelected' in cartsItem && (cartsItem['cancelSelected'] === true || cartsItem['cancelSelected'] === false)) {
+              if (cartsItem && 'cancelSelected' in cartsItem && (cartsItem['cancelSelected'] === true || cartsItem['cancelSelected'] === false)) {
                 goods.cancelSelected = oldCartsObj[goods.itemNo].cancelSelected
               } else {
                 goods.cancelSelected = false

@@ -390,7 +390,7 @@ const actions = {
                 const itemNo = goods.itemNo,
                       currentPromotionNo = (`${itemNo}` in cartsObj && cartsObj[itemNo].currentPromotionNo) 
                                           || goods.currentPromotionNo 
-                                          || ('promotionCollections' in goods && goods.promotionCollections.slice(0, 18))
+                                          || ('promotionCollections' in goods && !goods['promotionCollections'].includes(',') && goods.promotionCollections.slice(0, 18))
                                           || ''
                 newCartsObj.keyArr.push(itemNo)
                 newCartsObj[itemNo] = {

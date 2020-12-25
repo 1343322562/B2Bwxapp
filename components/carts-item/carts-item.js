@@ -86,16 +86,29 @@ Component({
           } else {
             switch (currentPromotionType) {
               case 'MS':
-                nowGoods.price = nowGoods.msPrice
+                console.log(nowGoods.realQty <= nowGoods.msMaxQty)
+                if (nowGoods.realQty <= nowGoods.msMaxQty) {
+                  nowGoods.price = nowGoods.msPrice
+                } else {
+                  nowGoods.price = nowGoods.carstBasePrice
+                }
                 break;
               case 'FS':
                 nowGoods.price = nowGoods.sdPrice
                 break;
               case 'SD':
-                nowGoods.price = nowGoods.drPrice
+                if (nowGoods.realQty <= nowGoods.drMaxQty) {
+                  nowGoods.price = nowGoods.drPrice
+                } else {
+                  nowGoods.price = nowGoods.carstBasePrice
+                }
                 break;
               case 'RSD':
-                nowGoods.price = nowGoods.drPrice
+                if (nowGoods.realQty <= nowGoods.drMaxQty) {
+                  nowGoods.price = nowGoods.drPrice
+                } else {
+                  nowGoods.price = nowGoods.carstBasePrice
+                }
                 break;
               case 'ZK':
                 nowGoods.price = nowGoods.zkPrice
@@ -772,9 +785,9 @@ Component({
           // 无 currentPromotionno
           if (!(item['currentPromotionNo'] && item['promotionCollectionsArr'].includes(item['currentPromotionNo']))) {
             if (item['promotionCollections'].includes(',')) {
+              console.log(775,item)
               const promoArr = item['promotionCollections'].split(',')
               item['promotionCollectionsArr'] = promoArr
-              console.log(promoArr, promoArrSort)
               // 商品促销数组的排序  'MS', 'FS', 'SD', 'ZK', 'BF', 'SZ' , 'BG', 'MJ', 'MQ'
               item['promotionCollectionsArr'] = promoArrSort(promoArr, sourceType)
             } else if (item['promotionCollections'] == '') {
