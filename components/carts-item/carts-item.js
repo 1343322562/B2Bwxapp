@@ -508,7 +508,7 @@ Component({
       console.log(data)
       wx.setStorageSync('liquidationObj', data)
       console.log(424,deepCopy(data))
-      if (partnerCode == '1029') {   // isNewCarts: 新版购物车
+      if (partnerCode == '1029' || partnerCode == '1000') {   // isNewCarts: 新版购物车
         goPage('liquidation', { supplierNo: data.items[0].sourceNo, isNewCarts: true, cartsType: this.data.goods.cartsType, replenish, replenishNo, allPromotion })
       } else {
         goPage('liquidation', { cartsType: this.data.goods.cartsType, replenish, replenishNo, allPromotion })  

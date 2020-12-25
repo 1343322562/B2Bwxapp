@@ -12,7 +12,7 @@ export default {
     let requestObj = param.data || {}
     const userObj = wx.getStorageSync('userObj')
     if (userObj && !requestObj.branchNo) { requestObj.branchNo = userObj.branchNo }
-    requestObj.mobilePlatform = getApp().data.phoneType
+    requestObj.mobilePlatform = 'mini'
     const requestUrl = wx.getStorageSync('requestBaseUrl')||this.baseURL
     
     let request = {
@@ -58,7 +58,7 @@ export default {
   upload({url,filePath,formData,success,fail,complete}){
     const requestUrl = wx.getStorageSync('requestBaseUrl')||this.baseURL;
     const mobilePlatform = getApp().data.phoneType;
-    const platform	= '1';
+    const platform	= '3';
     formData = {...formData,mobilePlatform,platform};
 
     wx.uploadFile({

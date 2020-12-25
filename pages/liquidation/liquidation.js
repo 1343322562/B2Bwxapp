@@ -703,7 +703,7 @@ Page({
             promotionItemNo: item.promotionItemNo || ''
           })
           request.mqData = JSON.stringify(mqData)
-        } else if (item.promotionType == 'MJ') {
+        } else if (item.promotionType == 'MJ' || item.promotionType == 'RMJ') {
           mjData.push({
             sheetNo: item.promotionSheetNo,
             promotionId: item.promotionId,
@@ -1102,7 +1102,7 @@ Page({
     this.wxPayRate =Number(wxPayRate) || 0
     this.wxPayRateOpen =  wxPayRateOpen || '0'
     
-    console.log(sourceType, cartsType, partnerCode)
+    console.log(sourceType, cartsType, partnerCode,isNewCarts)
     if (isNewCarts) { // 新版购物车
       this.getSettlementPromotionNew(requestItemList, allPromotion, supplierNo, cartsType)
       if (cartsType != 'sup') this.getCoupons(JSON.stringify(requestItemList))
