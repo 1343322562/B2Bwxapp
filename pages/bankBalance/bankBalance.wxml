@@ -9,7 +9,7 @@
       <text class='name'>可订货额度(元)</text>
       <text class='content'>{{availableCzAmt}}</text>
     </view>
-    <view class='item'>
+    <view class='item' wx:if="{{partnerCode != 1063}}">
       <text class='name'>信用额度(元)</text>
       <text class='content'>{{minCzAmt}}</text>
     </view>

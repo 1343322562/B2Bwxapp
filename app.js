@@ -19,8 +19,8 @@ App({
     // partnerCode: '1047',
     // baseImgUrl: 'http://106.124.142.203:8081/',
     // lttest001
-    partnerCode: '1034',
-    baseImgUrl:'https://39.100.103.135:8080/',
+    // partnerCode: '1034',
+    // baseImgUrl:'https://39.100.103.135:8080/',
     // partnerCode: '10522',
     // partnerCode: '1014',
     // baseImgUrl:'https://bbladmin.bangbianli.com/',
@@ -34,8 +34,8 @@ App({
     // partnerCode: '1059',
     // partnerCode: '05',
     // partnerCode: '1054',
-    // partnerCode: '1063',
-    // baseImgUrl:'http://erp.tianhenglg.cn;',
+    partnerCode: '1063',
+    baseImgUrl:'http://erp.tianhenglg.cn;',
     // partnerCode: '1062',
     // baseImgUrl:'http://erp.sljsp.com/',
 

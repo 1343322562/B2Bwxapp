@@ -12,7 +12,7 @@ Page({
     czAmt: 0.00, // 余额
     minCzAmt: 0.00, // 信用额度
     rebateAmt: 0.00, // 待返利
-
+    partnerCode: getApp().data.partnerCode
   },
   goPage () {
     goPage('reconciliation')
