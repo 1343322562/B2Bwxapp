@@ -38,7 +38,7 @@
     </view>
     <view class='info'>
       <view class='name'>{{goodsObj[itemNo].itemName}}</view>
-      
+      <!--  -->
       <view class='size'>
         {{goodsObj[itemNo].itemSize}}
       </view>
