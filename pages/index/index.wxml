@@ -56,7 +56,7 @@
 					<view class="goods_info_date" wx:if="{{zItem.productionTime}}">生产日期: {{zItem.productionTime}}</view>
 					<view class="prpos-t" wx:if="{{zItem.itemSizeOv}}">
 						<text>规格：{{zItem.itemSizeOv}}</text>
-						<text>起订：{{zItem.minSupplyQtyOv}}</text>
+						<!-- <text>起订：{{zItem.minSupplyQtyOv}}</text> -->
 					</view>
 					<view class="promo-t" wx:if="{{zItem.originPriceOv && zItem.originPriceOv != zItem.price}}">
 						<text class="oldprice-t">￥{{zItem.originPriceOv}}</text>

@@ -76,9 +76,9 @@ swiper{overflow:hidden;}
 .ind-goodsList .price-t{display: flex;justify-content: space-between;align-items: center;padding: 0 15rpx 0 10rpx;position: absolute;bottom: 12rpx;left: 0;right: 15rpx;}
 .ind-goodsList .btn{width:54rpx;height:54rpx;}
 .ind-goodsList image{width:100%}
-.prpos-t{font-size: 23rpx;display: flex;justify-content: space-between;align-items: center;color: #888888;margin-top: 6rpx;padding: 3rpx 5rpx;}
+.prpos-t{font-size: 23rpx;display: flex;justify-content: space-between;align-items: center;color: #aaaaaa;margin-top: 6rpx;padding: 3rpx 5rpx;}
 .promo-t {display: flex;align-items: center;margin-top: 6rpx;}
-.oldprice-t {text-decoration: line-through;color: #888888;font-size: 27rpx;}
+.oldprice-t {text-decoration: line-through;color: #aaaaaa;font-size: 27rpx;}
 .tag-t{font-size: 19rpx;background-color: #f15221;color: #fafafa;padding: 4rpx 6rpx;border-radius: 8rpx;margin-left: 12rpx;}
 /*分类*/
 .categoryList{white-space: nowrap;position: fixed;left: 0;top:0;background-color: #fff;width: 100%;z-index:50;box-shadow: 0 4rpx 8rpx #ddd;}
