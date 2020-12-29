@@ -208,8 +208,10 @@ Component({
     // 去凑凑  中心仓跳转分类页  前置仓跳转对应前置仓页面
     goCD() {
       const { sourceType, sourceNo } = this.data.goods
+      console.log(sourceType)
       switch (sourceType) {
         case '0':
+          console.log(sourceType)
           wx.switchTab({ url: '/pages/t_goods/t_goods' })
           break;
         case '1':
@@ -221,30 +223,40 @@ Component({
     },
     // 跳转凑单页 
     goAddGoodsClick(e) {
-      const promotionNo = typeof e == 'object' ? e.currentTarget.dataset.items.promotionNo : 'RBF'
-      if (promotionNo.includes('RBF')) {
+      console.log(e)
+      let promotionNo
+      let name = ''
+      if (typeof e === 'object') {
+        promotionNo = e.currentTarget.dataset.items.promotionNo
+        name = e.currentTarget.dataset.items.name
+      }
+      if (name.includes('全场') || typeof e === 'string') {
         const { goods: goodsData } = this.data 
         const config = {
           supplierName: goodsData.sourceName,
           supplierNo: goodsData.sourceNo,
           minDeliveryMomey: goodsData.startPrice,
           itemClsName: '',
-          goodsImgUrl: ''
+          goodsImgUrl: '',
+          promotionNo
         }
         const { platform, username, branchNo, token } = wx.getStorageSync('userObj')
         API.Supplier.searchSupcust({
-          data: { branchNo, token, platform, username, condition:''},
+          data: { branchNo, token, platform, username, condition: '' },
           success(res) {
             console.log(res)
             const list = res.data
             list.forEach(item => {
               if (item.supcustNo == goodsData.sourceNo) {
+                console.log(item)
                 const imgUrl = getApp().data.imgUrl
                 console.log(getApp().data)
                 item.goodsImgUrl = imgUrl + '/upload/images/supplier/' + item.picUrl
                 console.log(imgUrl, item)
+                'customDescription' in item && (config.customDescription = item.customDescription)
                 config.itemClsName = item.itemClsName
                 config.goodsImgUrl = item.goodsImgUrl
+                console.log(config)
                 goPage('supplierGoods', { config })
               }
             })
@@ -253,7 +265,8 @@ Component({
         return
       }
       console.log(e ,this.data)
-      goPage('p_goods', { promotionNo })
+      const { sourceNo } = this.data.goods
+      goPage('p_goods', { promotionNo, sourceNo })
     },
     // 获取系统配置(送货开始和结束时间)
     getCommonSetting() {
@@ -908,7 +921,7 @@ Component({
           nowGoods['promotionCollectionsArr'] = [res['RBF'][nowGoods.itemNo].promotionNo]
         }
         sPromotionList.push({
-          name: '满赠',
+          name: res['RBF'][nowGoods.itemNo].type == 1 ? '全场满赠' : '满赠',
           reachVal: res['RBF'][nowGoods.itemNo].reachVal,
           msg: [res['RBF'][nowGoods.itemNo].memo || `满￥${res['RBF'][nowGoods.itemNo].reachVal}送赠品`],
           promotionNo: res['RBF'][nowGoods.itemNo].promotionNo
@@ -928,7 +941,7 @@ Component({
           nowGoods['promotionCollectionsArr'] = [res['RMJ'][nowGoods.itemNo].promotionNo]
         }
         sPromotionList.push({
-          name: '满减',
+          name: res['RMJ'][nowGoods.itemNo].type == 1 ? '全场满减' : '满减',
           reachVal: res['RMJ'][nowGoods.itemNo].reachVal,
           subMoney: res['RMJ'][nowGoods.itemNo].subMoney,
           msg: [res['RMJ'][nowGoods.itemNo].memo || `满￥${res['RMJ'][nowGoods.itemNo].reachVal}减￥${res['RMJ'][nowGoods.itemNo].subMoney}`],
@@ -1273,38 +1286,6 @@ Component({
     this.sourceType = goodsData.sourceType
     goodsData = this.addCurrentSelectedPromotion(goodsData) // 首次加载时，添加当前所选择的促销字段
     console.log(deepCopy(goodsData.data))
-    // if (goodsData.sourceType == 1) {
-    //   let supplierPromotion = ''
-    //   // 缓存中无直配促销信息，请求促销接口。有促销信息则直接使用
-    //   if (!supplierPromotion) {
-    //     const { branchNo, token, platform, username } = wx.getStorageSync('userObj')
-    //     this.getSupplierAllPromotion(branchNo, token, platform, username, goodsData)
-    //   } else {
-    //     goodsData.data.forEach(item => { // 商品对象中 添加促销信息
-    //       if ('promotionCollections' in item && item.promotionCollections.includes('RMJ')) item['RMJ'] = '满减商品'
-    //       if ('promotionCollections' in item && item.promotionCollections.includes('RBF')) item['RBF'] = '满赠商品'
-    //       if ('promotionCollections' in item && item.promotionCollections.includes('RSD')) item['RSD'] = '限时抢购'
-    //       // 直配限时购买信息
-    //       for (let key in supplierPromotion) {
-    //         console.log(item['currentPromotionNo'])
-    //         if (item['currentPromotionNo'] == key) {
-    //           const cartsObj = wx.getStorageSync('cartsObj')
-    //           supplierPromotion[key].startDate = supplierPromotion[key].startDate.slice(0, 10)
-    //           supplierPromotion[key].endDate = supplierPromotion[key].endDate.slice(0, 10)
-    //           supplierPromotion[key].limitedQty = supplierPromotion[key].limitedQty
-    //           item['todayPromotion'] = supplierPromotion[key]
-    //           item.drPrice = supplierPromotion[key].price
-    //           item.drMaxQty = supplierPromotion[key].limitedQty
-    //           if (!(key in cartsObj) || cartsObj[key].realQty < item.drMaxQty) {
-    //             item.price = supplierPromotion[key].price
-    //           }
-    //         }
-    //       }
-    //     })
-    //   }
-    //   console.log(deepCopy(goodsData.data))
-    //   this.data.goods = goodsData
-    // }
     this.setData({ goods: goodsData })
     setTimeout(() => console.log(this.data.goods, this, getCurrentPages()), 1200)
   }

@@ -35,7 +35,10 @@
         <text wx:if="{{goodsObj[itemNo].MS}}">秒杀</text>
         <text wx:if="{{goodsObj[itemNo].ZK}}">{{goodsObj[itemNo].discount}}</text>
         <text wx:if="{{goodsObj[itemNo].discountMoney}}">优惠{{goodsObj[itemNo].discountMoney}}元</text>
-        <text wx:if="{{goodsObj[itemNo].rewardPoint>0}}">积分</text>
+        <text wx:if="{{goodsObj[itemNo].rewardPoint>0}}">积分</text> 
+        <text wx:if="{{rmj[itemNo] || rmj === true}}">满减</text>
+        <text wx:if="{{ rbf }}">满赠</text>
+        <text wx:if="{{ goodsObj[itemNo].todayPromotion }}">特价</text>
       </view>
       
     </view>
@@ -72,7 +75,7 @@
 
 </block>
 
-<view class="pageData_null" wx:if="{{pageLoading && !classifyList.length}}">
+<view class="pageData_null" wx:if="{{goodsList.length == '0'}}">
   <image mode="widthFix" src="../../images/pageData-null.png" />
   <view class="page_text">没有商品数据~</view>
 </view>

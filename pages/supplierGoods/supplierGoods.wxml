@@ -5,10 +5,22 @@
   </view>
   <view class='img'><image binderror="loadDef" src="{{config.goodsImgUrl}}" class="icon" style="" /></view>
   <view class='info'>
-    <view class='name'>{{config.supplierName}}</view>
-    <view class="startMoney">起订:<text>￥{{config.minDeliveryMomey}}</text></view>
-    <view class='manage'>简介:{{config.itemClsName}}</view>
-    <view class='phone'>商户电话:{{config.supplierTel}}</view>
+    <view class='name'>
+      <text class="supplierName">{{config.supplierName}}</text>
+      <text class="minPrice">起订:<text>￥{{config.minDeliveryMomey}}</text></text>
+    </view>
+    <view class='manage' wx:if="{{config.customDescription}}">
+      <text class="label">描述 </text>
+      <text class="content">{{ config.customDescription}}</text>
+    </view>
+    <view class='manage'>
+      <text class="label">简介 </text>
+      <text class="content">{{ config.itemClsName}}</text>
+    </view>
+    <view class='phone' wx:if="{{config.supplierTel}}">
+      <text class="label">商户电话 </text>
+      <text class="content">{{ config.supplierTel}}</text>
+    </view>
   </view>
   <scroll-view class='clsList' scroll-x>
     <view class="li{{nowSelectCls==''?' act':''}}" catchtap='changeTab' data-no="">全部</view>

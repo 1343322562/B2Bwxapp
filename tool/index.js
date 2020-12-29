@@ -403,6 +403,7 @@ export const HANDLE_SUP_PROMOTION = function(param) {
               param.data.data.forEach(goodItem => {
                 if(goodItem.itemNo in obj.RMJ) return
                 obj.RMJ[goodItem.itemNo] = {}
+                obj.RMJ[goodItem.itemNo].type = 1 // 全场
                 obj.RMJ[goodItem.itemNo].reachVal = item.reachVal
                 obj.RMJ[goodItem.itemNo].subMoney = item.subMoney
                 obj.RMJ[goodItem.itemNo].promotionNo = item.sheetNo
@@ -427,6 +428,7 @@ export const HANDLE_SUP_PROMOTION = function(param) {
               param.data.data.forEach(goodItem => {
                 if(goodItem.itemNo in obj.RBF) return
                 obj.RBF[goodItem.itemNo] = {}
+                obj.RBF[goodItem.itemNo].type = 1
                 obj.RBF[goodItem.itemNo].reachVal = item.reachVal
                 obj.RBF[goodItem.itemNo].subMoney = item.subMoney
                 obj.RBF[goodItem.itemNo].promotionNo = item.sheetNo

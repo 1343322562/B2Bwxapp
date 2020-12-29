@@ -637,20 +637,25 @@ Page({
           data.parentItemQty = goods.parentItemQty
           data.id = goods.id
         } else {
+          console.log(640, goods)
           const orgiPrice = String(goods.orgiPrice)
           const tag = getGoodsTag(goods, this.promotionObj)
-          if (goods.currentPromotionNo.includes('MS')) {
+          const isMS = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('MS')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('MS'))
+          const isSD = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('SD')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('SD'))
+          const isFS = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('FS')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('FS'))
+          const isZK = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('ZK')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('ZK'))
+          if (isMS && goods.orgiPrice != goods.price) {
             data.oldPrice = orgiPrice
             data.limitedQty = String(goods.maxSupplyQty)
             data.promotionSheetNo = goods.promotionSheetNo
-          } else if (goods.currentPromotionNo.includes('SD') && goods.realQty<=tag.drMaxQty) { // 单日限购
+          } else if (isSD && goods.orgiPrice != goods.price) { // 单日限购
             data.promotionSheetNo = goods.promotionSheetNo
             data.oldPrice = orgiPrice
             data.limitedQty = String(tag.limitedQty)
-          } else if (goods.currentPromotionNo.includes('FS') && goods.realQty <= tag.sdMaxQty){
+          } else if (isFS && goods.orgiPrice != goods.price){
             data.fsPromotionSheetNo = goods.promotionSheetNo
             data.oldPrice = orgiPrice
-          } else if (goods.currentPromotionNo.includes('ZK')) {
+          } else if (isZK && goods.orgiPrice != goods.price) {
             data.promotionSheetNo = goods.promotionSheetNo
             data.discount = String(tag.discountNum)
           }

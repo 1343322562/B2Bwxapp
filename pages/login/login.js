@@ -215,7 +215,12 @@ Page({
             }
           })
           firstSupplierCls && firstSupplierCls.forEach(item => {
-            classifyObj['s' + item.clsNo] = { title: item.clsName, minDeliveryMomey: item.minDeliveryMomey, supplierName: item.supplierName }
+            classifyObj['s' + item.clsNo] = { 
+              title: item.clsName,
+              minDeliveryMomey: item.minDeliveryMomey,
+              supplierName: item.supplierName,
+              customDescription: item.customDescription
+            }
             classifyList.unshift('s' + item.clsNo)
           })
           secondSupplierCls && secondSupplierCls.forEach(item => {
@@ -381,7 +386,7 @@ Page({
     const nowDate = new Date()
     const dateStr = String(nowDate.getFullYear()) + (nowDate.getMonth() + 1) + nowDate.getDate()
     const user = wx.getStorageSync('userObj')
-    if (dateStr == '20201225s' && !opt.isLogin && !wx.getStorageSync('isWxLogin') && (!user || user.isLogin)) {
+    if (dateStr == '20201228s' && !opt.isLogin && !wx.getStorageSync('isWxLogin') && (!user || user.isLogin)) {
       console.log(1)
       showLoading()
       let request = {

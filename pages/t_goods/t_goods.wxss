@@ -11,7 +11,7 @@
 .oneCls.act>.oneClsTitle{color:#dd4242;}
 .oneClsTitle{color:#707070;text-align:center;font-size:30rpx;height:100rpx;border-right:1px solid #dcdcdc;display:flex;justify-content:center;align-items: center;}
 .twoClsList{background-color:#fff}
-.twoClsTitle{border-top:1px solid #dcdcdc;height:100rpx;font-size:26rpx;text-align:center;border-right:2rpx solid #dcdcdc;position:relative;display:flex;justify-content:center;align-items:center;
+.twoClsTitle{border-top:1px solid #dcdcdc;height:99rpx;font-size:26rpx;text-align:center;border-right:2rpx solid #dcdcdc;position:relative;display:flex;justify-content:center;align-items:center;
 }
 .twoClsTitle.act{color:#dd4242;border-right-color:#fff; font-weight: bold;}
 .twoClsTitle.act::after{width: 0; height: 0; content: "";  border: 6px solid transparent;border-left-color: #dd4242;position: absolute;right: -10rpx;top: 39rpx;  }
@@ -67,6 +67,7 @@ z-index:100}
 .toTopIcon {position: fixed;height: 50rpx;width: 50rpx;bottom: 25px;right: 25rpx;z-index: 100;background-color: #059656;border-radius: 50%;padding: 16rpx;opacity: .8;display: flex;justify-content: center;}
 .toTopIcon image{height: 50rpx; width: 46rpx; transform: rotate(180deg);}
 .supTop{padding: 10rpx 25rpx;font-size: 25rpx;background-color: rgb(252, 233, 237);color: rgb(197, 43, 37);border-radius: 15rpx;margin-right: 15rpx;margin-top: 10rpx;}
+.supTop view {margin-top: 5rpx;}
 .noReturn {
   position: absolute;
   right: 0rpx;

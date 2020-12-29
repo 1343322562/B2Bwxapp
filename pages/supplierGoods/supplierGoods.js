@@ -6,6 +6,7 @@ const maxNum = 20
 let baseGoodsList
 Page({
   data: {
+    promotionNo: '',
     config: null,
     pageLoading: false,
     clsList: [],
@@ -37,9 +38,13 @@ Page({
     const { type, no } = e.currentTarget.dataset
     console.log(type, no)
     const sourceNo = this.supplierNo
+    const { promotionNo } = this.data 
     const goods = this.data.goodsObj[no]
     console.log(goods)
     if (goods.stockQty == 0) return toast('库存不足')
+    if (promotionNo) goods.currentPromotionNo = promotionNo
+    
+    console.log(deepCopy(goods), this.data.promotionNo)
     const {  branchNo } = this.userObj
     const config = {
       sourceType: '1',
@@ -264,7 +269,10 @@ Page({
     // 判断是否有传来的参数
     if (opt.config) {
       const config = JSON.parse(opt.config)
+      console.log(config)
       this.supplierNo = config.supplierNo
+      if ('promotionNo' in config && config['promotionNo']) this.data.promotionNo = config.promotionNo
+      console.log(config)
       this.setData({ config })
     } else {
       this.supplierNo = opt.supplierNo

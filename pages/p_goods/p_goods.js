@@ -6,6 +6,7 @@ const maxNum = 15
 let baseGoodsList
 Page({
   data: {
+    isSup: false,
     pageLoading: false,
     nowSelectOneCls: '', // 选中一级分类
     nowSelectTwoCls: '', // 选中二级分类
@@ -25,6 +26,8 @@ Page({
     brandList:[],
     brandObj: {},
     itemBrandnos:{},
+    rmj: false, // 直配是否满减
+    rbf: false, // 直配是否开启满增
     promotionNo: '' // 促销单号
   },
   showScreen (e) {
@@ -295,34 +298,183 @@ Page({
       }
     })
   },
+  getSupPromotionGoods(supcustNo) {
+    const { branchNo, token, platform, username } = this.userObj
+    const { zcGoodsUrl, baseImgUrl } = getApp().data
+    console.log(1000, zcGoodsUrl,  getApp().data)
+    API.Goods.supplierItemSearch({
+      data: { condition: '', modifyDate:'', supcustNo, pageIndex: 1, pageSize: 1000, itemClsNo: '', token, platform, username},
+      success: res => {
+        if(res.code == 0 && res.data) {
+          console.log(res)
+          const list = res.data.itemData || []
+          let goodsList = []
+          let fineGoodsList = []
+          let goodsObj = {}
+          list.forEach(goods => {
+            goods.orgiPrice = goods.price 
+            goods.stockQty = 9999
+            const itemNo = goods.itemNo
+            goods.goodsImgUrl = zcGoodsUrl || baseImgUrl + '/upload/images/bdSupplierItem/  '  + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
+            goods.stockQty > 0 ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
+            goods.isStock = goods.stockQty > 0 ? true : false
+            goodsObj[itemNo] = goods
+            
+          })
+          let newArr = goodsList.concat(fineGoodsList)
+          const totalLength = newArr.length
+          console.log(newArr, goodsList)
+          this.getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength, goodsList, supcustNo) // 获取并处理今日限购的促销信息(直配)
+
+          // setTimeout(()=>{
+          //   this.setData({
+          //     goodsList: newArr.splice(0, maxNum),
+          //   })
+          //   baseGoodsList = newArr
+          // },150)
+          wx.pageScrollTo({ scrollTop: 0, duration: 0 })
+        } else {
+          this.setData({
+            goodsList: [],
+            goodsObj: {},
+            totalLength: ''
+          })
+        }
+      },
+      error: () => {
+        alert('获取商品失败，请检查网络是否正常')
+      },
+      complete: ()=> {
+        // hideLoading()
+        this.setData({ pageLoading: true })
+      }
+    })
+  },
+  // 获取 今日限购的促销信息(直配)
+  getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength, goodsList, supcustNo) {
+    console.log((this.data))
+    const _this = this
+    const { promotionNo } = this.data
+    const cartsObj = wx.getStorageSync('cartsObj')
+    // 获取促销信息
+    API.Public.getSupplierAllPromotion({
+      data: { branchNo, token, platform, username, supplierNo: supcustNo },
+      success: res => {
+        console.log('促销信息' ,res)
+        let data= res.data
+        if (res.code == 0 && res.data) {
+          let promKey // 获取 以 RSD 开头的下标 (促销信息)
+          for (let key in data) {
+            if (key.includes('RMJ') && data[key].length != 0) {
+              console.log(data[key][0])
+              let filterArr
+              if (data[key][0].filterType == '0') {
+                filterArr = goodsList
+              } else {
+                filterArr = data[key][0].filterValue.split(',')
+              }
+              const rmjObj  = {}
+              filterArr.forEach((itemNo) => {
+                const goodPromotions = goodsObj[itemNo]['promotionNos'] 
+                rmjObj[itemNo] = 1
+                if (!(goodPromotions && goodPromotions.includes(promotionNo))) {
+                  console.log(8888, goodsObj[itemNo],  data[key][0].sheetNo)
+                  goodsObj[itemNo]['promotionNos']  = goodPromotions && goodPromotions.includes(',') ? goodPromotions + ',' + data[key][0].sheetNo : data[key][0].sheetNo
+                } 
+              })
+              console.log(rmjObj, filterArr)
+              this.setData({ rmj: rmjObj })
+            } 
+            if (key.includes('RBF') && data[key].length != 0) { this.setData({ rbf: true }) }    
+            if (key.includes('RSD')) { promKey = key }
+          }
+          wx.setStorageSync('supplierPromotion', data[promKey]) // 储存 限购信息，在购物车中拿到
+          // 将促销字段，推入对应的商品对象，页面通过 促销子段 (存在与否) 来渲染促销信息
+          new Promise((resolve, reject) => {
+            let todayPromotion = data[promKey]
+            resolve(todayPromotion)
+          }).then(todayPromotion => {        // 将当日促销信息推入 goodsObj
+            let todayPromotionKeyArr = Object.keys(todayPromotion)
+            todayPromotionKeyArr.map(item => {
+              for (let key in goodsObj) {
+                if (goodsObj[key].itemNo == item) {
+                  console.log(cartsObj, key)
+                  todayPromotion[key].endDate = todayPromotion[key].endDate.slice(0, 10)      // 截取年月日
+                  todayPromotion[key].startDate = todayPromotion[key].startDate.slice(0, 10)  // 截取年月日
+                  goodsObj[key].todayPromotion = todayPromotion[key]
+                  goodsObj[key].drPrice = todayPromotion[key].price
+                  goodsObj[key].drMaxQty = todayPromotion[key].limitedQty
+                  if (!(key in cartsObj) || cartsObj[key].realQty < goodsObj[key].drMaxQty) {
+                    goodsObj[key].price = todayPromotion[key].price
+                  }
+                }
+              }
+            })
+            
+            console.log(404, goodsObj)
+            for (const key in goodsObj) {
+              console.log(goodsObj[key].promotionNos, promotionNo)
+              if (!goodsObj[key].promotionNos.includes(promotionNo)) {
+                delete goodsObj[key];
+                continue
+              }
+              if (key in cartsObj) {
+                console.log(8889,cartsObj[key].realQty, goodsObj[key])
+                goodsObj[key].realQty = cartsObj[key].realQty
+              }
+            }
+            goodsList = Object.keys(goodsObj)
+            this.data.goodsObj = goodsObj
+            console.log(_this.data)
+            this.setData({
+              cartsObj: cartsObj,
+              goodsList: goodsList,
+              goodsObj: goodsObj,
+              totalLength: goodsList.length
+            })
+          })
+        }
+      }
+    })
+  },
   onLoad (opt) {
     console.log(opt)
-    this.setData({ promotionNo: opt.promotionNo })
+    const { promotionNo, sourceNo } = opt
+    const isSup = promotionNo.includes('RMJ') || promotionNo.includes('RBF')
+    if (isSup) this.data.isSup = true
+    this.setData({ promotionNo })
+    this.data.promotionNo = promotionNo
     console.log(getApp().data.partnerCode)
     this.createAnimation()
     this.userObj = wx.getStorageSync('userObj')
     this.productionDateFlag = wx.getStorageSync('configObj').productionDateFlag
     this.goodsUrl = getApp().data.goodsUrl
-    this.getAllPromotion()
+    if (isSup) {
+      this.getSupPromotionGoods(sourceNo)
+    } else {
+      this.getAllPromotion()
+    }
+    // this.getAllPromotion()
+    
   },
   onReady () {
   },
   onShow () {
-    const userObj = wx.getStorageSync('userObj')
-    if (userObj) this.userObj = userObj
-    const pageLoadingTime = this.pageLoadingTime
-    if (pageLoadingTime) {
-      const now = +new Date()
-      const time = now - pageLoadingTime
-      if (time > (1000*60*2)) {
-        this.pageLoadingTime = now
-        this.getAllPromotion(true)
-      } else {
-        this.getCartsData()
-      }
-    } else {
-      this.pageLoadingTime = +new Date()
-    }
+    // const userObj = wx.getStorageSync('userObj')
+    // if (userObj) this.userObj = userObj
+    // const pageLoadingTime = this.pageLoadingTime
+    // if (pageLoadingTime) {
+    //   const now = +new Date()
+    //   const time = now - pageLoadingTime
+    //   if (time > (1000*60*2)) {
+    //     this.pageLoadingTime = now
+    //     this.getAllPromotion(true)
+    //   } else {
+    //     this.getCartsData()
+    //   }
+    // } else {
+    //   this.pageLoadingTime = +new Date()
+    // }
   },
   onShareAppMessage: function () { },
   onReachBottom () {

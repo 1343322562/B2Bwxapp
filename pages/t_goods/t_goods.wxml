@@ -46,8 +46,9 @@
     wx:if="{{currentClsType == 1 && (classifyObj[nowSelectOneCls].minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey)}}" 
     class="supTop"
   >
-    起送价: ￥{{classifyObj.nowSelectOneCls.minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey}}
-    {{classifyObj.nowSelectOneCls.supplierName || classifyObj[classifyList[0]].supplierName}}
+    <text decode="{{true}}">{{classifyObj.nowSelectOneCls.supplierName || classifyObj[classifyList[0]].supplierName}} &nbsp; 起送价: ￥{{classifyObj.nowSelectOneCls.minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey}}
+    </text>
+    <view>{{classifyObj.nowSelectOneCls.customDescription || classifyObj[classifyList[0]].customDescription || ''}}</view>
   </view>
   <view class='li' wx:for="{{goodsList}}" wx:for-item="itemNo" wx:key="index" data-supNo="{{goodsObj[itemNo].supcustNo}}" data-no="{{itemNo}}" bindtap='goGoodsDetails'>
     <view class='img'>
