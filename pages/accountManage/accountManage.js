@@ -25,6 +25,7 @@ Page({
             let data = res.data
             data.platform = '3'
             wx.setStorageSync('userObj', data)
+            // wx.setStorage({key: 'userObj',data: data})
             _this.getItemCls(data)
             wx.setStorage({key: 'userName',data: item.user})
             wx.removeStorageSync('cartsObj')
