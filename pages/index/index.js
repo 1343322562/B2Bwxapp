@@ -2,7 +2,7 @@ import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
 import commit from '../../store/mutations.js'
-import { showLoading, hideLoading, goPage, toast, alert, getGoodsImgSize } from '../../tool/index.js'
+import { showLoading, hideLoading, goPage, toast, alert, getGoodsImgSize, deepCopy } from '../../tool/index.js'
 let app = getApp()
 Page({
   data: {
@@ -14,48 +14,23 @@ Page({
     promotionObj: {},
     categoryList: [],
     nowSelectedCls:'',
+    goodsCpnDetail: [], // 多余的商品组件
     partnerCode: getApp().data.partnerCode,
     // 首页弹窗信息
     getPopupObj: {
       popupType: 2, 	// 0：优惠卷， 1：通知  2: 无弹窗
       coupons: [] 		// 优惠卷或通知
-    },
-    // 常购商品位置
-    position: {
-      startX: 0,
-      startY: 0,
-      X: '20px' ,
-      Y: '85vh'
     }
   },
-  // 常购商品触摸开始
-  touchstartFrequentPurchase(e){
-    console.log(0,e)
-    const { offsetLeft: clientX, offsetTop: clientY } = e.currentTarget
-    this.data.position.startX = parseInt(clientX)
-    this.data.position.startY = parseInt(clientY)
+  // 加载更多商品
+  loadingMoreClick(e) {
+    showLoading('加载中...')
+    const { index } = e.currentTarget.dataset,
+          goodsCpnDetail = this.data.goodsCpnDetail
+          console.log(this.data.pageObj, goodsCpnDetail)
+    this.setData({ [`pageObj[${index}].details`]: goodsCpnDetail })
+    setTimeout(() => hideLoading(), 2600)
   },
-  // 常购商品触摸结束
-  touchendFrequentPurchase(e){
-    console.log(0,e)
-    const { offsetLeft: clientX, offsetTop: clientY } = e.currentTarget
-    const { startX, startY } = this.data.position
-    console.log(startX, startY)
-    console.log(clientX, clientY)
-    if (startX == parseInt(clientX) && startY == parseInt(clientY)) console.log('点击')
-  },
-  // 常购商品触摸
-  touchmoveFrequentPurchase(e){
-    console.log(1, e)
-    const { clientX, clientY } = e.touches[0]
-    const _this = this
-    if (_this.moveTimer) clearTimeout(_this.moveTimer)
-    _this.moveTimer = setTimeout(() => {
-      console.log(100)
-      _this.setData({ ['position.X']: parseInt(clientX)-20 + 'px', ['position.Y']: parseInt(clientY)-20 + 'px' })
-    }, 20)
-  },
-
   toTopClick(e) {
     console.log(e)
     wx.pageScrollTo({
@@ -216,6 +191,12 @@ Page({
                   a.picUrl = getGoodsImgSize(a.picUrl, 1)
                   a.productionTime = 'productionTime' in a && a.productionTime.slice(0, 10)
                 })
+                const items = deepCopy(list[i])
+                if (list[i].details.length > 40) {
+                  list[i].details = list[i].details.slice(0, 40)
+                  this.data.goodsCpnDetail = items.details
+                  // setTimeout(() => { _this.setData({ [`pageObj[${i}]`]: items }) }, 4000)
+                }
               }
               keyList.push(false);
             }
