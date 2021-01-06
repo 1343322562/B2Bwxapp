@@ -84,13 +84,14 @@
 .act {
   border-color: #e60012;
 }
-
+.swicth{font-size: 33rpx; font-weight: bold; color: #444444;}
 
 .good-box {display: flex;padding: 10rpx 18rpx;align-items: center;}
 .good-box .img {height: 140rpx; width: 140rpx;background-color: #eeeeee;}
 .good-box .good-prop {flex: 1;height: 140rpx;margin-left: 20rpx;}
 .good-box .good-prop .name {font-weight: bold;}
-.good-box .good-prop .unit {font-size: 25rpx;color: #666666;}
+.good-box .good-prop .unit {font-size: 25rpx;color: #666666;display: flex;justify-content: space-between;}
+.good-box .good-prop .unit .stock-qty {margin-right: 40rpx;}
 .good-box .good-prop .price {margin-top: 20rpx;}
 .good-box .good-prop .price .new{color: #f11110;font-weight: bold;font-size: 31rpx;}
 .good-box .good-prop .price .old{color: #666666;text-decoration: line-through;font-size: 28rpx;margin-left: 6rpx;}
