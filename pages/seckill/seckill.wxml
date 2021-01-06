@@ -41,7 +41,7 @@
           原价:{{item.price}}元
         </view>
         <view class='goods_info_purchase'>每个账户限购{{item.qty}}{{item.unit}}</view>
-        <view class="goods_info_date" wx:if="{{item.productionTime}}">生产日期: {{item.productionTime}}</view>
+        <view class="goods_info_date" wx:if="{{item.productionTime}}">生产日期: <view>{{item.productionTime}}</view></view>
         <view catchtap="addCarts" data-index="{{index}}" class="{{'goods_info_btn'+((list[nowSelectDate].type!='1'||item.stockQty<=0)?' act':'')}}">{{item.stockQty<=0?"抢光了":"立即抢购"}}</view>
       </view>
     </view>

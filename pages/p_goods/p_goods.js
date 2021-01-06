@@ -1,7 +1,7 @@
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
-import { showLoading, hideLoading, goPage, toast, alert, getGoodsImgSize, getGoodsDataSize, getGoodsTag, deepCopy, setParentGoodsCartsObj, MsAndDrCount} from '../../tool/index.js'
+import { addedPromotionHandle,showLoading, hideLoading, goPage, toast, alert, getGoodsImgSize, getGoodsDataSize, getGoodsTag, deepCopy, setParentGoodsCartsObj, MsAndDrCount} from '../../tool/index.js'
 const maxNum = 15
 let baseGoodsList
 Page({
@@ -102,6 +102,7 @@ Page({
   },
   getGoodsList (type) {
     const { branchNo, token, username, platform} = this.userObj
+    let { items } = this.data
     const clsNo = this.data.nowSelectTwoCls
     const screenSelect = this.data.screenSelect
     const loadingIndex = type ? this.loadingIndex : 1
@@ -131,6 +132,7 @@ Page({
         const promotionGoodsList =[]
         const promotionFineGoodsList = []
         let goodsObj = {}
+        let cartsObj = wx.getStorageSync('cartsObj')
         const promotionObj = this.promotionObj
         const zhGoodsList = promotionObj.BD.cls[clsNo]
         const zhGoodsObj = promotionObj.BD.goods
@@ -148,9 +150,10 @@ Page({
         if (res.code == 0 && res.data) {
           const list = res.data.itemData || []
 
-          console.log(promotionObj, this)
+          console.log(promotionObj, this.data)
           list.forEach(goods => {
             const itemNo = goods.itemNo
+            if (cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo === promotionNo) items.qty = items.qty ? items.qty + cartsObj[itemNo].realQty : cartsObj[itemNo].realQty
             if (goods.itemBrandname && !brandObj[goods.itemBrandno] && !itemBrandnos) {
               brandObj[goods.itemBrandno] = goods.itemBrandname
               brandList.push(goods.itemBrandno)
@@ -213,6 +216,10 @@ Page({
               goods.productionTime = dateArr.join('-')
             }
             goodsObj[itemNo] = goods
+            if (cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo && cartsObj[itemNo].currentPromotionNo !== this.data.promotionNo) {
+              const cPromotionNo = cartsObj[itemNo].currentPromotionNo // 当前购物车商品所选促销
+              goodsObj[itemNo].addedText = addedPromotionHandle(cPromotionNo)
+            }
           })
         }
         let newArr = (promotionGoodsList.concat(goodsList)).concat(promotionFineGoodsList.concat(fineGoodsList))
@@ -220,7 +227,10 @@ Page({
           newArr.sort((a, b) => (screenSelect == '1' ? (goodsObj[a].price - goodsObj[b].price) : (goodsObj[b].price - goodsObj[a].price)))
         }
         const totalLength = newArr.length
+        
+        
         this.setData({
+          items,
           goodsObj: goodsObj,
           totalLength: totalLength,
           brandList,
@@ -233,6 +243,7 @@ Page({
           })
           baseGoodsList = newArr
           hideLoading()
+          console.log('type', type)
           type||this.getCartsData()
         }, 100)
       },
@@ -251,19 +262,43 @@ Page({
   },
   changeCarts (e) {
     const {type,no} = e.currentTarget.dataset
+    let { items, promotionNo } = this.data
     let allGoods = this.data.goodsObj
     const goods = allGoods[no]
     const { dbBranchNo, branchNo } = this.userObj
+    // switch(type) {
+    //   case 'add':
+    //     if ()
+    //     break;
+    //   case 'minus':
+    //     break;
+    // }
     if (goods.specType !='2') {
       const config = {
         sourceType: '0',
         sourceNo: dbBranchNo,
         branchNo: branchNo
       }
-      goods.currentPromotionNo = this.data.promotionNo
-      const cartsObj = dispatch[types.CHANGE_CARTS]({ goods, type, config })
+      !goods.currentPromotionNo && (goods.currentPromotionNo = promotionNo)
+      let cartsObj = wx.getStorageSync('cartsObj')
+      const oldGoodQty = cartsObj[no] ? cartsObj[no].realQty : 0
+      cartsObj = dispatch[types.CHANGE_CARTS]({ goods, type, config })
+      if (cartsObj[no].currentPromotionNo === promotionNo) {
+        const newGood = cartsObj[no]
+        const qty = Number(newGood.realQty) - Number(oldGoodQty)
+        console.log(deepCopy(items), qty) 
+        items.qty = items.qty + qty
+        const pNo = items['promotionNo']
+        if (pNo.includes('MJ') || pNo.includes('BF') || pNo.includes('BG') || pNo.includes('MQ')) {
+          items.price = items.price + qty * newGood.origPrice        
+        } else {
+          items.price = items.price + qty * newGood.validPrice
+        }
+        console.log('oldGood', oldGoodQty)
+        console.log('newGood', newGood)
+      }
       if (cartsObj) {
-        let obj = { cartsObj: setParentGoodsCartsObj(cartsObj) }
+        let obj = { cartsObj: setParentGoodsCartsObj(cartsObj), items }
         const newGoods = MsAndDrCount(goods, cartsObj[no], type)
         if (newGoods) {
           allGoods[no] = newGoods
@@ -272,7 +307,7 @@ Page({
         this.setData(obj)
       }
     } else {
-      goPage('goodsChildren', { itemNo: no})
+      goPage('goodsChildren', { itemNo: no })
     }
   },
   getCartsData() {
@@ -286,7 +321,9 @@ Page({
         let isUpDate = false
         cartsObj.keyArr.forEach(item => {
           if (goodsObj[item]) {
-            const newGoods = MsAndDrCount(goodsObj[item], cartsObj[item], '')
+            let newGoods = MsAndDrCount(goodsObj[item], cartsObj[item], '')
+            // 已选促销商品判断
+            console.log(314, newGoods)
             if (newGoods) {
               goodsObj[item] = newGoods
               isUpDate = true
@@ -301,7 +338,7 @@ Page({
   getSupPromotionGoods(supcustNo) {
     const { branchNo, token, platform, username } = this.userObj
     const { zcGoodsUrl, baseImgUrl } = getApp().data
-    console.log(1000, zcGoodsUrl,  getApp().data)
+    let { items } = this.data
     API.Goods.supplierItemSearch({
       data: { condition: '', modifyDate:'', supcustNo, pageIndex: 1, pageSize: 1000, itemClsNo: '', token, platform, username},
       success: res => {
@@ -440,9 +477,10 @@ Page({
   onLoad (opt) {
     console.log(opt)
     const { promotionNo, sourceNo } = opt
+    let items = JSON.parse(opt.items)
     const isSup = promotionNo.includes('RMJ') || promotionNo.includes('RBF')
     if (isSup) this.data.isSup = true
-    this.setData({ promotionNo })
+    this.setData({ promotionNo, items })
     this.data.promotionNo = promotionNo
     console.log(getApp().data.partnerCode)
     this.createAnimation()

@@ -51,6 +51,9 @@
         <!-- <view class='limitPromotionTime' wx:if="{{!!goodsObj[itemNo].todayPromotion}}">活动时间</view>
         <view class='limitPromotionTime' wx:if="{{!!goodsObj[itemNo].todayPromotion}}">{{goodsObj[itemNo].todayPromotion.startDate}} 至 {{goodsObj[itemNo].todayPromotion.endDate}}</view> -->
       </view>
+      <view class="added" wx:if="{{goodsObj[itemNo].addedText}}">
+        此商品已参与【{{goodsObj[itemNo].addedText}}】，请注意切换活动方式！
+      </view>
         <view class="tag">
           <text wx:if="{{rmj[itemNo] || rmj === true}}">满减</text>
           <text wx:if="{{ rbf }}">满赠</text>

@@ -10,6 +10,7 @@ Page{background-color: #fff}
 .head>.info .name{color: #000;font-size: 31rpx;display: flex;justify-content: space-between;align-items: center;margin-bottom: 5rpx;}
 .supplierName {font-weight: bold;}
 .minPrice {font-size: 25rpx;margin-right: 30rpx;}
+.added {font-size: 23rpx; font-weight: bold;color: #f33809;min-height: 35rpx;line-height: 35rpx;margin-left: 10rpx;}
 .minPrice text{color: #d40000;}
 .manage .label, .phone .label {color: #888888;}
 .manage .content, .phone .content {color: #333333;}
@@ -35,10 +36,10 @@ Page{background-color: #fff}
 .goodsList>.li .info>.price .now{display: inline-block;}
 .goodsList>.li .info>.price .before{vertical-align: 2rpx;margin-left: 10rpx;text-decoration:line-through;font-size: .8em;color: #999;display: inline-block;}
 .goodsList>.li .info>.price .limitPromotionTime{font-size: .7em;color: #999;line-height: 28rpx;}
-.goodsList>.li .goCarts{position: absolute;right: 0;bottom: 20rpx;width: 190rpx}
-.goodsList>.li .goCarts>.btn{position: relative;height: 80rpx;text-align: center}
+.goodsList>.li .goCarts{position: absolute;right: 0;bottom: 0rpx;width: 190rpx}
+.goodsList>.li .goCarts>.btn{position: relative;height: 68rpx;text-align: center}
 .goodsList>.li .goCarts>.btn .item{height: 100%;width: 80rpx;position: absolute;top: 0}
-.goodsList>.li .goCarts>.btn .item>.icon{width: 50rpx;height: 50rpx;margin-top: 15rpx;background-color:#fff;}
+.goodsList>.li .goCarts>.btn .item>.icon{width: 46rpx;height: 46rpx;margin-top: 15rpx;background-color:#fff;}
 .goodsList>.li .goCarts>.btn .minus{left: 0}
 .goodsList>.li .goCarts>.btn .num{display: inline-block;line-height:80rpx}
 .goodsList>.li .goCarts>.btn .add{right: 0}

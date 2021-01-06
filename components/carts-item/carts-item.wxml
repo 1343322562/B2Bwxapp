@@ -79,6 +79,7 @@
               class="switchPromotiom" 
               bindtap="showSwitchPromotionDialog" 
               wx:if="{{good.promotionCollectionsArr.length>1}}"
+              data-good="{{good}}"
               data-promotionNoArr="{{good.promotionCollectionsArr}}"
               data-itemNo="{{good.itemNo}}"
               data-cpnPromotionNo="{{good.currentPromotionNo}}"

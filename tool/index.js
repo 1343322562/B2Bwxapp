@@ -478,3 +478,25 @@ export const promoArrSort = (promoArr, sourceType) => {
   return rArr
 }
 
+export const addedPromotionHandle = (cPromotionNo) => { // // 已参与了其它促销的购物车商品处理
+  let text
+  if (cPromotionNo.includes('MJ')) {
+    text = '金额满减'
+  } else if (cPromotionNo.includes('BF')) {
+    text = '买满赠'
+  } else if (cPromotionNo.includes('MQ')) {
+    text = '数量满减'
+  } else if (cPromotionNo.includes('BG')) {
+    text = '买赠'
+  } else if (cPromotionNo.includes('SD')) {
+    text = '特价促销'
+  } else if (cPromotionNo.includes('SZ')) {
+    text = '首单赠送'
+  } else if (cPromotionNo.includes('MS')) {
+    text = '秒杀'
+  } else if (cPromotionNo.includes('ZK')) {
+    text = '折扣'
+  }
+  return text
+}
+

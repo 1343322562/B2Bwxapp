@@ -1,7 +1,18 @@
 <view class="selecter-time-conainer" wx:if="{{isShow}}" catchtouchmove>
   <view style="height:65vh;width:100%;" catchtap="close"/>
   <view class="selecter-time-box">
-    <view class="promo-box {{item.promotionNo == promotionNo?'act':''}}" wx:for="{{data}}" wx:key="index" bindtap="onParentEvent" data-promotion="{{item.promotionNo}}">
+    <view class="good-box">
+      <image class="img" src="{{selectPromotionGood.goodsImgUrl}}" />
+      <view class="good-prop">
+        <view class="name">{{selectPromotionGood.itemName || ''}}</view>
+        <view class="unit">{{selectPromotionGood.itemSize || ''}}</view>
+        <view class="price">
+          <text class="new">￥{{selectPromotionGood.price || ''}}</text>
+          <text class="old" wx:if="{{selectPromotionGood.orgiPrice && selectPromotionGood.orgiPrice != selectPromotionGood.price}}">￥{{selectPromotionGood.orgiPrice || ''}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="promo-box {{item.promotionNo == promotionNo?'act':''}}" wx:for="{{data}}" wx:key="index" catch:tap="onParentEvent" data-promotion="{{item.promotionNo}}">
       <view class="tag">{{item.name}}</view>
       <view class="info-box">
         <view 

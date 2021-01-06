@@ -1,7 +1,7 @@
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
-import { showLoading, hideLoading, alert, getGoodsImgSize, goPage, toast, MsAndDrCount, deepCopy } from '../../tool/index.js'
+import { showLoading, hideLoading, alert, getGoodsImgSize, goPage, toast, MsAndDrCount, deepCopy, addedPromotionHandle } from '../../tool/index.js'
 const maxNum = 20
 let baseGoodsList
 Page({
@@ -187,6 +187,12 @@ Page({
   getGoodsList (condition = '') {
     showLoading('请稍候...')
     const { nowSelectCls: itemClsNo } = this.data
+    let promotionNo
+    let cartsObj
+    if ('promotionNo' in this.data) {
+      promotionNo = this.data.promotionNo
+      cartsObj = wx.getStorageSync('cartsObj')
+    }
     const supcustNo = this.supplierNo
     console.log('supcustNo', supcustNo)
     const { branchNo, token, platform, username } = this.userObj
@@ -207,12 +213,14 @@ Page({
             goods.goodsImgUrl = this.zcGoodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
             goods.stockQty > 0 ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
             goods.isStock = goods.stockQty > 0 ? true : false
+            if (promotionNo && cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo && cartsObj[itemNo].currentPromotionNo !== promotionNo) {
+              goods.addedText = addedPromotionHandle(cartsObj[itemNo].currentPromotionNo)
+              console.log(goodsObj[itemNo], goods, this.data)
+            }
             goodsObj[itemNo] = goods
-            
           })
           let newArr = goodsList.concat(fineGoodsList)
           const totalLength = newArr.length
-          console.log(newArr, goodsList)
           this.getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength, goodsList) // 获取并处理今日限购的促销信息(直配)
 
           setTimeout(()=>{

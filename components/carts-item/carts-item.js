@@ -188,6 +188,7 @@ Component({
       const promotionNoArr = e.currentTarget.dataset.promotionnoarr,
             promotionNo = e.currentTarget.dataset.cpnpromotionno,
             allPromotion = this.data.allPromotion,
+            selectPromotionGood = e.currentTarget.dataset.good,
             p = deepCopy(allPromotion),
             itemNo = e.currentTarget.dataset.itemno
       let promotionNoObj = {},
@@ -203,7 +204,7 @@ Component({
         }
       })
       console.log(promotionNoObj, allPromotion, this.data.allPromotion)
-      cpnObj.setData({ data: promotionNoObj, itemNo, goods, promotionNo })
+      cpnObj.setData({ data: promotionNoObj, itemNo, goods, promotionNo, selectPromotionGood })
     },
     // 去凑凑  中心仓跳转分类页  前置仓跳转对应前置仓页面
     goCD() {
@@ -224,9 +225,11 @@ Component({
     // 跳转凑单页 
     goAddGoodsClick(e) {
       console.log(e)
+      let items
       let promotionNo
       let name = ''
       if (typeof e === 'object') {
+        items = e.currentTarget.dataset.items
         promotionNo = e.currentTarget.dataset.items.promotionNo
         name = e.currentTarget.dataset.items.name
       }
@@ -266,7 +269,7 @@ Component({
       }
       console.log(e ,this.data)
       const { sourceNo } = this.data.goods
-      goPage('p_goods', { promotionNo, sourceNo })
+      goPage('p_goods', { promotionNo, sourceNo, items })
     },
     // 获取系统配置(送货开始和结束时间)
     getCommonSetting() {

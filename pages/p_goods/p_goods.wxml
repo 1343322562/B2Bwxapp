@@ -1,12 +1,36 @@
+<wxs module="filters" src="../../tool/filter.wxs"></wxs>  <!-- 引入 wxs module -->  
 <block wx:if="{{pageLoading}}">
 <view class='goodsList'>
-  <view class='screen'>
+  <!-- <view class='screen'>
     <view catchtap='selectScreen' data-type="0" class="item{{screenSelect=='0'?' act':''}}">综合</view>
     <view catchtap='selectScreen' data-type="1" class="item{{(screenSelect=='1'||screenSelect=='2')?' act':''}}">
       <text>价格</text>
       <image wx:if="{{screenSelect=='1'||screenSelect=='2'}}" class="icon{{screenSelect=='2'?' act':''}}" src="../../images/up_donwn_icon.png" />
     </view>
     <view class='item' catchtap='showScreen'>筛选</view>
+  </view> -->
+  <view class="promo-top">
+    <view class="promo-info">
+      <view class="content">
+        <text class="label">促销类型 : </text> <text class="tag">{{items.name}}</text>
+      </view>
+      <view class="content">
+        <text class="label">促销说明 : </text> <text class="msg">{{items.msg}}</text>
+      </view>
+    </view>
+    <view class="promo-prop">
+      <view class="content">
+        <view class="qty">{{items.qty || 0}}</view>
+        <view class="label">合购数量</view>
+      </view>
+      <view class="content">
+        <block>
+          <view class="amt" wx:if="{{items.qty}}">{{filters.toFixed(items.price)}}</view>
+          <view class="amt" wx:else>0</view>
+        </block>
+        <view class="label">合购金额</view>
+      </view>
+    </view>
   </view>
   <view class='li'  wx:for="{{goodsList}}" wx:for-item="itemNo" wx:key="index" data-no="{{itemNo}}" bindtap='goGoodsDetails'>
     <view class='img'>
@@ -23,6 +47,9 @@
       <view class='price' wx:if="{{partnerCode!='1039' && partnerCode!='1049'}}">
         <text class='now'>￥{{goodsObj[itemNo].price}}{{goodsObj[itemNo].specType=='2'?'起':('/'+(goodsObj[itemNo].unit||''))}}</text>
         <text class='before' wx:if="{{goodsObj[itemNo].orgiPrice&&goodsObj[itemNo].orgiPrice!=goodsObj[itemNo].price&&goodsObj[itemNo].specType!='2'}}">￥{{goodsObj[itemNo].orgiPrice}}</text>
+      </view>
+      <view class="added" wx:if="{{cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo && cartsObj[itemNo].currentPromotionNo !== promotionNo}}">
+        此商品已参与【{{goodsObj[itemNo].addedText}}】，请注意切换活动方式！
       </view>
       <view class='tag'>
         <text wx:if="{{goodsObj[itemNo].BF}}">买满赠</text>

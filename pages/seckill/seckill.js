@@ -101,6 +101,7 @@ Page({
     this.changeTime(index)
   },
   setListData (list) {
+    const _this = this
     const nowTime = +new Date()
     let nowSelectDate
     this.setListDataTimer = setTimeout(() => {
@@ -113,7 +114,12 @@ Page({
         if (nowTime < info.endTime && (!nowSelectDate && nowSelectDate != 0)) nowSelectDate = index;
         info.item.forEach(item => {
           item.itemImgUrls = this.goodsUrl + item.itemNo + '/' + getGoodsImgSize(item.picUrl)
-          item.productionTime = 'productionTime' in item && item.productionTime.slice(0, 10)
+          if (_this.productionDateFlag != '0' && (item.productionDate || item.newProductionDate)) {
+            let dateArr = []
+            if ((_this.productionDateFlag == '1' || _this.productionDateFlag == '3') && item.productionDate) dateArr.push(item.productionDate.replace(new RegExp(/(-)/g), '.'))
+            if ((_this.productionDateFlag == '2' || _this.productionDateFlag == '3') && item.newProductionDate) dateArr.push(item.newProductionDate.replace(new RegExp(/(-)/g), '.'))
+            item.productionTime = dateArr.join('-')
+          }
         })
         info.item = info.item.sort((a, b) => Number(a.serialNo) - Number(b.serialNo))
       })
@@ -126,6 +132,7 @@ Page({
     
   },
   onLoad (opt) {
+    this.productionDateFlag = wx.getStorageSync('configObj').productionDateFlag
     const { branchNo, token, platform, username, dbBranchNo } = wx.getStorageSync('userObj')
     this.goodsUrl = getApp().data.goodsUrl
     this.dbBranchNo = dbBranchNo

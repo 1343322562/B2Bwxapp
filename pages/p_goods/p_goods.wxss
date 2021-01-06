@@ -16,9 +16,9 @@
 .twoClsTitle.act::before{content: "";position:absolute;top:20%;left:0px;width:6rpx;height:60%;background:#dd4242;
 z-index:100}
 /*商品列表*/
-.goodsList{background-color: #fff;padding-left: 20rpx;position: relative;padding-top: 80rpx;}
+.goodsList{background-color: #fff;position: relative;}
 .goodsList>.li{padding: 20rpx 20rpx 20rpx 0;position: relative;border-bottom: 1px solid #e8e8e8;}
-.goodsList>.li .img{position: absolute;top: 20rpx;left:0;overflow: hidden;width: 170rpx;height: 170rpx;background-color: #f2f2f2}
+.goodsList>.li .img{position: absolute;top: 20rpx;left:20rpx;overflow: hidden;width: 170rpx;height: 170rpx;background-color: #f2f2f2}
 .goodsList>.li .img>.goodsType{color: #fff;background-color: #dd4242;position: absolute;top: 0;left: 20%;width: 60%;text-align: center;line-height:40rpx;font-size: 23rpx;border-radius: 0 0 10rpx 10rpx;}
 .goodsList>.li .img>.noReturnAllowed{width: 50rpx;height: 50rpx;position: absolute;bottom: 5rpx;right: 5rpx;}
 .goodsList>.li .img>.icon{width: 100%;height: 100%}
@@ -33,12 +33,23 @@ z-index:100}
 .goodsList>.li .goCarts>.type{text-align: right;font-size: 24rpx;padding-right: 18rpx}
 .goodsList>.li .goCarts>.type.cw{color: #ffb400}
 .goodsList>.li .goCarts>.type.dw{color:#04a1ff;}
-.goodsList>.li .goCarts>.btn{position: relative;height: 80rpx;text-align: center}
+.goodsList>.li .goCarts>.btn{position: relative;height: 68rpx;text-align: center}
 .goodsList>.li .goCarts>.btn .item{height: 100%;width: 80rpx;position: absolute;top: 0}
-.goodsList>.li .goCarts>.btn .item>.icon{width: 50rpx;height: 50rpx;margin-top: 15rpx;background-color:#fff;}
+.goodsList>.li .goCarts>.btn .item>.icon{width: 46rpx;height: 46rpx;margin-top: 15rpx;background-color:#fff;}
 .goodsList>.li .goCarts>.btn .minus{left: 0}
 .goodsList>.li .goCarts>.btn .num{display: inline-block;line-height:80rpx}
 .goodsList>.li .goCarts>.btn .add{right: 0}
+.promo-top {width: 94%;background-color: #fff;border-bottom: 10rpx solid #f1f1f1;padding: 6rpx 3%;}
+.promo-top .promo-info {}
+.promo-top .content {height: 50rpx;line-height: 50rpx;}
+.promo-top .content .label {color: #666666;}
+.promo-top .content .tag {color: #f33809;font-weight: bold;}
+.promo-top .content .msg {color: #333333;}
+.promo-prop {width: 100%; display: flex; justify-content: space-around;min-height: 100rpx;margin-top: 30rpx;align-items: center;}
+.promo-prop .content {display: flex; flex-direction: column; justify-content: center;align-items: center;}
+.promo-prop .label {color: #666666;}
+.promo-prop .qty, .promo-prop .amt{color: #f33809;font-weight: bold;height: 42rpx;line-height: 42rpx;}
+.added {font-size: 23rpx; font-weight: bold;color: #f33809;z-index: 999;position: relative;min-height: 35rpx;line-height: 35rpx;margin-left: 10rpx;}
 /*筛选*/
 .screen{position:fixed;top: 0;left: 0rpx;display: flex;border-bottom: 1px solid #e8e8e8;right: 0;background-color: #fff;box-shadow: 0 2rpx 10rpx #ddd;z-index: 100;color: #9f9f9f}
 .screen>.item{text-align: center;width: 0;flex-grow: 1;line-height: 80rpx;position: relative}
