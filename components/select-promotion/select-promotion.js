@@ -13,7 +13,7 @@ Component({
     isShow: false,
     data: {},   // 选择框数据
     itemNo: '', // 商品编号
-    selectPromotionGood: {}, // 当前在切换促销的商品
+    selectPromotionGood: '', // 当前在切换促销的商品
     promotionNo: '' // 当前所选促销
   },
 
@@ -24,7 +24,7 @@ Component({
     console.log(this.data)
   },
   methods: {
-    close() { this.setData({ isShow: false, selectPromotionGood: {} }) },    // 关闭促销选择框
+    close() { this.setData({ isShow: false, selectPromotionGood: '' }) },    // 关闭促销选择框
     showClick() { this.setData({ isShow: true }); console.log(this.data) },  // 显示Dialog
     selectPromotionClick(e) {
       const promotionNo = e.currentTarget.dataset.promotion,

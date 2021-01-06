@@ -1,11 +1,11 @@
 <view class="selecter-time-conainer" wx:if="{{isShow}}" catchtouchmove>
   <view style="height:65vh;width:100%;" catchtap="close"/>
   <view class="selecter-time-box">
-    <view class="good-box">
+    <view class="good-box" wx:if="{{selectPromotionGood}}">
       <image class="img" src="{{selectPromotionGood.goodsImgUrl}}" />
       <view class="good-prop">
         <view class="name">{{selectPromotionGood.itemName || ''}}</view>
-        <view class="unit"><text>{{selectPromotionGood.itemSize || ''}}</text> <text class="stock-qty">{{selectPromotionGood.stockQty != ? '有库存'}}</text></view>
+        <view class="unit"><text>{{selectPromotionGood.itemSize || ''}}</text> <text class="stock-qty">{{selectPromotionGood.stockQty != 0 ? '有库存' : ''}}</text></view>
         <view class="price">
           <text class="new">￥{{selectPromotionGood.price || ''}}</text>
           <text class="old" wx:if="{{selectPromotionGood.orgiPrice && selectPromotionGood.orgiPrice != selectPromotionGood.price}}">￥{{selectPromotionGood.orgiPrice || ''}}</text>

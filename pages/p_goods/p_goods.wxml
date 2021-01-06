@@ -9,6 +9,7 @@
     </view>
     <view class='item' catchtap='showScreen'>筛选</view>
   </view> -->
+  <view class="bfc"></view>
   <view class="promo-top">
     <view class="promo-info">
       <view class="content">
