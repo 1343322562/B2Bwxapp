@@ -214,6 +214,7 @@ Page({
             goods.stockQty > 0 ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
             goods.isStock = goods.stockQty > 0 ? true : false
             if (promotionNo && cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo && cartsObj[itemNo].currentPromotionNo !== promotionNo) {
+              console.log(564564564)
               goods.addedText = addedPromotionHandle(cartsObj[itemNo].currentPromotionNo)
               console.log(goodsObj[itemNo], goods, this.data)
             }

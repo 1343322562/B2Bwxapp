@@ -22,7 +22,7 @@ z-index:100}
 .goodsList>.li .img>.goodsType{color: #fff;background-color: #dd4242;position: absolute;top: 0;left: 20%;width: 60%;text-align: center;line-height:40rpx;font-size: 23rpx;border-radius: 0 0 10rpx 10rpx;}
 .goodsList>.li .img>.noReturnAllowed{width: 50rpx;height: 50rpx;position: absolute;bottom: 5rpx;right: 5rpx;}
 .goodsList>.li .img>.icon{width: 100%;height: 100%}
-.goodsList>.li .info{min-height: 170rpx;margin-left: 190rpx}
+.goodsList>.li .info{min-height: 170rpx;margin-left: 206rpx}
 .goodsList>.li .info>.name{display: -webkit-box; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp:2; overflow: hidden; text-overflow:ellipsis;font-weight: 500;}
 .goodsList>.li .info>.size{font-size: 26rpx;color: #888}
 .goodsList>.li .info>.price{color: red;font-size: 32rpx}
@@ -40,7 +40,7 @@ z-index:100}
 .goodsList>.li .goCarts>.btn .num{display: inline-block;line-height:80rpx}
 .goodsList>.li .goCarts>.btn .add{right: 0}
 .bfc {width: 100%;height: 250rpx;}
-.promo-top {width: 94%;background-color: #fff;border-bottom: 10rpx solid #f1f1f1;padding: 6rpx 3%; z-index: 9;height: 230rpx;top: 0; position: fixed;}
+.promo-top { width: 100%;background-color: #fff;padding: 6rpx 3%;z-index: 9;height: 240rpx;top: 0;box-shadow: 0rpx 10rpx 12rpx #eee;box-sizing: border-box;position: fixed;}
 .promo-top .promo-info {}
 .promo-top .content {height: 50rpx;line-height: 50rpx;}
 .promo-top .content .label {color: #666666;}

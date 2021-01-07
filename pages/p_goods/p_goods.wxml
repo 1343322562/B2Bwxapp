@@ -26,7 +26,7 @@
       </view>
       <view class="content">
         <block>
-          <view class="amt" wx:if="{{items.qty}}">{{filters.toFixed(items.price)}}</view>
+          <view class="amt" wx:if="{{items.price}}">{{filters.toFixed(items.price) || 0.00}}</view>
           <view class="amt" wx:else>0</view>
         </block>
         <view class="label">合购金额</view>

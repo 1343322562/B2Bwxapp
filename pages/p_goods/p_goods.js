@@ -7,6 +7,7 @@ let baseGoodsList
 Page({
   data: {
     isSup: false,
+    items: {},
     pageLoading: false,
     nowSelectOneCls: '', // 选中一级分类
     nowSelectTwoCls: '', // 选中二级分类
@@ -153,7 +154,10 @@ Page({
           console.log(promotionObj, this.data)
           list.forEach(goods => {
             const itemNo = goods.itemNo
-            if (cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo === promotionNo) items.qty = items.qty ? items.qty + cartsObj[itemNo].realQty : cartsObj[itemNo].realQty
+            if (cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo === promotionNo) {
+              items.qty = items.qty ? items.qty + cartsObj[itemNo].realQty : cartsObj[itemNo].realQty
+              items.price = this.countPromotionPrice(items, cartsObj[itemNo])
+            }
             if (goods.itemBrandname && !brandObj[goods.itemBrandno] && !itemBrandnos) {
               brandObj[goods.itemBrandno] = goods.itemBrandname
               brandList.push(goods.itemBrandno)
@@ -474,12 +478,23 @@ Page({
       }
     })
   },
+  countPromotionPrice(items, good) {
+    const pNo = items['promotionNo']
+    if (pNo.includes('MJ') || pNo.includes('BF') || pNo.includes('BG') || pNo.includes('MQ')) {
+      items.price = items.price + good.realQty * good.origPrice        
+    } else {
+      items.price = items.price + good.realQty * good.validPrice
+    }
+    return items.price
+  },
   onLoad (opt) {
     console.log(opt)
     const { promotionNo, sourceNo } = opt
     let items = JSON.parse(opt.items)
     const isSup = promotionNo.includes('RMJ') || promotionNo.includes('RBF')
     if (isSup) this.data.isSup = true
+    items['qty'] = 0
+    items['price'] = 0
     this.setData({ promotionNo, items })
     this.data.promotionNo = promotionNo
     console.log(getApp().data.partnerCode)
