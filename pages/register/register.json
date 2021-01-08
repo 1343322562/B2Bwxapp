@@ -4,6 +4,6 @@
   "navigationBarTitleText": "新用户注册",
   "navigationBarTextStyle": "black",
   "usingComponents": {
-    "register": "../components/register-input/register-input"
+    "register": "../../components/register-input/register-input"
   }
 }

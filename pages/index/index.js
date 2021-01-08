@@ -29,7 +29,8 @@ Page({
           goodsCpnDetail = this.data.goodsCpnDetail
           console.log(this.data.pageObj, goodsCpnDetail)
     this.setData({ [`pageObj[${index}].details`]: goodsCpnDetail })
-    setTimeout(() => hideLoading(), 2600)
+    console.log(goodsCpnDetail.length * 10)
+    setTimeout(() => hideLoading(), Number(goodsCpnDetail.length * 10) + 800)
   },
   toTopClick(e) {
     console.log(e)

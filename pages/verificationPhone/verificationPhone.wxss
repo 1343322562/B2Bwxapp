@@ -2,5 +2,5 @@ Page{background-color: #fff;}
 .title{text-align: center;font-size: 40rpx;margin-bottom: 50rpx;}
 .form{height: 110rpx;position: relative}
 .form>.input{display: block;width: 90%;margin: 0 auto;height: 100%;border-bottom: 2rpx solid #f2f2f2;font-size: 30rpx;}
-.submit{width: 85%;margin: 50rpx auto;background-color:#d40000;text-align: center;color: #fff;line-height: 90rpx;font-size: 32rpx; }
+.submit{width: 85%;margin: 50rpx auto;background-color:#ff9c01;text-align: center;color: #fff;line-height: 90rpx;font-size: 32rpx; }
 .form>.getCode{position: absolute;top: 0rpx;right: 20rpx;width: 240rpx;line-height:110rpx;text-align: center;border-left: 2rpx solid #f2f2f2;z-index: 100}
