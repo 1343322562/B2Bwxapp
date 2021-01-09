@@ -229,6 +229,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     obj['MQ'].subMoney = promotionObj.MQ[itemNo].subMoney
     obj['MQ'].explain = promotionObj.MQ[itemNo].explain
   } else if (promotionObj.SD[itemNo]) {
+    console.log('promotionObj', promotionObj)
     obj.SD = true
     obj.promotionSheetNo = promotionObj.SD[itemNo].sheetNo
     const limitedQty = promotionObj.SD[itemNo].limitedQty
@@ -259,6 +260,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     obj.msMaxQty = limitedQty > buyQty ? buyQty : limitedQty
     type || (obj.price = price)
   }
+  console.log(promotionObj.SD[itemNo], itemNo)
   return obj
 }
 export const setParentGoodsCartsObj = (cartsObj) => { // 计算多规格主商品数量

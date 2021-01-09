@@ -565,6 +565,39 @@ Page({
     const ticketType = this.data.ticketType
     goPage('invoice', { openType: 'liquidation', ticketType})
   },
+  addGoodsPromotion(goods, data) {
+    console.log(640, goods)
+    const orgiPrice = String(goods.orgiPrice)
+    console.log(deepCopy(this.promotionObj))
+    const tag = getGoodsTag(goods, this.promotionObj)
+    console.log(tag)
+    const isMS = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('MS')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('MS'))
+    const isSD = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('SD')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('SD'))
+    const isRSD = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('RSD')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('RSD'))
+    const isFS = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('FS')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('FS'))
+    const isZK = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('ZK')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('ZK'))
+    if (isMS && goods.orgiPrice != goods.price) {
+      data.oldPrice = orgiPrice
+      data.limitedQty = String(goods.maxSupplyQty)
+      data.promotionSheetNo = goods.promotionSheetNo
+    }  else if (isRSD && goods.orgiPrice != goods.price) {
+      const allPromotion = this.data.allPromotion
+      data.promotionSheetNo = goods.promotionSheetNo
+      data.oldPrice = orgiPrice
+      console.log(allPromotion[goods.promotionSheetNo])
+      data.limitedQty =  allPromotion && allPromotion[goods.promotionSheetNo] && String(allPromotion[goods.promotionSheetNo].limitedQty || 999)
+    } else if (isSD && goods.orgiPrice != goods.price) { // 单日限购
+      data.promotionSheetNo = goods.promotionSheetNo
+      data.oldPrice = orgiPrice
+      data.limitedQty = String(tag.limitedQty)
+    } else if (isFS && goods.orgiPrice != goods.price){
+      data.fsPromotionSheetNo = goods.promotionSheetNo
+      data.oldPrice = orgiPrice
+    } else if (isZK && goods.orgiPrice != goods.price) {
+      data.promotionSheetNo = goods.promotionSheetNo
+      data.discount = String(tag.discountNum)
+    }
+  },
   submit(ignore) {
     const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = this.userObj
     const { transportFeeAmt: transportFee, payWay, memo, selectedCoupons, totalMoney, selectedDhCoupons, dhCouponsList, realPayAmt, mjObj, giftList, selectedGift, selectedGiftNum, goodsList, storedValue, ticketType, isUseBlendWay } = this.data
@@ -622,6 +655,7 @@ Page({
     }
 
     goodsList.forEach(goods => {
+      console.log(goods, this.transNo)
       if (goods.BF && goods.isGift) return
       itemNos.push(goods.itemNo)
       let data = { itemNo: goods.itemNo, isGift: goods.isGift ? '1' : '0', qty: String(goods.realQty), price: String(goods.isGift ? 0 : goods.price), itemType: goods.itemType}
@@ -637,30 +671,11 @@ Page({
           data.parentItemQty = goods.parentItemQty
           data.id = goods.id
         } else {
-          console.log(640, goods)
-          const orgiPrice = String(goods.orgiPrice)
-          const tag = getGoodsTag(goods, this.promotionObj)
-          const isMS = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('MS')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('MS'))
-          const isSD = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('SD')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('SD'))
-          const isFS = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('FS')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('FS'))
-          const isZK = ('currentPromotionNo' in goods && goods.currentPromotionNo.includes('ZK')) || ('promotionSheetNo' in goods && goods.promotionSheetNo.includes('ZK'))
-          if (isMS && goods.orgiPrice != goods.price) {
-            data.oldPrice = orgiPrice
-            data.limitedQty = String(goods.maxSupplyQty)
-            data.promotionSheetNo = goods.promotionSheetNo
-          } else if (isSD && goods.orgiPrice != goods.price) { // 单日限购
-            data.promotionSheetNo = goods.promotionSheetNo
-            data.oldPrice = orgiPrice
-            data.limitedQty = String(tag.limitedQty)
-          } else if (isFS && goods.orgiPrice != goods.price){
-            data.fsPromotionSheetNo = goods.promotionSheetNo
-            data.oldPrice = orgiPrice
-          } else if (isZK && goods.orgiPrice != goods.price) {
-            data.promotionSheetNo = goods.promotionSheetNo
-            data.discount = String(tag.discountNum)
-          }
+          this.addGoodsPromotion(goods, data) // 增加对应促销参数
         }
-      }
+      } else {
+        this.addGoodsPromotion(goods, data, 'ZC')
+      } 
       goodsData.push(data)
     })
     if (selectedCoupons && selectedCoupons!='no') { // 使用优惠券

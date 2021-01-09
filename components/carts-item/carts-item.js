@@ -1169,6 +1169,7 @@ Component({
                 if (allPromotion[item.promotionNo]) {
                   if (type == 'RSD') {
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
+                    allPromotion[item.promotionNo].limitedQty = nowGoods.drMaxQty
                   }
                   if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return 
                   if (type == 'RMJ') {
@@ -1180,7 +1181,9 @@ Component({
                 } else {
                   allPromotion[item.promotionNo] = item
                   if (type == 'RSD') {
+                    console.log(nowGoods)
                     allPromotion[item.promotionNo].msg[nowGoods.itemNo] = item.msg[nowGoods.itemNo]
+                    allPromotion[item.promotionNo].limitedQty = nowGoods.drMaxQty
                   }
                   if (nowGoods['currentPromotionNo'] != item.promotionNo || nowGoods.cancelSelected) return allPromotion[item.promotionNo].price = 0
                   if (type == 'RMJ') {
