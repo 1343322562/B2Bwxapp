@@ -119,7 +119,7 @@ Page({
           order.couponsAmt = Number(order.couponsAmt)
           order.codPayAmt = Number(order.codPayAmt)
           // order.realPayAmt = Number(order.realPayAmt || 0)
-          order.realPayAmt = order.onlinePayway == 'WX' ? Number(Number(order.onlinePayAmt).toFixed(2)) : Number(order.realPayAmt || 0)
+          order.realPayAmt = (order.onlinePayway == 'WX' ? Number(Number(order.onlinePayAmt).toFixed(2)) : Number(order.realPayAmt || 0)) + (Number(order.czPayAmt) || 0)
           order.orgiSheetAmt = Number(order.orgiSheetAmt || order.realPayAmt)
           order.itemNos = itemNos.join(',')
           order.czPayAmt = Number(Number(order.czPayAmt).toFixed(2))
@@ -141,7 +141,8 @@ Page({
           // }
           console.log(order.realSheetAmt)
           // 缺货金额 = 支付金额 + 优惠卷金额 - 出库金额 
-          order.stockoutAmt = (Number(order.realPayAmt) + Number(order.vouchersAmt) - Number(order.doAmt)).toFixed(2)
+          order.stockoutAmt = ((Number(order.realPayAmt) + Number(order.vouchersAmt) - Number(order.doAmt)).toFixed(2))
+          order.stockoutAmt = Math.abs(order.stockoutAmt) || 0.00
           console.log('缺货金额：', order.stockoutAmt, order.realPayAmt, order.vouchersAmt, order.doAmt)
           order.vouchersAmt = Number(Number(order.vouchersAmt).toFixed(2))
           console.log(order)

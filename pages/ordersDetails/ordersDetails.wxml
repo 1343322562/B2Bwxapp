@@ -1,3 +1,4 @@
+<wxs module="filters" src="../../tool/filter.wxs"></wxs>  <!-- 引入 wxs module -->  
 <block wx:if="{{order}}">
 <view class="head" wx:if="{{openType!='share'}}">
   <view class="act" style="left:{{(tabIndex*(100/tabTitle.length))}}%;width:{{(100/tabTitle.length)}}%"></view>
@@ -22,7 +23,7 @@
     <view class='p' wx:if="{{order.doAmt}}"><text class='name' >缺货金额</text><text class='content'>￥{{order.stockoutAmt}}</text></view>
     <view class='p' wx:if="{{order.transportFeeAmt}}"><text class='name'>配送费</text><text class='content'>￥{{order.transportFee}}</text></view>
     <view class='p' wx:if="{{!order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{order.realPayAmt}}</text></view>
-    <view class='p' wx:if="{{order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{order.realPayAmt - order.stockoutAmt}}</text></view>
+    <view class='p' wx:if="{{order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{filters.toFixed(order.realPayAmt - order.stockoutAmt)}}</text></view>
     <view class='p'><text class='name'>已付金额</text><text class='content b t-red'>￥{{order.paymentAmtStr}}</text></view>
     
   </view>

@@ -19,13 +19,13 @@ App({
     // partnerCode: '1047',
     // baseImgUrl: 'http://106.124.142.203:8081/',
     // lttest001
-    partnerCode: '1034',
-    baseImgUrl:'https://39.100.103.135:8080/',
+    // partnerCode: '1034',
+    // baseImgUrl:'https://39.100.103.135:8080/',
     // partnerCode: '10522',
     // partnerCode: '1014',
     // baseImgUrl:'https://bbladmin.bangbianli.com/',
-    // partnerCode: '1036',
-    // baseImgUrl:'https://erp.yhfws.cn/',
+    partnerCode: '1036',
+    baseImgUrl:'https://erp.yhfws.cn/',
     // partnerCode: '1026',
     
     // partnerCode: '1051',
