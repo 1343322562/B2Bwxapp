@@ -387,7 +387,7 @@ Page({
     const dateStr = String(nowDate.getFullYear()) + (nowDate.getMonth() + 1) + nowDate.getDate()
     const user = wx.getStorageSync('userObj')
     console.log(dateStr)
-    if (dateStr == '202119' && !opt.isLogin && !wx.getStorageSync('isWxLogin') && (!user || user.isLogin)) {
+    if (dateStr == '2021112' && !opt.isLogin && !wx.getStorageSync('isWxLogin') && (!user || user.isLogin)) {
       console.log(1)
       showLoading()
       let request = {
