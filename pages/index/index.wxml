@@ -6,11 +6,10 @@
 	</view>
 </Navbar>
 
-
 <scroll-view class="categoryList" scroll-x wx:if="{{categoryList.length}}">
 	<view wx:for="{{categoryList}}" wx:key="index" class="item" data-no="{{item.no}}" bindtap="changeCls">{{item.name}}</view>
 </scroll-view>
-<scroll-view scroll-y class="tdBox{{categoryList.length?' act':''}}" style="{{categoryList.length?'bottom:0':''}}" scroll-into-view="{{nowSelectedCls}}" scroll-with-animation="true">
+<view scroll-y class="tdBox{{categoryList.length?' act':''}}" style="{{categoryList.length?'bottom:0':''}}" scroll-into-view="{{nowSelectedCls}}" scroll-with-animation="true">
 	<button class="shareIcon" open-type="share">
 		<image src="../../images/shareIcon.png"  />
 	</button>
@@ -49,6 +48,7 @@
 		</view>
 		<!-- 商品列表 -->
 		<view id="{{list.moduleId}}" class="ind-goodsList" wx:if="{{list.templetType=='6'}}" style="{{'margin:'+list.marginTop+'px 0 '+list.marginBottom+'px 0;'}}">
+			
 			<view class="li" wx:for="{{list.details}}" wx:for-index="annIndex" wx:for-item="zItem" wx:key="annIndex" bindtap="goPage" data-type="{{zItem.connectionType}}" data-supplier="{{zItem.supplierNo}}" data-val="{{zItem.connectionNo}}" data-title="{{zItem.btnName}}">
 				<view class="img" style="background-image:url({{goodsUrl + zItem.connectionNo}}/{{zItem.picUrl}})"></view>
 				<view class="info">
@@ -60,7 +60,10 @@
 					<image src="../../images/b2bIndex_goodsList_addCarts.png" mode="widthFix" />
 				</view>
 			</view>
-			<view bindtap="loadingMoreClick" data-index="{{indexD}}" class="loadingMore" wx:if="{{list.details.length == 40}}">--- 点击加载更多商品 ---</view>
+			
+			<view bindtap="loadingMoreClick" class="loadingMore" wx:if="{{isShowAniLoadingMore}}">
+				<image src="../../images/loading.png" animation="{{aniLoadingMore}}" class="image"></image>
+			</view>
 		</view>
 		<!--圆形菜单按钮-->
 		<view id="{{list.moduleId}}" wx:if="{{list.templetType=='2'}}" class="btns" style="{{'margin:'+list.marginTop+'px 0 '+list.marginBottom+'px 0;'}}">
@@ -147,37 +150,38 @@
 	</view>
 
 	<!-- <movable-view class="oftenBuy" direction="all" inertia="true" x="{{400}}" y="{{350}}" bindtap="goPage" data-type="100">常购商品</movable-view> -->
-</scroll-view>
-
-	<view class="popup-container" wx:if="{{getPopupObj.popupType == 2 ? false : true}}">
+</view>
+	<view class="popup-container" wx:if="{{getPopupObj.popupType == '0' || getPopupObj.popupType == '1'}}">
 		<view class="popup-box" >
-			<view class="close">+</view>
-			<view 
-        class='type-coupons' 
-        wx:for="{{getPopupObj.coupons}}" 
-        wx:key="index"
-        wx:if="{{getPopupObj.popupType == 0 ? true : false}}"
-      >
-				<view class='item'>
-					<view class='main'>
-						<view class='amt'>
-							<view class='sub-amt'>{{item.subAmt}}</view>
-							<view class='text'>
-								<text class='en'>RMB</text>
-								<text class='cn'>优惠卷</text>
+			<view class="title">{{getPopupObj.popupType == "0" ? '优惠卷' : '通知'}}</view>
+			<block wx:if="{{getPopupObj.popupType == '0'}}">
+				<view 
+					class='type-coupons' 
+					wx:for="{{getPopupObj.coupons}}" 
+					wx:key="index"
+				>
+					<view class='item'>
+						<view class='main'>
+							<view class='amt'>
+								<view class='sub-amt'>{{item.subAmt}}</view>
+								<view class='text'>
+									<text class='en'>RMB</text>
+									<text class='cn'>优惠卷</text>
+								</view>
 							</view>
+							<view class='tag' bindtap="byCoupons" data-index="{{index}}">领取</view>
 						</view>
-						<view class='tag' bindtap="byCoupons" data-index="index">领取</view>
+						<view class='info'>全场满{{ item.limitAmt }}可使用</view>
 					</view>
-					<view class='info'>全场满{{ item.limitAmt }}可使用</view>
 				</view>
-			</view>
+			</block>
       <!-- 通知 -->
 			<view 
         class='type-notify' 
-        wx:if="{{getPopupObj.popupType == 1 ? true : false}}"
+        wx:if="{{getPopupObj.popupType == '1'}}"
       >
-        <image src="{{getPopupObj.coupons[0].picUrl}}" />
-      </view>
+        <image mode="widthFix" wx:for="{{getPopupObj.coupons}}" wx:key="index" src="{{item.picUrl}}" />
+			</view>
+			<view class="closePopup" hover-class="btn-hover" hover-stay-time="50" bindtap="closePopup">确定</view>
 		</view>
 	</view>

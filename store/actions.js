@@ -264,6 +264,7 @@ const actions = {
       return toast('此商品已达秒杀最大限购数量!')
     }
     let cartsObj = commit[types.GET_CARTS]()
+    // console.log(cartsObj.keyArr.length , param.type , !(param.goods['itemNo'] in cartsObj))
     if (cartsObj.keyArr.length>=300 && param.type != 'delete' && !(param.goods['itemNo'] in cartsObj)){
       toast('购物车已达到最大商品数量!')
       console.log(9987, param.type, param.goods, deepCopy(cartsObj))

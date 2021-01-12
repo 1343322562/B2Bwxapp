@@ -24,3 +24,8 @@ Page{background-color: #f2f2f2;font-size:28rpx;}
 #bg {
   background-color: #ff9c01;
 }
+
+.btn-hover {
+  opacity: .7;
+  transform: translate(3rpx, 3rpx);
+}

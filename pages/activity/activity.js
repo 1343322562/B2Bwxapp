@@ -64,7 +64,12 @@ Page({
           this.getGoodsListTimeout(itemNos.join(','))
           title = '首单特价'
         } else if (type == '3') { // 活动页
-          this.getGoodsListTimeout(value)
+          if (value) {
+            this.getGoodsListTimeout(value)
+          } else {
+            hideLoading()
+            toast('未设置商品数据')
+          }
         } else if (type == '8') { // 组合促销
           let list = []
           const goods = res.BD.goods
@@ -218,6 +223,7 @@ Page({
     })
   },
   onLoad (opt) {
+    console.log(opt)
     setTimeout(() => {console.log(this.data), 500})
     showLoading('请稍后...')
     opt.title = decodeURIComponent(opt.title)
@@ -240,9 +246,7 @@ Page({
     const { pageLoading, isCollectGoods, totalLength } = this.data
     console.log(isCollectGoods)
     if (pageLoading&& isCollectGoods && totalLength && this.isLoadingPage) {
-      console.log('钱')
       const collectObj = wx.getStorageSync('collectObj')
-      console.log('后')
       const arr = Object.keys(collectObj)
       arr.length ? this.getGoodsListTimeout(arr.join(',')) : this.setData({ goodsList:[]})
     } else {

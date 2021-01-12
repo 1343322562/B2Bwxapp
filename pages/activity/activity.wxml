@@ -28,10 +28,10 @@
       <text wx:if="{{goodsObj[itemNo].rewardPoint>0}}">积分</text>
     </view>
     <view class='price' wx:if="{{partnerCode!='1039'}}">
-      <text class='now'>￥{{goodsObj[itemNo].price}}{{goodsObj[itemNo].specType=='2'?'起':('/'+goodsObj[itemNo].unit)}}</text>
+      <text class='now'>￥{{goodsObj[itemNo].price}}{{goodsObj[itemNo].specType=='2'?'起':('/'+(goodsObj[itemNo].unit || ''))}}</text>
       <text class='before' wx:if="{{goodsObj[itemNo].orgiPrice&&goodsObj[itemNo].price!=goodsObj[itemNo].orgiPrice&&goodsObj[itemNo].specType!='2'}}">￥{{goodsObj[itemNo].orgiPrice}}</text>
     </view>
-    <view wx:if="{{!cartsObj[itemNo].realQty&&goodsObj[itemNo].minSupplyQty>1}}" class='minSupplyQty'>起订数量{{goodsObj[itemNo].minSupplyQty}}</view>
+    <view wx:if="{{!cartsObj[itemNo].realQty&&goodsObj[itemNo].minSupplyQty>1}}" class='minSupplyQty'>起订 {{goodsObj[itemNo].minSupplyQty}}</view>
     <view class='goCarts'>
       <view wx:if="{{goodsObj[itemNo].stockType!='0'}}" class="type {{goodsObj[itemNo].stockType=='0'?'cw':'dw'}}">{{goodsObj[itemNo].stockType=='0'?'常温':'低温'}}</view>
       <view class='btn'>

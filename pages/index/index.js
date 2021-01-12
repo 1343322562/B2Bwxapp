@@ -10,6 +10,8 @@ Page({
     pageObj: [],
     pageObjKey: [],
     indexImgUrl: '',
+    aniLoadingMore: '',
+    isShowAniLoadingMore: false,
     goodsUrl: '',
     promotionObj: {},
     categoryList: [],
@@ -41,6 +43,33 @@ Page({
       }
     })
   },
+  onPageScroll() {
+    if (this.loadingMoreTimer) return
+    const _this = this
+    const { goodsCpnDetail, pageObj } = _this.data
+    if (!goodsCpnDetail.length || !goodsCpnDetail[0].items.length) return _this.setData({ isShowAniLoadingMore: false })
+    const query = wx.createSelectorQuery();
+    query.select('.ind-goodsList').boundingClientRect()
+    query.exec(function (res) {
+      const cpnIndex = goodsCpnDetail[0].index
+      const { height, top } = res[0]
+      const pageDetail = pageObj[cpnIndex].details
+      const loadingDistence = 0 - height + (wx.getSystemInfoSync().windowHeight * 2.5) // 触发加载的距离
+      _this.loadingMoreTimer = setTimeout(() => { _this.loadingMoreTimer = false }, 50)
+      if (top < loadingDistence) {
+        setTimeout(() => {
+          const newDetails = [...pageDetail, ...goodsCpnDetail[0].items.splice(0, 8)]
+          _this.data.pageObj[cpnIndex].details = newDetails
+          _this.data.goodsCpnDetail = goodsCpnDetail
+          _this.setData({
+            [`pageObj[${cpnIndex}].details`]: newDetails,
+            goodsCpnDetail
+          })
+        }, pageDetail.length*10)
+      }
+      console.log(top, loadingDistence, wx.getSystemInfoSync().windowHeight)
+    })
+  },
   toSearchPageClick() { goPage('searchGoods') }, // 跳转搜索页
   // 关闭弹窗
 	closePopup () {
@@ -57,11 +86,11 @@ Page({
       data: { branchNo, token, platform, username },
       success(obj) {
 				 console.log(obj)
-				 let getPopupObj = _this.data.getPopupObj
+         let getPopupObj = _this.data.getPopupObj
          getPopupObj.popupType = obj.data.popupType
-				 if (getPopupObj.popupType != 0 && getPopupObj.popupType != 1) return 
-				
-			   switch (getPopupObj.popupType) {
+				 if (getPopupObj.popupType != '0' && getPopupObj.popupType != '1') return 
+         
+			   switch (Number(getPopupObj.popupType)) {
            case 0: // 优惠卷
             _this.getCoupons(getPopupObj, obj.data.popupData)
             break;
@@ -74,7 +103,11 @@ Page({
   },
   // 通知数据处理
   notify (data) {
-    data.popupData[0].picUrl = this.goodsUrl + '/upload/images/homePopup/' + picUrl
+    console.log(545464564654, data)
+    data.popupData.forEach(item => {
+      item.picUrl = getApp().data.imgUrl + '/upload/images/homePopup/' + item.picUrl
+    })
+    
     this.setData({ getPopupObj: {popupType: 1, coupons: data.popupData} })
   },
   // 获取优惠卷请求
@@ -105,6 +138,7 @@ Page({
   },
   // 领取优惠卷
 	byCoupons(e) {
+    console.log(e)
     let i = e.currentTarget.dataset.index
 		console.log('index', i)
     const { branchNo, token, platform, username } = this.userObj
@@ -114,6 +148,8 @@ Page({
     API.Public.getCouponsByBatchNo({
       data: { branchNo, token, platform, username, giveOutBatch: coupon.giveOutBatch, giveOutNo: branchNo, },
       success (obj) {
+        console.log(obj)
+        if (obj.code === -1) return toast(obj.msg)
         toast('领取成功')
       },
       error(res){
@@ -121,26 +157,7 @@ Page({
       }
     })
 
-		Fun.ajax(
-			baseUrl+'getCouponsByBatchNo.do',
-			"POST",
-			{
-				giveOutBatch:	coupon.giveOutBatch,
-				giveOutNo:	branchNo,
-				branchNo:	branchNo,
-				token:	token,
-				username:	userName,
-				platform:	platform
-			},
-			function(obj){
-				console.log(obj)
-				_this.successToast('领取成功')	
-			},
-			function(obj){
-				console.log(obj)
-				_this.failToast('领取失败')
-			}
-		)
+		
 	},
   changeCls (e) {
     const no = e.currentTarget.dataset.no
@@ -193,10 +210,14 @@ Page({
                   a.productionTime = 'productionTime' in a && a.productionTime.slice(0, 10)
                 })
                 const items = deepCopy(list[i])
+                console.log(list[i])
                 if (list[i].details.length > 40) {
+                  setTimeout(() => this.initAnimation(), 500)
+                  
                   list[i].details = list[i].details.slice(0, 40)
-                  this.data.goodsCpnDetail = items.details
-                  // setTimeout(() => { _this.setData({ [`pageObj[${i}]`]: items }) }, 4000)
+                  items.details.splice(0, 40)
+                  const item = { items: items.details, index: i }
+                  this.data.goodsCpnDetail.push(item)
                 }
               }
               keyList.push(false);
@@ -213,6 +234,21 @@ Page({
         this.setData({ pageLoading: true})
         wx.stopPullDownRefresh()
       }
+    })
+  },
+  initAnimation() {
+    const _this = this
+    var animation = wx.createAnimation({
+      duration: 200000,
+      timingFunction: 'linear',
+      delay: 0,
+      transformOrigin: '50% 50% 0',
+    }); 
+    animation.rotateZ(50000).step()
+    this.setData({ 
+      isShowAniLoadingMore: true,     
+    }, () => {
+      _this.setData({ aniLoadingMore: animation.export() })
     })
   },
   imgLoad (e) {
@@ -318,22 +354,22 @@ Page({
       selectedIconPath: '/images/60-21.png'
     })
     
-    wx.setTabBarItem({
-      index: 2,
-      text: '直配进货',
-      iconPath: '/images/60-3.png',
-      selectedIconPath: '/images/60-31.png'
-    })
+    // wx.setTabBarItem({
+    //   index: 2,
+    //   text: '直配进货',
+    //   iconPath: '/images/60-3.png',
+    //   selectedIconPath: '/images/60-31.png'
+    // })
     
     wx.setTabBarItem({
-      index: 3,
+      index: 2,
       text: '购物车',
       iconPath: '/images/60-4.png',
       selectedIconPath: '/images/60-41.png'
     })
     
     wx.setTabBarItem({
-      index: 4,
+      index: 3,
       text: '我的',
       iconPath: '/images/60-1.png',
       selectedIconPath: '/images/60-11.png'
