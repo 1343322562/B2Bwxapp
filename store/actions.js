@@ -1,7 +1,7 @@
 import API from '../api/index.js'
 import * as types from './types.js'
 import commit from './mutations.js'
-import { getGoodsImgSize, toast, deepCopy } from '../tool/index.js'
+import { getGoodsImgSize, toast, deepCopy, alert } from '../tool/index.js'
 import { timCurrentDay, tim } from '../tool/date-format.js'
 
 const app = getApp()
@@ -381,8 +381,15 @@ const actions = {
         data: { items, platform, token, username, branchNo },
         success: (res) => {
           console.log('购物车信息:', res)
+          console.log(getCurrentPages())
           let newCartsObj = { num: 0, keyArr:[]}
           if (res.code == 0 && res.data) {
+            const pages = getCurrentPages()
+            let currentPage = pages[pages.length - 1]; //获取当前页面的对象
+            const { route } = currentPage // 当前页面对路由
+            if (res.msg && route === "pages/carts/carts") {
+              alert(res.msg, { title: '提示' })
+            }
             res.data.forEach(config => {
               // 按加购时间排序
               const partnerCode = getApp().data.partnerCode
