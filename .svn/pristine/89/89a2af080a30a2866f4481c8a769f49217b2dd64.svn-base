@@ -1,0 +1,29 @@
+<view class="search">
+  <view class='item form' catchtap='goSearch' style="display: none;">
+    <image class='icon' src="../../images/search_page_icon.png" />
+    <view class='input'>请输入你想要搜索的商品信息</view>
+  </view>
+</view>
+<scroll-view scroll-x class="clsList">
+  <view class= "li{{nowSelectedCls =='all'?' act':''}}"  catchtap='changeCls' data-no="all" >全部</view>
+  <view class="li{{nowSelectedCls == item.supcustCls?' act':''}}" wx:for="{{clsList}}" wx:key="index" catchtap='changeCls' data-no="{{item.supcustCls}}">{{item.supcustName}}</view>
+</scroll-view>
+<view class='supplierList'>
+  <view class='li' wx:for="{{supplierKey[nowSelectedCls]}}" wx:key="index" catchtap='goGoodsList' data-no="{{item}}">
+    <view class='img'><image class='icon' src="{{supplierObj[item].goodsImgUrl}}" /></view>
+    <view class='info'>
+      <view class='name'>{{supplierObj[item].supplierName}}</view>
+      <view class='startMoney'>起送价:<text>{{supplierObj[item].minDeliveryMomey}}元</text></view>
+      <view class='manage'>简 介:{{supplierObj[item].itemClsName || supplierObj[item].attachInfo}}</view>
+      <view class='phone' wx:if="{{supplierObj[item].supplierTel}}">商户电话:{{supplierObj[item].supplierTel}}</view>
+    </view>
+    
+  </view>
+</view>
+
+
+<!-- <view class="searchShop-box"><image height="30rpx" width="30rpx" src="../../images/search_page_icon.png" /></view> -->
+<view class="pageData_null" wx:if="{{!supplierKey[nowSelectedCls].length&&pageLoading}}">
+  <image mode="widthFix" src="../../images/pageData-null.png"/>
+  <view class="page_text">{{username == '13212609575' ? '此模块即将开放，敬请期待' : '当前类别无数据'}}~</view>
+</view>

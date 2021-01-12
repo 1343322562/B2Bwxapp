@@ -1,0 +1,61 @@
+<block wx:if="{{pageLoading}}">
+
+<image class="setRequestUrl" catchtap='setRequestUrl'  src="../../images/set_icon.png" wx:if="{{partnerCode=='1000'}}" />
+<view class='seRequestBox'wx:if="{{showSetrequest}}">
+  <input class='input'  bindinput='getInputDate' data-type="baseUrl" value="{{baseUrl}}" />
+  <view class='btn'>
+    <text  class='item' catchtap='confirmSetRequest' data-type="1">保存</text>
+    <text  class='item' catchtap='confirmSetRequest' data-type="0">取消</text>
+  </view>
+</view>
+
+<view class='tapList'>
+  <view class="item{{tabBarIndex==index?' act':''}}" wx:for="{{tabBarList}}" data-type="{{index}}" bindtap="changeLoginType" wx:key="index">{{item}}</view>
+</view>
+<view class='box'>
+  <view class='form'>
+    <view class='name'>{{tabBarIndex?'手机号':'用户名'}}</view>
+    <view class='input'><input bindinput='getInputDate' value="{{tabBarIndex?tel:name}}" data-type="{{tabBarIndex?'tel':'name'}}" maxlength='{{tabBarIndex?11:25}}'  /></view>
+    <view class='lookUserList' catchtap='changeShowUserList' wx:if="{{!tabBarIndex&&userList.length}}">
+      <image class="icon {{showUserList?'up':'down'}}" src="../../images/logo_up_icon.png" />
+    </view>
+  </view>
+  <view class='form'>
+    <view class='name'>{{tabBarIndex?'验证码':'密码'}}</view>
+    <view class="input{{tabBarIndex?' code':''}}">
+      <input bindinput='getInputDate' type="{{tabBarIndex?'value':'password'}}" value="{{tabBarIndex?code:pwd}}" data-type="{{tabBarIndex?'code':'pwd'}}" maxlength='{{tabBarIndex?8:20}}'  />
+      <view wx:if="{{tabBarIndex}}" bindtap='getCode' class='getCode'>{{count?(count+"s"):"获取验证码"}}</view>
+    </view>
+  </view>
+</view>
+<view class='agreement' wx:if="{{agreementObj.secret || agreementObj.users}}">
+<checkbox-group bindchange="checkboxChange">
+  <label class="checkbox">
+    <checkbox checked="{{agreement}}">我已阅读并同意</checkbox>
+  </label>
+  <text wx:if="{{agreementObj.users}}" class='msg'catchtap="openUserAgreement" data-id='0'>《用户协议》</text>
+  <text wx:if="{{agreementObj.secret}}" class='msg-c'catchtap="openUserAgreement">和</text>
+  <text wx:if="{{agreementObj.secret}}" class='msg'catchtap="openUserAgreement" data-id='1'>《隐私协议》</text>
+</checkbox-group>
+</view>
+<view class="login{{agreement?'':' null'}}" bindtap='login'>登录</view>
+<view class='login null' wx:if="{{isLogin}}" bindtap='quit'>取消</view>
+
+<view class='action'>
+  <view class='l' wx:if="{{!isLogin}}" bindtap='goPage' data-type='password'>忘记密码?</view>
+  <view class='r' bindtap='goPage' data-type='register' wx:if="{{partnerCode!='1043'}}">新用户注册</view>
+</view>
+<view class='loadingImg' wx:if="{{showLoadingImg}}"  animation="{{animation}}" style="background-image:url({{loadingImg}}/upload/images/sysLogo/adPic.jpg?randNum={{randNum}})"></view>
+<image class='hide' src="{{loadingImg}}/upload/images/sysLogo/adPic.jpg?#" binderror='imgError'></image>
+</block>
+
+<view class="userList{{showUserList?' act':''}}" animation="{{userListAnimation}}" wx:if="{{!tabBarIndex&&userList.length}}">
+
+  <view class='li' wx:for="{{userList}}" wx:key="index" catchtap='selectedUser' data-index="{{index}}">
+    <image src="../../images/my_page_icon_user.png" class='img' />
+    <view class='info'><text class='acc'>{{item.user}}</text><text class='name'>{{item.name}}</text></view>
+    <view class='quit' data-index="{{index}}"  catchtap='deleteUser'><image class='icon' src="../../images/search-quit-icon.png" /></view>
+  </view>
+
+</view>
+<view class='fmsg'>由中商软科提供技术支持</view>

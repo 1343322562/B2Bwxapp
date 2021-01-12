@@ -1,0 +1,15 @@
+<view class='head'>
+  <view class='backMoney'>我的积分：{{money}}</view>
+</view>
+<view class='list'>
+  <view class='li' wx:for="{{list}}" wx:key="index">
+    <view class='item' >
+      <text class='type'>{{item.memo}}</text>
+      <text class='right'>{{item.createDate}}</text>
+    </view>
+    <view class='item' >
+      <text class='right money'>{{item.accNum}}</text>
+    </view>
+  </view>
+</view>
+<text  class="page-bottom-null" wx:if="{{list.length}}"></text>

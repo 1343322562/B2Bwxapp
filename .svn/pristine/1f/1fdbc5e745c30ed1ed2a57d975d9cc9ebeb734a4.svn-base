@@ -1,0 +1,6 @@
+<view  class='title'>设置您的新密码</view>
+<view class='form' wx:if="{{openType == 'my'}}"><input bindinput='getValue' data-type="nowPwd"  class='input' type='password' maxlength='20' placeholder='输入当前密码' /></view>
+<view class='form'><input bindinput='getValue' data-type="pwd"  class='input' type='password' maxlength='20' placeholder='输入新密码' /></view>
+<view class='form'><input bindinput='getValue' data-type="pwd2" class='input' type='password' maxlength='20' placeholder='再次输入新密码' /></view>
+<view class='submit' catchtap='submit'>确认</view>
+

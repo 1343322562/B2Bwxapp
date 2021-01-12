@@ -1,0 +1,41 @@
+<view class='head head-col'>
+
+  <view class='reconciliation' bindtap='goPage'>对账</view>
+  <view class='title'>账户余额(元)</view>
+  <view class='money'>{{czAmt}}</view>
+
+  <view class='info'>
+    <view class='item'>
+      <text class='name'>可订货额度(元)</text>
+      <text class='content'>{{availableCzAmt}}</text>
+    </view>
+    <view class='item'>
+      <text class='name'>信用额度(元)</text>
+      <text class='content'>{{minCzAmt}}</text>
+    </view>
+    <view class='item'>
+      <text class='name'>待 返 利(元)</text>
+      <text class='content'>{{rebateAmt}}</text>
+    </view>
+  </view>
+  <view class='btn'>
+    <view wx:for="{{tabBer}}" wx:key="index" class="item{{tabIndex==index?' act':''}}" catchtap='changeTab' data-index="{{index}}">
+      <image class="icon" src="../../images/{{item.icon}}.png" mode="widthFix" />
+      <text class='text'>{{item.name}}</text>
+    </view>
+  </view>
+  
+</view>
+<view class='list'>
+  <view class='li' wx:for="{{list[tabIndex]}}" wx:key="index">
+    <view class='item' >
+      <text class='type'>{{item.memo}}</text>
+      <text class='right'>{{item.createDate}}</text>
+    </view>
+    <view class='item' >
+      <text class='sheetNo'>{{item.subOrderNo}}</text>
+      <text class='right money'>{{item.busiFrozenAmt}}</text>
+    </view>
+  </view>
+</view>
+<text  class="page-bottom-null" wx:if="{{list[tabIndex].length}}"></text>

@@ -1,0 +1,47 @@
+<view class="head">
+  <view class="act" style="{{('left:'+(tabIndex*(100/tabTitle.length))+'%;width:'+(100/tabTitle.length)+'%')}}"></view>
+  <view class="btn2">
+    <view  wx:for="{{tabTitle}}" wx:key="index" class="{{tabIndex==index?'act':''}}" data-index="{{index}}" bindtap="changeTab">{{item}}</view>
+  </view>
+</view>
+<view class="list">
+  <view class="li" wx:for="{{list[tabIndex]}}" wx:key="index">
+    <view class="l">
+      <view class="money">￥<text>{{item.subAmt}}</text></view>
+      <view class="max">满{{item.limitAmt}}元可用</view>
+    </view>
+    <view class="r">
+      <view class="name">满{{item.limitAmt}}元减{{item.subAmt}}元</view>
+      <view class="time">
+        <text>{{item.startDateStr}}至{{item.endDateStr}}</text>
+        <!-- <view class="btn" bindtap="selectCup" data-no="{{index}}">立即使用</view> -->
+      </view>
+       <view class="explain" bindtap="showCupInfo" data-index="{{index}}">
+        <text>使用说明</text>
+        <image src="../../images/yh-coupon-up.png" class="{{'icon '+(showList[index]?'up':'down')}}" mode="widthFix"/>
+      </view> 
+    </view>
+     <view class="c" wx:if="{{showList[index]}}">
+      <view class="title">使用说明</view>
+      <view class="cnt" wx:if="{{item.instructions}}">{{item.instructions}}</view>
+      <view wx:else>
+        <view class="cnt" wx:if="{{!item.filterType&&item.filterType!='0'}}">1,全场可享用优惠券。</view>
+        <view class="cnt" wx:else >
+        <text>仅限已下{{item.filterType=='0'?'商品':(item.filterType=='1'?'类别':'品牌')}}使用 :</text>
+        <view>
+        <text wx:for="{{item.filterData}}" wx:key="{{zIndex}}" wx:for-item="zItem" wx:for-index="zIndex">{{zIndex+1}}、{{zItem.filterName}} </text>
+      </view>
+      
+      </view>
+      
+      </view>
+    </view> 
+  </view>
+
+</view>
+<text  class="page-bottom-null" wx:if="{{list[tabIndex].length}}"></text>
+
+<view class="pageData_null" wx:if="{{!list[tabIndex].length&&pageLoading}}">
+  <image mode="widthFix" src="../../images/pageData-null.png"/>
+  <view class="page_text">没有优惠券哦~~</view>
+</view>

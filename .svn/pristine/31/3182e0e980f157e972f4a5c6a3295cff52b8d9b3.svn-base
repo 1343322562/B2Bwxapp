@@ -1,0 +1,254 @@
+<wxs module="filters" src="../../tool/filter.wxs"></wxs>  <!-- 引入 wxs module -->  
+<view class="block">
+  <view class='title'>付款方式</view>
+  <view class='contentBlock' wx:for="{{payWayList}}" wx:key="index" wx:if="{{item.show && !(partnerCode == 1059 && item.type == 0)}}" bindtap='changePayWay' data-type="{{item.type}}">
+    <image class="icon" src="../../images/liquidation_page_{{item.icon}}.png" />
+    <text class='text'>{{item.name}}</text>
+    <text class='msg' wx:if="{{item.type == '2'}}">(下单可用余额: ￥{{storedValue}})</text>
+    <view class="checkbox{{item.type == payWay?' act':(isUseBlendWay&&item.type=='2'?' use':'')}}"><image class="icon" src="../../images/hook.png" /></view>
+    <view  class='right' wx:if="{{item.type == '0' && partnerCode != '1029'}}">部分优惠不能享用</view>
+    <view  class='right' wx:if="{{item.type == '1'&&wxPayRateOpen=='1'}}">收取手续费{{wxPayRate}}%</view>
+  </view>
+  <view class='payWayWarning' wx:if="{{(payWay == '2' && storedValue != 0 && storedValue < realPayAmt)||isUseBlendWay}}">
+    <image class="icon" src="../../images/warning_icon.png" />
+    <text class='text'>您的余额不足以单独支付订单金额,可搭配其他方式混合支付,是否使用混合支付?</text>
+    <view class='select'>
+      <checkbox-group bindchange="checkboxChange">
+        <label class="checkbox">
+          <checkbox value="true"  checked="{{isUseBlendWay}}"/>
+          <text>使用混合支付</text>
+        </label>
+      </checkbox-group>
+    </view>
+  </view>
+</view>
+<view class="block" style="margin: 0;" wx:if="{{(partnerCode == 1000 || partnerCode == 1059 || partnerCode == 05) && !replenish}}" >
+  <view class='title'>  
+    <text>配送方式</text>
+    <view class="right act">
+      <picker header-text="选择配送方式" bindchange="bindPickerChange" value="{{transWayIndex}}" range="{{transWayArray}}">
+        <view class="picker">
+          {{transWayArray[transWayIndex]}} 
+          <image class="icon" src="../../images/goRight_icon.png" />
+        </view>
+      </picker>
+    </view>
+  </view>
+  <view class="transWayList" >
+    <view class="transBlock" bindtap="selectTransWayClick" data-type="0">
+      <view class="content {{deliveryType == 0?'act':''}}">
+        <text class="title">配送</text>
+        <text class="info">送货到店</text>
+      </view>
+    </view>
+    <view class="transBlock" bindtap="selectTransWayClick" data-type="1">
+      <view class="content {{deliveryType == 1?'act':''}}">
+        <text class="title">自提</text>
+        <text class="info">到总仓自提</text>
+      </view>
+    </view>
+    <view class="transBlock" bindtap="selectTransWayClick" data-type="3">
+      <view class="content {{deliveryType == 3?'act':''}}">
+        <text class="title">物流</text>
+        <text class="info">发物流公司</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 自提点时间选择区域 (需要erp开启自提点取货)-->
+<view class='contentBlock block' catchtap='showStoreTime' wx:if="{{deliveryType == 1}}">
+  <image class="icon" src="../../images/store.png" style="width: 49rpx;height: 49rpx;margin:0 6rpx;"/>
+  <text class='text'>自提时间</text>
+  <view class="right act">
+    <text style="font-size: 27rpx;">{{storeTime+':00'}}</text>
+    <image class="icon" src="../../images/goRight_icon.png" />
+  </view>
+</view>
+
+<view class='contentBlock block' wx:if="{{deliveryType != 1 && (deliveryType === transportFeeChoiceWay || transportFeeChoiceWay == 4)}}">
+  <image class="icon" src="../../images/tans-amt.png" style="width: 60rpx;height: 60rpx;margin:0 6rpx;"/>
+  <text class='text'>配送费</text>
+  <view class="right act">
+    <text style="font-size: 29rpx;">￥{{transportFeeAmt}}</text>
+    <!-- <image class="icon" src="../../images/goRight_icon.png" /> -->
+  </view>
+</view>
+
+
+<view class="block" wx:if="{{isInvoice == '1'}}" >
+  <view class='title'>  
+    <text>发票信息</text>
+    <view class="right act" catchtap='goInvoicePage'>
+      <text>{{ticketType==0?'不开发票':(ticketType=='1'?'个人发票':'增值税普通发票')}}</text>
+      <image class="icon" src="../../images/goRight_icon.png" />
+    </view>
+  </view>
+</view>
+<view class="block">
+  <view class='title'>费用明细</view>
+  <view class='detail'>
+    <view class='info'><text class='l'>付款商品</text><text class='c'>x{{totalNum}}</text><text class='r b'>￥{{totalMoney}}</text></view>
+    <view class='info'><text class='l'>赠送商品</text><text class='c'>x{{BGnum}}</text><text class='r'>￥0</text></view>
+    <view class='info'><text class='l'>兑换商品</text><text class='c'>x{{selectedDhCoupons.num}}</text><text class='r'>￥0</text></view>
+    <view class='info'><text class='l'>优惠金额</text><text class='r'>￥{{discountsMoney}}</text></view>
+    <view class='info'><text class='l'>配送金额</text><text class='r'>￥{{transportFeeAmt}}</text></view>
+  </view>
+  <!-- 优惠卷区域 -->
+  <view class='contentBlock' wx:if="{{sourceType == '0'}}" catchtap='showCoupons'>
+    <image class="icon" src="../../images/my_page_icon_youhuiquan.png" />
+    <text class='text'>优惠券</text>
+    <view class="right{{(selectedCoupons&&selectedCoupons!='no')?' act':''}}">
+      <text>{{couponsList.length?(selectedCoupons =='no'?'不使用':(selectedCoupons?('优惠 '+selectedCoupons.subAmt+'元'):'有可用优惠券')):'暂无优惠券可使用'}}</text>
+      <image class="icon" src="../../images/goRight_icon.png" />
+    </view>
+  </view>
+    <!-- 满减区域 (满减条件：  满减数据)-->
+  <view class='contentBlock' wx:if="{{mjObj.length}}">
+    <image class="icon" src="../../images/settle_icon_1.png" />
+    <text class='text'>满减</text>
+    <view class='right act'>
+      <text wx:if="{{item.reachVal}}" wx:for="{{mjObj}}" wx:key="index">金额满 ￥{{item.reachVal}} 减 ￥{{item.bonousAmt}}<text wx:if="{{index!=(mjObj.length-1)}}">,</text></text>
+      <text wx:if="{{item.reachQty}}" wx:for="{{mjObj}}" wx:key="index">数量满 {{item.reachQty}} 减 ￥{{item.bonousAmt}}<text wx:if="{{index!=(mjObj.length-1)}}">,</text></text>
+    </view>
+  </view>
+  <!-- 满赠区域 (没有赠品可选择时，不会显示此区域)-->
+  <view class='contentBlock' wx:if="{{giftList.length}}" catchtap='showGiftList'>
+    <image class="icon" src="../../images/settle_icon_0.png" />
+    <text class='text'>满赠</text>
+    <view class="right{{selectedGiftNum?' act':''}}">
+      <text>{{selectedGiftNum?('已选择'+selectedGiftNum+'组赠品'):'未选择赠品'}}</text>
+      <image class="icon" src="../../images/goRight_icon.png" />
+    </view>
+  </view>
+</view>
+
+
+<view class="block" >
+  <view class='contentBlock' wx:if="{{sourceType == '0'}}" catchtap='showDhCoupons'>
+    <image class="icon" src="../../images/my_page_icon_duihuiquan.png" />
+    <text class='text'>兑换券</text>
+    <text class='msg'>(不需要付款)</text>
+    <view class="right{{dhCouponsList.length?' act':''}}">
+      <text>{{dhCouponsList.length?'有可用兑换券':'无兑换券'}}</text>
+      <image class="icon" src="../../images/goRight_icon.png" />
+    </view>
+  </view>
+  
+  <view class='goodsList' wx:if="{{selectedDhCoupons.keyArr.length}}">
+  
+    <view class='li' wx:for="{{selectedDhCoupons.keyArr}}" wx:for-item="itemNo" wx:key="index">
+      <view class='img'>
+        <image class="icon" src="" />
+      </view>
+      <view class='info'>
+        <view class='name'><text class='red'>[兑换券]</text>{{dhCouponsList[selectedDhCoupons[itemNo].index].itemName}}</view>
+        <view class='size'>规格:{{dhCouponsList[selectedDhCoupons[itemNo].index].itemSize}}</view>
+      </view>
+      <view class='total'>
+        <view class='price'>免费</view>
+        <view class='num'>x{{selectedDhCoupons[itemNo].num}}</view>
+        <view class='subtotal'>小计:￥0</view>
+      </view>
+    </view>
+
+  </view>
+</view>
+
+<view class="block">
+  <view class='title'>所购商品</view>
+  <view class='goodsList'>
+  
+    <view class='li' wx:for="{{goodsList}}" wx:for-item="goods" wx:key="index">
+      <view class='img'>
+        <image class="icon" src="{{goods.goodsImgUrl}}" />
+        <view wx:if="{{goods.enReturnGoods=='0'||goods.isProhibit=='1'}}" class="noReturn">不可退</view>  
+      </view>
+      <view class='info'>
+        <view class='name'>
+          <text class='red' wx:if="{{goods.isGift}}">[赠品]</text>
+          {{goods.itemName}}
+        </view>
+        <view class='size'>
+          规格:{{goods.itemSize}}
+          <!-- 统配促销信息 -->
+          <view class='tag'>
+            <text wx:if="{{goods.MS}}">秒杀</text>
+            <text wx:if="{{goods.MQ}}">数量满减</text>
+            <text wx:if="{{goods.MJ}}">满减</text>
+            <text wx:if="{{goods.SZ}}">首赠</text>
+            <text wx:if="{{goods.BG}}">买赠</text>
+            <text wx:if="{{goods.FS}}">首单特价</text>
+            <text wx:if="{{goods.SD}}">单日限购</text>
+            <text wx:if="{{goods.BF}}">买满赠</text>
+          </view>
+          <!-- 直配促销信息 -->
+          <view class='tag'>
+            <text wx:if="{{goods.RBF && !goods.BF}}">买满赠</text>
+            <text wx:if="{{goods.RMJ && !goods.MJ}}">满减</text>
+            <text wx:if="{{goods.RSD && !goods.SD}}">限时促销</text>
+          </view>
+        </view>
+        <view class='size' wx:if="{{goods.deliveryUnit}}">单位:{{goods.deliveryUnit}}</view>
+      </view>
+      <view class='total'>
+        <view class='price'>{{goods.isGift?'免费':('￥'+goods.price)}}</view>
+        <view class='num'>x{{goods.realQty}}</view>
+        <view class='subtotal'>小计:￥{{goods.subtotal}}</view>
+      </view>
+    </view>
+
+  </view>
+</view>
+
+
+
+<view class="block" wx:if="{{!showSelectCoupons&&!showSelectMzgoods&&!showSelectDhCoupons}}">
+  <view class='title'>备注</view>
+  <input maxlength='40' class='textarea' value="{{memo}}" bindinput='getMemo' />
+  <view style="height:30rpx"></view>
+</view>
+<view style='height:110rpx'></view>
+
+<view class="pageBottomBtn">
+  <view class="okPay" bindtap="submit">提交订单</view>
+  <view class='info'>
+    <view class="totalMoney" wx:if="{{!isUseBlendWay}}"><view class='title'>合计: </view><view class='text'>￥{{filters.toFixed(realPayAmt + transportFeeAmt)}}</view></view>
+    <!-- 混合支付要减去储值金额 -->
+    <view class="totalMoney" wx:else><view class='title'>合计: </view><view class='text'>￥{{filters.toFixed(realPayAmt - storedValue + transportFeeAmt)}}</view></view>
+    <view class="discountsMoney">已优惠: ￥{{discountsMoney}}</view>
+  </view>
+  
+</view>
+
+<!-- 各类优惠选择的 Dialog 组件 -->
+<select-coupons show="{{showSelectCoupons}}" now="{{selectedCoupons}}" list="{{couponsList}}" bindselectCoupons="selectCoupons" />
+<select-mzgoods show="{{showSelectMzgoods}}" now="{{selectedGift}}" list="{{giftList}}" bindselectGift="selectGift"  /> 
+<select-dhCoupons show="{{showSelectDhCoupons}}" now="{{selectedDhCoupons}}" list="{{dhCouponsList}}" bindselectDhCoupons="selectDhCoupons" />
+<select-storeTime show="{{selectedStoreTime}}" time="{{storeTime}}" />
+
+<!-- <view class="selecter-time-conainer" wx:if="{{selected}}" catchtouchmove>
+  <view class="selecter-time-box">
+    <view class="btn-box">
+      <text bindtap='close'>取消</text>
+      <text bindtap='come'>确定</text>
+    </view>
+    <picker-view indicator-style="height: 50px;" style="margin: 0 8%; width: 84%; height: 300px;" value="{{value}}" bindchange="bindChange">
+  <picker-view-column>
+    <view wx:for="{{years}}" wx:key="{{years}}" style="line-height: 50px; text-align: center;">{{item}}</view>
+  </picker-view-column>
+  <picker-view-column>
+    <view wx:for="{{months}}" wx:key="{{months}}" style="line-height: 50px; text-align: center;">{{item}}</view>
+  </picker-view-column>
+  <picker-view-column>
+    <view wx:for="{{days}}" wx:key="{{days}}" style="line-height: 50px; text-align: center;">{{item}}</view>
+  </picker-view-column>
+  <view style="padding-right: 10rpx;display: flex;justify-content: center;align-items: center;font-size: 12px;font-weight: 100;">—</view>
+  <picker-view-column>
+    <view wx:for="{{hours}}" wx:key="{{hours}}" style="line-height: 50px; text-align: center;">{{item}}</view>
+  </picker-view-column>
+  <view style="padding-right: 10rpx;display: flex;justify-content: center;align-items: center;font-size: 14px;font-weight: 100;position:relative;left: -45rpx;">时</view>
+</picker-view>
+  </view>
+  
+</view> -->
