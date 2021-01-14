@@ -94,8 +94,6 @@ Page({
   getItemCls () {
     const { classifyList, classifyObj} = wx.getStorageSync('AllCls')
     this.setData({ classifyList, classifyObj, pageLoading: true})
-    console.log(classifyList[0], classifyList)
-    console.log(88,classifyObj)
     if (app.data.supplierNo) {       // 首页跳转至入驻商类别
       return this.tapOneCls(app.data.supplierNo ,'no')
       app.data.supplierNo = ''
@@ -164,48 +162,73 @@ Page({
   // 获取 今日限购的促销信息(直配)
   getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength, supcustNo) {
     // 获取促销信息
-    API.Public.getSupplierAllPromotion({
-      data: { branchNo, token, platform, username, supplierNo: supcustNo },
-      success: res => {
-        console.log('促销信息' ,res)
-        let data = res.data
-        if (res.code == 0 && res.data) {
-          let promKey // 获取 以 RSD 开头的下标 (促销信息)
-          for (let key in data) {
-            if (key.includes('RMJ') && data[key].length != 0) { this.setData({ rmj: true }) }  
-            if (key.includes('RBF') && data[key].length != 0) { this.setData({ rbf: true }) }    
-            if (key.includes('RSD')) { promKey = key }
-          }
-          wx.setStorageSync('supplierPromotion', data[promKey]) // 储存 限购信息，在购物车中拿到
-          // 将促销字段，推入对应的商品对象，页面通过 促销子段 (存在与否) 来渲染促销信息
-          new Promise((resolve, reject) => {
-            let todayPromotion = data[promKey]
-            resolve(todayPromotion)
-          }).then(todayPromotion => {        // 将当日促销信息推入 goodsObj
-            let todayPromotionKeyArr = Object.keys(todayPromotion)
-            todayPromotionKeyArr.map(item => {
-              for (let key in goodsObj) {
-                if (goodsObj[key].itemNo == item) {
-                  todayPromotion[key].endDate = todayPromotion[key].endDate.slice(0, 10)      // 截取年月日
-                  todayPromotion[key].startDate = todayPromotion[key].startDate.slice(0, 10)  // 截取年月日
-                  goodsObj[key].todayPromotion = todayPromotion[key]
+    return new Promise((resolve) => {
+      API.Public.getSupplierAllPromotion({
+        data: { branchNo, token, platform, username, supplierNo: supcustNo },
+        success: res => {
+          console.log('促销信息' ,res)
+          let data = res.data
+          if (res.code == 0 && res.data) {
+            let promKey // 获取 以 RSD 开头的下标 (促销信息)
+            for (let key in data) {
+              if (key.includes('RMJ') && data[key].length != 0) {
+                let rmjObj  = {}
+                data[key].forEach(item => {
+                  if (item.filterType == '3') { // 按条件 (商品)
+                    const filterArr = item.filterValue.split(',')
+                    filterArr.forEach((itemNo) => { rmjObj[itemNo] = 1 })
+                  } else if (item.filterType == '0') { // 全场
+                    rmjObj = true
+                  }
+                })
+                this.setData({ rmj: rmjObj })
+              } 
+              if (key.includes('RBF') && data[key].length != 0) {
+                let rbfObj  = {}
+                data[key].forEach(item => {
+                  if (item.filterType == '3') { // 按条件 (商品)
+                    const filterArr = item.filterValue.split(',')
+                    filterArr.forEach((itemNo) => { rbfObj[itemNo] = 1 })
+                  } else if (item.filterType == '0') { // 全场
+                    rbfObj = true
+                  }
+                })
+                this.setData({ rbf: rbfObj })
+              }    
+              if (key.includes('RSD')) { promKey = key }
+            }
+            wx.setStorageSync('supplierPromotion', data[promKey]) // 储存 限购信息，在购物车中拿到
+            // 将促销字段，推入对应的商品对象，页面通过 促销子段 (存在与否) 来渲染促销信息
+            new Promise((resolve, reject) => {
+              let todayPromotion = data[promKey]
+              resolve(todayPromotion)
+            }).then(todayPromotion => {        // 将当日促销信息推入 goodsObj
+              let todayPromotionKeyArr = Object.keys(todayPromotion)
+              todayPromotionKeyArr.map(item => {
+                for (let key in goodsObj) {
+                  if (goodsObj[key].itemNo == item) {
+                    const cartsObj = wx.getStorageSync('cartsObj')
+                    todayPromotion[key].endDate = todayPromotion[key].endDate.slice(0, 10)      // 截取年月日
+                    todayPromotion[key].startDate = todayPromotion[key].startDate.slice(0, 10)  // 截取年月日
+                    goodsObj[key].todayPromotion = todayPromotion[key]
+                    goodsObj[key].drPrice = todayPromotion[key].price
+                    goodsObj[key].drMaxQty = todayPromotion[key].limitedQty
+                    if (!(key in cartsObj) || cartsObj[key].realQty < goodsObj[key].drMaxQty) {
+                      goodsObj[key].price = todayPromotion[key].price
+                    }
+                  }
                 }
-              }
+              })
+              resolve({ goodsObj, totalLength })
+              // goodsObj 中有促销字段 todayPromotion
+              this.setData({
+                goodsObj: goodsObj,
+                totalLength: totalLength
+              })
             })
-            // goodsObj 中有促销字段 todayPromotion
-            this.setData({
-              goodsObj: goodsObj,
-              totalLength: totalLength
-            })
-          })
-        } else {
-          // goodsObj 中没有促销字段 todayPromotion
-          this.setData({
-            goodsObj: goodsObj,
-            totalLength: totalLength
-          })
+          }
         }
-      }
+      })
     })
   },
   // 获取直配商品
@@ -215,32 +238,36 @@ Page({
     const screenSelect = this.data.screenSelect
     API.Goods.supplierItemSearch({
       data: { condition: '', modifyDate:'', supcustNo, pageIndex: 1, pageSize: 1000, itemClsNo, token, platform, username},
-      success: res => {
+      success: async res => {
         if(res.code == 0 && res.data) {
-          console.log(res)
+          console.log(res, deepCopy(res))
           const list = res.data.itemData || []
           let goodsList = []
           let fineGoodsList = []
           let goodsObj = {}
           const promotionObj = this.promotionObj
           list.forEach(goods => {
-            goods.stockQty = 9999
+            goods.orgiPrice = goods.price 
+            // goods.stockQty = 9999
             const itemNo = goods.itemNo
             goods.goodsImgUrl = this.zcGoodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
             goods.stockQty > 0 ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
             goods.isStock = goods.stockQty > 0 ? true : false
             goodsObj[itemNo] = goods
-            
           })
           let newArr = goodsList.concat(fineGoodsList)
-          const totalLength = newArr.length
+          let totalLength = newArr.length
           console.log(newArr)
-          this.getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength, supcustNo) // 获取并处理今日限购的促销信息(直配)
+          const obj = await this.getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength, supcustNo) // 获取并处理今日限购的促销信息(直配)
+          goodsObj = obj.goodsObj
+          totalLength = obj.totalLength
           if (screenSelect!='0') {
             newArr.sort((a, b) => (screenSelect == '1' ? (goodsObj[a].price - goodsObj[b].price) : (goodsObj[b].price - goodsObj[a].price)))
           }
           setTimeout(()=>{
             this.setData({
+              goodsObj,
+              totalLength,
               goodsList: newArr.splice(0, maxNum),
             })
             baseGoodsList = newArr
@@ -315,12 +342,12 @@ Page({
             if (goods.itemBrandname && !brandObj[goods.itemBrandno] && !itemBrandnos) {
               brandObj[goods.itemBrandno] = goods.itemBrandname
               brandList.push(goods.itemBrandno)
-            } 
+            }
             goods.goodsImgUrl = this.goodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
             const tag = getGoodsTag(goods, promotionObj)
             if (Object.keys(tag).length) { // 促销商品
               goods.stockQty > 0 ? promotionGoodsList.push(itemNo) : promotionFineGoodsList.push(itemNo)
-              if (tag.FS || tag.SD || tag.ZK|| tag.MS) {
+              if (tag.FS || tag.SD || tag.ZK || tag.MS) {
                 goods.orgiPrice = goods.price
                 goods.price
               }

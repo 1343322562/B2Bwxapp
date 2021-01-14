@@ -8,18 +8,19 @@
     class="title" 
     style="margin-top:{{bounding.top + 2}}px; height: {{bounding.height}}px; line-height:{{bounding.height}}px;"
   >
-    <block>
+    <block wx:if="{{r!=2}}">
       <view class="code" wx:if="{{isShowLeftIcon}}" bindtap="openCode"> 
         <image bindtap='backPage' class='back' src='../../images/code.png' wx:if='{{leftIconStyle != "black"}}'/>
         <view class="content">扫码购</view>
       </view>
-      <view bindtap='backPage' class='back back-text' wx:if='{{leftIconText}}'>{{leftIconText}}</view>
-    
-      <image bindtap='backPage' class='back' src='../../images/backBlack.png' wx:if='{{leftIconStyle == "black"}}'/>
-      <view bindtap='backPage' style="color:#000;" class='back back-text' wx:if='{{leftIconStyle == "black" && leftIconText}}'>返回</view>
     </block>
+    <view bindtap='backPage' class='back back-text' wx:if='{{leftIconText || r==2}}'>{{leftIconText || '首页'}}</view>
+  
+    <image bindtap='backPage' class='back' src='../../images/backBlack.png' wx:if='{{leftIconStyle == "black"}}'/>
+    <view bindtap='backPage' style="color:#000;" class='back back-text' wx:if='{{leftIconStyle == "black" && leftIconText}}'>返回</view>
+  
     
     <view class="content" style='{{titleStyle}}'>{{title}}</view>
-    <slot />
+    <slot wx:if="{{r!=2}}"/>
   </view>
 </view>

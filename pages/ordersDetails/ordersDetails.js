@@ -5,6 +5,7 @@ import * as types from '../../store/types.js'
 import commit from '../../store/mutations.js'
 Page({
   data: {
+    currentScrollTop: '',
     tabIndex: 0,
     tabTitle: ['订单详情', '订单状态'],
     order: null,
@@ -21,6 +22,7 @@ Page({
   },
   // 是否选择商品
   selectGoods(e) {
+    console.log(e)
     const { index } = e.currentTarget.dataset
     const { orderDetails } = this.data.order
     orderDetails[index].cancelSelected = !orderDetails[index].cancelSelected
@@ -42,6 +44,7 @@ Page({
     }
   },
   getOrderStatusStr(item) {
+    // approveFlag 审核状态 0未审核  1已审核  3未处理
     const status = item.supplyFlag
     return (status == '1' ?
       (item.approveFlag == '0' ? '未提交' : '已提交') :
@@ -103,7 +106,7 @@ Page({
             console.log(91, goods.differAmt, isNaN(goods.differAmt))
             console.log(87, order)
             console.log(92, order.supplyFlag, order.sheetSourceStr, order.memo)  
-            if (order.supplyFlag == 5 || order.supplyFlag == 51) {
+            if (order.supplyFlag == 5  || order.supplyFlag == '4' || order.supplyFlag == 51 || order.sheetSource=='yewuyuan') {
               goods.cancelSelected = true
             } else {
               goods.cancelSelected = 'hide'
@@ -254,7 +257,23 @@ Page({
     })
     return obj
   },
-  afreshOrder () {
+  
+  onPageScroll:function(e){ // 获取滚动条当前位置
+    this.data.currentScrollTop = e.scrollTop //获取滚动条当前位置的值
+  },
+  afreshOrder (type) {
+    const currentScrollTop = this.data.currentScrollTop
+    wx.createSelectorQuery().select('#repeatAdd').fields({
+      id:true,//是否返回节点id
+      rect:true,//是否返回节点布局位置
+      dataset: true,//返回数据集
+      size: true,//返回宽高
+      scrollOffset: true,//返回 scrollLeft,scrollTop
+    }, function(res){
+      console.log(res.top, currentScrollTop)
+      const scrollTop = currentScrollTop + res.top - 55
+      wx.pageScrollTo({ scrollTop: scrollTop })
+    }).exec()
     const { token, platform, username, branchNo, dbBranchNo } = this.userObj
     const { orderDetails } = this.data.order
     const selectedItemObj = this.selectedItemHandle(orderDetails)
@@ -262,7 +281,8 @@ Page({
     console.log(selectedItemObj)
     const _this = this
     const yhSheetNo = this.ordersNo
-    alert('是否把商品加入购物车',{
+    
+    alert((type == 'yewuyuan' ? '未达到起送金额，是否将商品加入购物车' : '是否把商品加入购物车'),{
       showCancel: true,
       success: ret => {
         if (ret.confirm) {
@@ -325,6 +345,14 @@ Page({
     this.setData({ showPay: false})
   },
   goPay () {
+    const _this = this
+    const { order } = this.data
+    const { normal } = wx.getStorageSync('configObj') // 起送金额
+    if(order.sheetSource == 'yewuyuan' && normal && order.realPayAmt < normal) {
+      _this.afreshOrder('yewuyuan')
+      return
+    }
+    console.log(this.data)
     this.setData({ showPay: true})
   },
   getPageData () {
@@ -332,6 +360,7 @@ Page({
     this.getOrdersDetail()
   },
   onLoad (opt) {
+    const _this = this
     this.openType = opt.openType
     this.ordersNo = opt.sheetNo
     this.userObj = wx.getStorageSync('userObj')
@@ -368,10 +397,4 @@ Page({
   onReachBottom() {
     console.log(this.data.order)
   }
-  // onShareAppMessage() {
-  //   return {
-  //     title: '快来看看我买了什么好东西！',
-  //     path: '/pages/ordersDetails/ordersDetails?openType=share&sheetNo=' + this.ordersNo
-  //   }
-  // }
 })

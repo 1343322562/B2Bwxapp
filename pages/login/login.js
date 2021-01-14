@@ -215,7 +215,12 @@ Page({
             }
           })
           firstSupplierCls && firstSupplierCls.forEach(item => {
-            classifyObj['s' + item.clsNo] = { title: item.clsName, minDeliveryMomey: item.minDeliveryMomey, supplierName: item.supplierName }
+            classifyObj['s' + item.clsNo] = { 
+              title: item.clsName,
+              minDeliveryMomey: item.minDeliveryMomey,
+              supplierName: item.supplierName,
+              customDescription: item.customDescription
+            }
             classifyList.unshift('s' + item.clsNo)
           })
           secondSupplierCls && secondSupplierCls.forEach(item => {
@@ -448,7 +453,7 @@ Page({
       wx.getStorage({
         key: 'userObj',
         success: (res) => {
-          wx.removeStorage({ key: 'cartsObj' })
+          // wx.removeStorage({ key: 'cartsObj' })
           wx.removeStorage({ key: 'updateCartsTime' })
           this.anewLoading = true
           this.setData({ pageLoading: true })

@@ -229,7 +229,7 @@ Page({
     opt.title = decodeURIComponent(opt.title)
     opt.value = decodeURIComponent(opt.value)
     console.log(opt, JSON.stringify(opt))
-    this.userObj = getApp().data['userObj'] || wx.getStorageSync('userObj')
+    this.userObj = wx.getStorageSync('userObj')
     this.productionDateFlag = wx.getStorageSync('configObj').productionDateFlag
     const { goodsUrl, zhGoodsUrl, zcGoodsUrl} = getApp().data
     this.goodsUrl = goodsUrl

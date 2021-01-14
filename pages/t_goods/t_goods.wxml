@@ -46,8 +46,9 @@
     wx:if="{{currentClsType == 1 && (classifyObj[nowSelectOneCls].minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey)}}" 
     class="supTop"
   >
-    起送价: ￥{{classifyObj.nowSelectOneCls.minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey}}
-    {{classifyObj.nowSelectOneCls.supplierName || classifyObj[classifyList[0]].supplierName}}
+    <text decode="{{true}}">{{classifyObj.nowSelectOneCls.supplierName || classifyObj[classifyList[0]].supplierName}} &nbsp; 起送价: ￥{{classifyObj.nowSelectOneCls.minDeliveryMomey || classifyObj[classifyList[0]].minDeliveryMomey}}
+    </text>
+    <view>{{classifyObj.nowSelectOneCls.customDescription || classifyObj[classifyList[0]].customDescription || ''}}</view>
   </view>
   <view class='li' wx:for="{{goodsList}}" wx:for-item="itemNo" wx:key="index" data-supNo="{{goodsObj[itemNo].supcustNo}}" data-no="{{itemNo}}" bindtap='goGoodsDetails'>
     <view class='img'>
@@ -73,7 +74,8 @@
         <text wx:if="{{goodsObj[itemNo].BF}}">买满赠</text>
         <text wx:if="{{goodsObj[itemNo].FS}}">首单特价</text>
         <text wx:if="{{goodsObj[itemNo].BG}}">买赠</text>
-        <text wx:if="{{goodsObj[itemNo].SD}}">单日限购</text>
+        <text wx:if="{{goodsObj[itemNo].SD}}">特价促销</text>
+        <text wx:if="{{goodsObj[itemNo].todayPromotion}}">特价促销</text>
         <text wx:if="{{goodsObj[itemNo].MJ}}">满减</text>
         <text wx:if="{{goodsObj[itemNo].SZInfo}}">首赠</text>
         <text wx:if="{{goodsObj[itemNo].MQ}}">数量满减</text>
@@ -81,8 +83,8 @@
         <text wx:if="{{goodsObj[itemNo].ZK}}">{{goodsObj[itemNo].discount}}</text>
         <text wx:if="{{goodsObj[itemNo].discountMoney}}">优惠{{goodsObj[itemNo].discountMoney}}元</text>
         <text wx:if="{{goodsObj[itemNo].rewardPoint>0}}">积分</text>
-        <text wx:if="{{goodsObj[itemNo].supcustNo && rmj}}">满减</text>
-        <text wx:if="{{goodsObj[itemNo].supcustNo && rbf}}">满赠</text>
+        <text wx:if="{{goodsObj[itemNo].supcustNo && (rmj[itemNo] || rmj === true)}}">满减</text>
+        <text wx:if="{{goodsObj[itemNo].supcustNo && (rbf[itemNo] || rbf === true)}}">满赠</text>
       </view>
       
     </view>

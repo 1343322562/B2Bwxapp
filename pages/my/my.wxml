@@ -1,12 +1,12 @@
 <view id="{{(partnerCode == 1060 || partnerCode == 1063) ? 'bg' : ''}}" class="head head-col">
-  <view class='img' catchtap='goPage' data-page="accountManage"><image class="icon" src="../../images/my_page_icon_user.png" /> </view>
+  <view class='img' catchtap='goPage' data-page="accountManage"><image class="icon" src="{{userObj.picHeader || '../../images/my_page_icon_user.png'}}" /> </view>
   <view class='info'>
     <view class='name' style="padding-top:30rpx;" catchtap='goLogin' wx:if="{{userObj.isLogin}}">点击登录</view>
     <block wx:else>
-    <view class='name'>{{userObj.branchName}}</view>
-    <view class='tel' wx:if="{{userObj.branchTel}}">电话: {{userObj.branchTel}}</view>
-    <view class="address">地址: {{userObj.address}}</view>
-    <view class="address">编号: {{userObj.dbBranchNo}}-{{userObj.branchNo}}</view>
+      <view class='name'>{{userObj.branchName}}</view>
+      <view class='tel' wx:if="{{userObj.branchTel}}">电话: {{userObj.branchTel}}</view>
+      <view class="address">地址: {{userObj.address}}</view>
+      <view class="address">编号: {{userObj.dbBranchNo}}-{{userObj.branchNo}}</view>
     </block>
   </view>
   <view class='btn'>
@@ -17,6 +17,10 @@
     <view class='item' catchtap='goCollectList'>
       <image class="icon" src="../../images/my_page_icon_sc.png" />
       <text class='text'>收藏</text>
+    </view>
+    <view class='item' catchtap='goPCPage' wx:if="{{partnerCode == '1029'}}">
+      <image mode="aspectFit" class="icon" src="../../images/pz.png" />
+      <text class='text'>批次</text>
     </view>
     <view class='item' catchtap='toSeach' wx:if="{{partnerCode == '1024'}}">
       <image mode="aspectFit" class="icon" src="../../images/box.png" />

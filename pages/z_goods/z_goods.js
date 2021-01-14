@@ -39,7 +39,8 @@ Page({
           list.forEach((item, index) => {
             const cls = item.managementType
             const no = item.supplierNo
-            item.goodsImgUrl = imgUrl + '/upload/images/supplier/' + item.picUrl
+            console.log(!!item.picUrl)
+            item.goodsImgUrl = item.picUrl ? imgUrl + '/upload/images/supplier/' + item.picUrl : '../../images/sup-h.png'
             supplierObj[no] = item
             supplierKey['all'].push(no)
             if (cls && supplierKey[cls]) {

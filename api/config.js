@@ -1,4 +1,5 @@
 import urlConfig from './type'
+
 export default {
   baseURL: urlConfig[getApp().data.partnerCode],
   post (url, param) {
@@ -11,7 +12,7 @@ export default {
     let requestObj = param.data || {}
     const userObj = wx.getStorageSync('userObj')
     if (userObj && !requestObj.branchNo) { requestObj.branchNo = userObj.branchNo }
-    requestObj.mobilePlatform = getApp().data.phoneType
+    requestObj.mobilePlatform = 'mini'
     const requestUrl = wx.getStorageSync('requestBaseUrl')||this.baseURL
     
     let request = {
@@ -23,7 +24,6 @@ export default {
       dataType: 'json',
       data: requestObj ,
       success:  (response) => {
-        console.log(response, url)
         const data = (typeof response === 'object' ? response.data : response)
         if (!data || data.code == 2) {
           wx.setStorageSync('isWxLogin', true)
@@ -58,7 +58,7 @@ export default {
   upload({url,filePath,formData,success,fail,complete}){
     const requestUrl = wx.getStorageSync('requestBaseUrl')||this.baseURL;
     const mobilePlatform = getApp().data.phoneType;
-    const platform	= '1';
+    const platform	= '3';
     formData = {...formData,mobilePlatform,platform};
 
     wx.uploadFile({

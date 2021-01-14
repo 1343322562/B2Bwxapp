@@ -1,11 +1,12 @@
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
-import { showLoading, hideLoading, alert, getGoodsImgSize, goPage, toast } from '../../tool/index.js'
+import { showLoading, hideLoading, alert, getGoodsImgSize, goPage, toast, MsAndDrCount, deepCopy, addedPromotionHandle } from '../../tool/index.js'
 const maxNum = 20
 let baseGoodsList
 Page({
   data: {
+    promotionNo: '',
     config: null,
     pageLoading: false,
     clsList: [],
@@ -18,6 +19,9 @@ Page({
     nowSelectCls: '',
     cartsObj: {},
     searchValue: '' // 搜索框 value
+  },
+  loadDef(err) {
+    this.setData({ [`config.goodsImgUrl`]: '../../images/sup-h.png' })
   },
   // 确认搜索
   searchConfirm() {
@@ -34,9 +38,13 @@ Page({
     const { type, no } = e.currentTarget.dataset
     console.log(type, no)
     const sourceNo = this.supplierNo
+    const { promotionNo } = this.data 
     const goods = this.data.goodsObj[no]
     console.log(goods)
     if (goods.stockQty == 0) return toast('库存不足')
+    if (promotionNo) goods.currentPromotionNo = promotionNo
+    
+    console.log(deepCopy(goods), this.data.promotionNo)
     const {  branchNo } = this.userObj
     const config = {
       sourceType: '1',
@@ -47,7 +55,9 @@ Page({
     
     const cartsObj = dispatch[types.CHANGE_CARTS]({ goods, type, config }, this.data.cartsObj)
     if (!cartsObj) return 
-    cartsObj && this.setData({ cartsObj: cartsObj })
+    const newGoods = MsAndDrCount(goods, cartsObj[no], type) || goods
+    console.log(newGoods, this.data.goodsObj, no )
+    cartsObj && this.setData({ cartsObj: cartsObj, [`goodsObj.${no}`]: newGoods })
   },
   getCartsData() {
     dispatch[types.GET_CHANGE_CARTS]({
@@ -107,7 +117,9 @@ Page({
     }
   },
   // 获取 今日限购的促销信息(直配)
-  getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength) {
+  getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength, goodsList) {
+    console.log((this.data))
+    const _this = this
     // 获取促销信息
     API.Public.getSupplierAllPromotion({
       data: { branchNo, token, platform, username, supplierNo: this.supplierNo },
@@ -117,7 +129,19 @@ Page({
         if (res.code == 0 && res.data) {
           let promKey // 获取 以 RSD 开头的下标 (促销信息)
           for (let key in data) {
-            if (key.includes('RMJ') && data[key].length != 0) { this.setData({ rmj: true }) }  
+            if (key.includes('RMJ') && data[key].length != 0) {
+              console.log(data[key][0])
+              let filterArr
+              if (data[key][0].filterType == '0') {
+                filterArr = goodsList
+              } else {
+                filterArr = data[key][0].filterValue.split(',')
+              }
+              const rmjObj  = {}
+              filterArr.forEach((itemNo) => { rmjObj[itemNo] = 1 })
+              console.log(rmjObj, filterArr)
+              this.setData({ rmj: rmjObj })
+            } 
             if (key.includes('RBF') && data[key].length != 0) { this.setData({ rbf: true }) }    
             if (key.includes('RSD')) { promKey = key }
           }
@@ -131,9 +155,16 @@ Page({
             todayPromotionKeyArr.map(item => {
               for (let key in goodsObj) {
                 if (goodsObj[key].itemNo == item) {
+                  const cartsObj = wx.getStorageSync('cartsObj')
+                  console.log(cartsObj, key)
                   todayPromotion[key].endDate = todayPromotion[key].endDate.slice(0, 10)      // 截取年月日
                   todayPromotion[key].startDate = todayPromotion[key].startDate.slice(0, 10)  // 截取年月日
                   goodsObj[key].todayPromotion = todayPromotion[key]
+                  goodsObj[key].drPrice = todayPromotion[key].price
+                  goodsObj[key].drMaxQty = todayPromotion[key].limitedQty
+                  if (!(key in cartsObj) || cartsObj[key].realQty < goodsObj[key].drMaxQty) {
+                    goodsObj[key].price = todayPromotion[key].price
+                  }
                 }
               }
             })
@@ -156,6 +187,12 @@ Page({
   getGoodsList (condition = '') {
     showLoading('请稍候...')
     const { nowSelectCls: itemClsNo } = this.data
+    let promotionNo
+    let cartsObj
+    if ('promotionNo' in this.data) {
+      promotionNo = this.data.promotionNo
+      cartsObj = wx.getStorageSync('cartsObj')
+    }
     const supcustNo = this.supplierNo
     console.log('supcustNo', supcustNo)
     const { branchNo, token, platform, username } = this.userObj
@@ -170,18 +207,22 @@ Page({
           let goodsObj = {}
           const promotionObj = this.promotionObj
           list.forEach(goods => {
+            goods.orgiPrice = goods.price 
             goods.stockQty = 9999
             const itemNo = goods.itemNo
             goods.goodsImgUrl = this.zcGoodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
             goods.stockQty > 0 ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
             goods.isStock = goods.stockQty > 0 ? true : false
+            if (promotionNo && cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo && cartsObj[itemNo].currentPromotionNo !== promotionNo) {
+              console.log(564564564)
+              goods.addedText = addedPromotionHandle(cartsObj[itemNo].currentPromotionNo)
+              console.log(goodsObj[itemNo], goods, this.data)
+            }
             goodsObj[itemNo] = goods
-            
           })
           let newArr = goodsList.concat(fineGoodsList)
           const totalLength = newArr.length
-          console.log(newArr)
-          this.getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength) // 获取并处理今日限购的促销信息(直配)
+          this.getSupplierPromotionInfo(branchNo, token, platform, username, goodsObj, totalLength, goodsList) // 获取并处理今日限购的促销信息(直配)
 
           setTimeout(()=>{
             this.setData({
@@ -237,7 +278,10 @@ Page({
     // 判断是否有传来的参数
     if (opt.config) {
       const config = JSON.parse(opt.config)
+      console.log(config)
       this.supplierNo = config.supplierNo
+      if ('promotionNo' in config && config['promotionNo']) this.data.promotionNo = config.promotionNo
+      console.log(config)
       this.setData({ config })
     } else {
       this.supplierNo = opt.supplierNo

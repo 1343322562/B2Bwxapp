@@ -1,0 +1,36 @@
+<view class="selecter-time-conainer" wx:if="{{isShow}}" catchtouchmove>
+  <view style="height:65vh;width:100%;" catchtap="close"/>
+  <view class="selecter-time-box">
+    <view class="good-box" wx:if="{{selectPromotionGood}}">
+      <image class="img" src="{{selectPromotionGood.goodsImgUrl}}" />
+      <view class="good-prop">
+        <view class="name">{{selectPromotionGood.itemName || ''}}</view>
+        <view class="unit"><text>{{selectPromotionGood.itemSize || ''}}</text> <text class="stock-qty">{{selectPromotionGood.stockQty != 0 ? '有库存' : ''}}</text></view>
+        <view class="price">
+          <text class="new">￥{{selectPromotionGood.price || ''}}</text>
+          <text class="old" wx:if="{{selectPromotionGood.orgiPrice && selectPromotionGood.orgiPrice != selectPromotionGood.price}}">￥{{selectPromotionGood.orgiPrice || ''}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="swicth">换促销</view>
+    <view class="promo-box {{item.promotionNo == promotionNo?'act':''}}" wx:for="{{data}}" wx:key="index" catch:tap="onParentEvent" data-promotion="{{item.promotionNo}}">
+      <view class="tag">{{item.name}}</view>
+      <view class="info-box">
+        <view 
+          class="info" 
+          wx:for="{{item.msg}}" 
+          wx:for-item="t"
+          wx:for-index="zIndex"
+          wx:key="zIndex" 
+        >
+          {{zIndex+1}}. {{t}}
+        </view>
+      </view>
+      
+    </view>
+    <!-- <view class="btn-box">
+      <text catchtap="close">取消</text>
+      <text catchtap='come'>确定</text>
+    </view> -->
+  </view>
+</view>

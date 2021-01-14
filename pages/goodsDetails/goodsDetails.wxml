@@ -18,12 +18,12 @@
     <view class='goodsMsg' wx:if="{{goods.attachInfo}}">{{goods.attachInfo}}</view>
     <view class='price'>
     <!-- 统配 -->
-      <text class='now'  wx:if="{{!goods.todayPromotion}}">￥{{goods.price}}{{goods.specType =='2'?'起':('/'+goods.unit)}}</text>
-      <text class='before' wx:if="{{!goods.todayPromotion&&goods.orgiPrice&&goods.price!=goods.orgiPrice&&goods.specType!='2'}}">￥{{goods.orgiPrice}}</text>
-      <text class="discountMoney"  wx:if="{{goods.discountMoney && !(goods.itemDetails && partnerCode == 1005)}}">优惠{{goods.discountMoney}}元</text>
+      <text class='now'>￥{{goods.price}}{{goods.specType =='2'?'起':('/'+goods.unit)}}</text>
+      <text class='before' wx:if="{{goods.orgiPrice&&goods.price!=goods.orgiPrice&&goods.specType!='2'}}">￥{{goods.orgiPrice}}</text>
+      <!-- <text class="discountMoney"  wx:if="{{goods.discountMoney && !(goods.itemDetails && partnerCode == 1005)}}">优惠{{goods.discountMoney}}元</text> -->
     <!-- 直配 -->
-    <text class='now' wx:if="{{goods.todayPromotion}}">￥{{goods.todayPromotion.price}}/{{goods.unit}}</text>
-    <text class='before' wx:if="{{goods.todayPromotion}}">￥{{goods.todayPromotion.oldPrice}}</text>
+    <!-- <text class='now' wx:if="{{goods.todayPromotion}}">￥{{goods.todayPromotion.price}}/{{goods.unit}}</text>
+    <text class='before' wx:if="{{goods.todayPromotion}}">￥{{goods.todayPromotion.oldPrice}}</text> -->
     
     </view>
     <view class='recommend' wx:if="{{goods.salePrice&&referencePriceFlag=='1'&&goods.isBind != '1'}}">

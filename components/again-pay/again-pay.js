@@ -174,9 +174,11 @@ Component({
         return
       }
       showLoading('支付中...')
+      console.log('this.baseOrderObj', this.baseOrderObj)
       const { memo, itemNos, sheetNo, transNo, ticketType, couponsAmt, payWay: orderPayWay, czPayAmt} = this.baseOrderObj
       console.log(czPayAmt)
       const { username, platform, token, branchNo, dbBranchNo } = this.userObj
+      console.log('payWay', payWay)
       let request = {
         token,
         platform,
@@ -198,8 +200,7 @@ Component({
         czPayAmtString: String(payWay == '2' ? realPayAmt : 0), // 储值支付金额
         codPayAmtString: String(payWay == '0' ? realPayAmt : 0), // 货到付款
       }
-
-      console.log('realPayAmt', realPayAmt)
+      console.log('realPayAmt', realPayAmt, orderPayWay)
       if (orderPayWay == '4') {
         request.czPayAmtString = String(czPayAmt)
         // request.czPayAmtString = String(storedValue)
@@ -240,6 +241,11 @@ Component({
         console.log(czPayAmt)
         // request.czPayAmtString = String(czPayAmt)
         // request[payWay == '0' ? 'codPayAmtString' : 'onlinePayAmtString'] = realPayAmt.toFixed(2)
+        console.log(czPayAmt, storedValue)
+        // request.czPayAmtString = String(czPayAmt)
+        request.czPayAmtString = isNaN(czPayAmt) ? '0' : String(czPayAmt)   // 没有选择混合支付，不减去储值金额
+        console.log(czPayAmt == 'NaN',czPayAmt , 'NaN')
+        request[payWay == '0' ? 'codPayAmtString' : 'onlinePayAmtString'] = realPayAmt.toFixed(2)
         console.log('czPayAmtString', request.czPayAmtString)
         console.log('onlinePayAmtString', request.onlinePayAmtString)
       }

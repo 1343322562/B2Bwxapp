@@ -87,8 +87,9 @@ Page({
     API.Public.getPopup({
       data: { branchNo, token, platform, username },
       success(obj) {
-				 console.log(obj)
-         let getPopupObj = _this.data.getPopupObj
+         console.log(obj)
+         if (!obj.data) return
+				 let getPopupObj = _this.data.getPopupObj
          getPopupObj.popupType = obj.data.popupType
 				 if (getPopupObj.popupType != '0' && getPopupObj.popupType != '1') return 
          
@@ -174,6 +175,7 @@ Page({
 
   },
   getPageData () {
+    const _this = this
     showLoading('请稍后...')
     const { branchNo, dbBranchNo: dbranchNo, token, platform, username } = this.userObj
     API.Index.getIndexSetting({
@@ -184,6 +186,7 @@ Page({
           keyList = new Array(),
             nowDate = new Date().getDate(),
             categoryList = [];
+            console.log(JSON.parse(JSON.stringify(res.data)))
           for (let i = 0; i < list.length; i++) {
             let type = list[i].templetType;
             let moduleName = list[i].anchorText;
@@ -208,6 +211,7 @@ Page({
             } else {
               if (type == '6') {
                 list[i].details.forEach(a => {
+                  a.supGoodsUrl = _this.goodsUrl.replace('bdItemInfo', 'bdSupplierItem')
                   a.picUrl = getGoodsImgSize(a.picUrl, 1)
                   a.productionTime = 'productionTime' in a && a.productionTime.slice(0, 10)
                 })
@@ -428,5 +432,9 @@ Page({
   onHide(){
     this.pageLoading = false
       clearTimeout(this.getAllPromotionTimer, this.getCartsDataTimer)
+  },
+  onReachBottom() {
+    console.log(this.data.pageObj)
   }
+  
 })

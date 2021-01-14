@@ -86,10 +86,11 @@ Page({
       API.Goods[goodsType ? 'supplierItemSearch' :'itemSearch']({
         data: request,
         success: res => {
+          console.log(deepCopy(res), goodsType)
           if (res.code == 0 && res.data) {
             let goods = res.data.itemData[0]
             let imgList = []
-            goodsType && (goods.stockQty = 9999)
+            // goodsType && (goods.stockQty = 9999)
             if (goods.picUrl) {
               const arr = goods.picUrl.split(',')
               arr.forEach(url => {
@@ -149,17 +150,21 @@ Page({
   },
   // 处理 直配促销页面渲染信息
   getSupplierPromotion(goods){
+    console.log(goods)
     let { branchNo, token, platform, username } = wx.getStorageSync('userObj')
     API.Public.getSupplierAllPromotion({
       data: { branchNo, token, platform, username, supplierNo: this.supcustNo },
       success: res => {
+        console.log(res)
         let data = res.data
         if (res.code == 0 && res.data) {
           let promoList = this.data.promotionList
+          console.log(goods)
           for (let key in data){
             // 满减
             if (key.includes('RMJ') && goods['promotionNos'].includes('RMJ')) {
               let dataRMJ = data[key]
+              console.log(dataRMJ)
               dataRMJ.map(item => {
                 let startIndex = goods['promotionNos'].indexOf('RMJ')
                 let numRMJ = goods['promotionNos'].slice(startIndex, startIndex + 19)
@@ -175,6 +180,7 @@ Page({
             // 满赠
             if (key.includes('RBF') && goods['promotionNos'].includes('RBF')) {
               let dataRBF = data[key]
+              console.log(dataRBF)
               dataRBF.map((item, index) => {
                 let startIndex = goods['promotionNos'].indexOf('RBF')
                 let numRBF = goods['promotionNos'].slice(startIndex, startIndex + 19)
@@ -191,12 +197,21 @@ Page({
             }
           }
           if ('todayPromotion' in goods) {
+            const cartsObj = wx.getStorageSync('cartsObj')
             let startDate = goods.todayPromotion.startDate.slice(0, 10) 
             let endDate = goods.todayPromotion.endDate.slice(0, 10)
+            goods.orgiPrice = goods.price
+            goods.drPrice = goods.todayPromotion.price
+            goods.drMaxQty = goods.todayPromotion.limitedQty
+            if ((goods.itemNo in cartsObj && cartsObj[goods.itemNo].realQty) || 0 < goods.drMaxQty) {
+              goods.price = goods.drPrice
+            }
             promoList.push({ name: '限时促销', msg: ['活动时间: ' + startDate + ' 至 ' + endDate] })
           }
+          console.log(promoList)
           this.setData({
-            promotionList: promoList
+            promotionList: promoList,
+            goods
           })
         }
       }
@@ -216,10 +231,13 @@ Page({
         branchNo: this.requestObj.branchNo
       }
       const cartsObj = dispatch[types.CHANGE_CARTS]({ goods, type, config })
+      console.log(cartsObj)
+      console.log(cartsObj[goods.itemNo])
       if (cartsObj) {
         let obj = { cartsObj }
         const newGoods = MsAndDrCount(goods, cartsObj[goods.itemNo], type)
         if (newGoods) obj.goods = newGoods
+        console.log(obj, newGoods, deepCopy(this.data.goods))
         this.setData(obj)
       }
     } else {
@@ -269,6 +287,7 @@ Page({
     })
   },
   getAllPromotion(zhItemNo) {
+    console.log('zhItemNo', zhItemNo)
     let nowGoods = this.data.goods
     let promotionList = []
     dispatch[types.GET_ALL_PROMOTION]({

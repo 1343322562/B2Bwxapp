@@ -54,10 +54,20 @@
 				<view class="info">
 					<view class="name">{{zItem.itemName}}</view>
 					<view class="goods_info_date" wx:if="{{zItem.productionTime}}">生产日期: {{zItem.productionTime}}</view>
-					<view class="t-red price" wx:if="{{partnerCode!='1039'}}">￥{{promotionObj.SD[zItem.connectionNo]?promotionObj.SD[zItem.connectionNo].price:(promotionObj.FS[zItem.connectionNo]?promotionObj.FS[zItem.connectionNo].price:zItem.price)}}</view>
-				</view>
-				<view class="btn">
-					<image src="../../images/b2bIndex_goodsList_addCarts.png" mode="widthFix" />
+					<view class="prpos-t" wx:if="{{zItem.itemSizeOv}}">
+						<text>规格：{{zItem.itemSizeOv}}</text>
+						<!-- <text>起订：{{zItem.minSupplyQtyOv}}</text> -->
+					</view>
+					<view class="promo-t" wx:if="{{zItem.originPriceOv && zItem.originPriceOv != zItem.price}}">
+						<text class="oldprice-t">￥{{zItem.originPriceOv}}</text>
+						<text class="tag-t">特价促销</text>
+					</view>
+					<view class="price-t">
+						<view class="t-red price" wx:if="{{partnerCode!='1039'}}">￥{{promotionObj.SD[zItem.connectionNo]?promotionObj.SD[zItem.connectionNo].price:(promotionObj.FS[zItem.connectionNo]?promotionObj.FS[zItem.connectionNo].price:zItem.price)}}</view>
+						<view class="btn">
+							<image src="../../images/b2bIndex_goodsList_addCarts.png" mode="widthFix" />
+						</view>
+					</view>
 				</view>
 			</view>
 			
@@ -68,8 +78,8 @@
 		<!--圆形菜单按钮-->
 		<view id="{{list.moduleId}}" wx:if="{{list.templetType=='2'}}" class="btns" style="{{'margin:'+list.marginTop+'px 0 '+list.marginBottom+'px 0;'}}">
 			<view wx:for="{{list.details}}" wx:for-index="annIndex" wx:for-item="zItem" wx:key="annIndex" class="{{list.templetStyle == 3 ? 'lis' : 'li'}} " bindtap="goPage" data-type="{{zItem.connectionType}}" data-supplier="{{zItem.supplierNo}}" data-val="{{zItem.connectionNo}}" data-title="{{zItem.btnName}}">
-				<image style="{{partnerCode == 1053 ? 'margin: 12rpx;height: 90rpx;' : ''}}" mode="aspectFit" alt="无法显示" src="{{indexImgUrl+zItem.picUrl}}" />
-				<view class="text">{{zItem.btnName}}</view>
+				<image style="{{partnerCode == 1053 ? 'margin: 12rpx;height: 90rpx;' : ''}}" mode="widthFix" alt="无法显示" src="{{indexImgUrl+zItem.picUrl}}" />
+				<view wx:if="{{list.showName=='0'}}" class="text">{{zItem.btnName}}</view>
 			</view>
 
 		</view>

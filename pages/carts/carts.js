@@ -1,9 +1,11 @@
-import { showLoading, hideLoading, getGoodsImgSize, getGoodsTag } from '../../tool/index.js'
+import { showLoading, hideLoading, getGoodsImgSize, getGoodsTag, deepCopy } from '../../tool/index.js'
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
+import commit from '../../store/mutations.js'
 Page({
   data: {
+    // promotionDialogObj: [], // 换促销数据
     pageLoading: false,
     cartsObj: {},
     cartsList: [],
@@ -22,8 +24,12 @@ Page({
   getCartsData() {
     const { goodsUrl,zcGoodsUrl,zhGoodsUrl} = getApp().data
     const promotionObj = wx.getStorageSync('allPromotion')
+    const oldCartsObj = wx.getStorageSync('cartsObj')
+    wx.setStorageSync('updateCarts', true)
+    console.log(wx.getStorageSync('cartsObj'))
     dispatch[types.GET_CHANGE_CARTS]({
       success: (ret) => {
+        console.log(JSON.parse(JSON.stringify(ret)))
         wx.stopPullDownRefresh()
         hideLoading()
         let obj = { pageLoading: true}
@@ -31,6 +37,8 @@ Page({
           let list = ret.data||[]
           let cartsList = []
           let cartsObj = {}
+          let S_cartObj = commit[types.GET_CARTS]()
+          console.log(S_cartObj)
           list.forEach(config => {
             config.datas.forEach(goods => {
               const type = config.sourceType == '0' ? (goods.stockType == '0' ? 'cw' : 'dw') : config.sourceNo
@@ -48,7 +56,23 @@ Page({
                   cartsTypeName: type == 'cw'?'常温统配':(type=='dw'?'低温统配':'商家直配')
                 }
               }
+              console.log(type)
+              if (type != 'cw' && type != 'dw' && !('orgiPrice' in goods)) {
+                goods.orgiPrice = goods.price
+                console.log(deepCopy(goods))
+              }
+              const cartsItem = oldCartsObj[goods.itemNo]
+              console.log(cartsItem)
+              console.log(oldCartsObj, goods.itemNo)
+              if (cartsItem && 'cancelSelected' in cartsItem && (cartsItem['cancelSelected'] === true || cartsItem['cancelSelected'] === false)) {
+                goods.cancelSelected = oldCartsObj[goods.itemNo].cancelSelected
+              } else {
+                goods.cancelSelected = false
+              }
               goods.carstBasePrice =  goods.orgiPrice
+              goods.currentPromotionNo = S_cartObj[goods.itemNo].currentPromotionNo || '' 
+              goods.currentPromotionType = config.sourceType == 0 ? goods.currentPromotionNo.slice(0, 2) : goods.currentPromotionNo.slice(0, 3) 
+              goods.promotionCollectionsArr = goods.promotionCollections.includes(',') ?  goods.promotionCollections.split(',') : [goods.promotionCollections]
               const tag = getGoodsTag(goods, promotionObj,true)
               goods = Object.assign(goods, tag)
               goods.goodsImgUrl = (config.sourceType == '0' ? (goods.specType == '2' ? zhGoodsUrl : goodsUrl): zcGoodsUrl) + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
@@ -67,6 +91,7 @@ Page({
         }
         console.log(564564654, obj)
         this.setData(obj)
+        console.log(deepCopy(obj))
       }
     })
   },
@@ -107,9 +132,15 @@ Page({
     this.getCartsData()
   },
   onPullDownRefresh() {
-    this.refreshCarts()
+    // this.refreshCarts()
+    const cpn = this.selectAllComponents('.carts-items')
+    console.log(1)
+    // 刷新组件
+    cpn.forEach(item => {
+      console.log(item.pullUpdata())
+    })
   },
   onReachBottom () {
-    console.log(this.data.cartsObj)
+    console.log(this.data.cartsObj, this.data)
   }
 })

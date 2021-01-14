@@ -1,0 +1,160 @@
+page{
+  background-color: #f5f5f5;
+}
+.hover-btn1 {
+  opacity: .6;
+  transform: translate(2rpx, 2rpx);
+}
+.nav-seach-bar-box {
+  background: #ffffff;
+  height: 72rpx;
+  width: 600rpx;
+  max-width: 95%;
+  border-radius: 50rpx;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  color: #181716;
+  font-size: 30rpx;
+  margin: 20rpx auto;
+  box-shadow: 0 0 15rpx #bbb;
+}
+.nav-seach-bar-box image {
+  height: 32rpx;
+  width: 32rpx;
+  margin: 0 20rpx 0 25rpx;
+}
+.nav-seach-bar {
+  width: 460rpx;
+}
+
+.goods-box {
+  position: absolute;
+  bottom: 0;
+  background-color: #fcfcfc;
+  transition: all .5s;
+  border-radius: 50rpx 50rpx 0rpx 0rpx;
+  box-shadow: 0 0 10rpx #aaa;
+  height: 0rpx; 
+  width: 100%;
+  max-height: 70vh;
+  overflow: hidden;
+  /* visibility: hidden; */
+}
+.goods-list {
+  height: 60vh;
+  overflow-x: hidden;
+  padding-bottom: 10rpx;
+}
+.goods-box-act{
+  height: 900rpx;
+  padding: 40rpx 0;
+  /* visibility: visible; */
+}
+
+.box-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: rgb(30, 46, 62);
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+.goods-box .item, 
+.c-goods-box .item{
+  display: flex;
+  padding: 20rpx 3%;
+  width: 94%;
+  background-color: #fcfcfc;
+  border-bottom: 1rpx solid #eeeeee;
+}
+.goods-box:last-child{
+  border-bottom: 0rpx;
+}
+.goods-box .item image, 
+.c-goods-box .item image{
+  width: 140rpx;
+  height: 140rpx;
+  background-color: #eee;
+  border-radius: 15rpx;
+
+}
+.goods-box .item .content,
+.c-goods-box .item .content{
+  flex: 1;
+  padding: 10rpx 0 10rpx 20rpx;
+  color: #333333;
+}
+.goods-box .item .content .title,
+.c-goods-box .item .content .title{
+  font-size: 29rpx;
+  font-weight: bold;
+}
+.goods-box .item .content .info,
+.c-goods-box .item .content .info{
+  width: 100%;
+  margin-top: 6rpx;
+}
+.goods-box .item .content .props,
+.c-goods-box .item .content .props{
+  font-size: 26rpx;
+  min-width: 50%;
+  display: inline-block;
+  margin-top: 3rpx;
+  white-space: nowrap;
+}
+.goods-box .item .content .props .label,
+.c-goods-box .item .content .props .label{
+  color: #666666;
+}
+
+.goods-box .item .content .props .val{
+
+}
+.goods-box .item .content .props .price,
+.c-goods-box .item .content .props .price,
+.good-batch .info-1 .price{
+  color: #fc3f55;
+}
+
+
+.good-batch {
+  padding: 15rpx 3%;
+  width: 94%;
+  background-color: #fcfcfc;
+}
+.null {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 220rpx;
+}
+.null image {
+  width: 205rpx;
+  height: 150rpx;
+}
+.content {
+  width: 50%;
+}
+.null text {
+  font-size: 30rpx;
+  color: #888888;
+  margin-top: 15rpx;
+}
+
+.good-batch .label{
+  color: #666666;
+  width: 130rpx;
+  margin-left: 6rpx;
+  white-space: nowrap;
+}
+
+.good-batch .content-1{
+  display: flex;
+  justify-content: flex-start;
+  padding: 5rpx 0;
+}
+
+.good-batch .content-2{
+  display: flex;
+  flex: 0.5;
+}

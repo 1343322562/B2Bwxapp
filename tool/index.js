@@ -1,3 +1,4 @@
+import API from '../api/index.js'
 export const showLoading = (text = '') => {
   wx.showLoading({
     title: String(text),
@@ -19,6 +20,7 @@ export const alert = (c, o) => {
     showCancel: false
   }
   if (o) for (let i in o) obj[i] = o[i]
+  console.log(obj)
   wx.showModal(obj)
 }
 export const deepCopy = (p, c) => { // 对象拷贝
@@ -134,6 +136,18 @@ export const getGoodsImgSize = (url,type = 0) => { // 获取多规格的图片�
   const name = url.indexOf(',') != -1 ? url.split(',')[0] : url
   return name.substring(0,name.indexOf('-')+1) + type + name.substr(name.indexOf('.'))
 }
+
+export const notEmpty = (arrList) => { // 去除数组空位
+  var arr = [];
+  arrList.map(function(val, index) {
+    //过滤规则为，不为空串、不为null、不为undefined，也可自行修改
+    if (val !== "" && val != undefined) {
+        arr.push(val);
+    }
+  });
+    return arr;
+}
+
 export const setTabBarNum = (num) => { // 设置底部购物车数量
   const cartsIndex = 2
   if (num) {
@@ -195,7 +209,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
   if (BG) obj.BG = BG
   if (BF) obj.BF = true
   promotionObj.SZ['stockType'].map((item, index) => {
-    if (  // 判断库存类型
+    if (  
       item == 0
       || (item == 2 && goods['stockType'] != 0 )
       || (item == '1' && goods['stockType'] == '0')
@@ -205,7 +219,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
       const SZFilterArr = 'filterArr' in promotionObj['SZ'] ? promotionObj['SZ'].filterArr : false
       const SZName= 'giftName' in promotionObj['SZ'] ? promotionObj['SZ'].giftName : false
       SZFilterArr.forEach((t, ind) => {
-        if (goods.itemNo == t || goods.itemClsno == t) {
+        if (goods.itemNo == t || goods.itemClsno == t[0] || goods.itemClsno == t[1]) {
           if (SZInfo) {obj.SZInfo=[]; obj.SZInfo.push(SZInfo[ind])}                  // SZ配送信息
           if (SZName) { obj.SZName=[];  obj.SZName.push(SZName[ind])}                // SZ赠品名称
           if (SZStockType) { obj.SZStockType=[]; obj.SZStockType.push(SZStockType[ind])}   // SZ配送种类
@@ -223,12 +237,13 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     obj.sdPrice = price
     type || (obj.price = price)
   } else if (promotionObj.MQ[itemNo]) {
-    console.log(promotionObj.MQ)
+    // console.log(promotionObj.MQ)
     obj['MQ'] = {}
     obj['MQ'].buyQty = promotionObj.MQ[itemNo].buyQty
     obj['MQ'].subMoney = promotionObj.MQ[itemNo].subMoney
     obj['MQ'].explain = promotionObj.MQ[itemNo].explain
   } else if (promotionObj.SD[itemNo]) {
+    console.log('promotionObj', promotionObj)
     obj.SD = true
     obj.promotionSheetNo = promotionObj.SD[itemNo].sheetNo
     const limitedQty = promotionObj.SD[itemNo].limitedQty
@@ -259,6 +274,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     obj.msMaxQty = limitedQty > buyQty ? buyQty : limitedQty
     type || (obj.price = price)
   }
+  console.log(promotionObj.SD[itemNo], itemNo)
   return obj
 }
 export const setParentGoodsCartsObj = (cartsObj) => { // 计算多规格主商品数量
@@ -274,7 +290,10 @@ export const setParentGoodsCartsObj = (cartsObj) => { // 计算多规格主商�
 }
 export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单日限购 判断计算
   const warn = (openType == 'add' || openType == 'input')
-  if (goods.MS || goods.SD|| goods.ZK || goods.FS) {
+  const ty = goods.currentPromotionNo || ''
+  let isRSD = (goods['promotionNos'] && goods.promotionNos.includes('RSD')) || (goods['promotionCollections'] && goods.promotionCollections.includes('RSD')) 
+  if ('currentPromotionNo' in goods && !ty.includes('RSD')) isRSD = false 
+  if (ty.includes('MS') || ty.includes('SD') || ty.includes('ZK') || ty.includes('FS') || isRSD) {
     goods.msMaxQty || (goods.msMaxQty=0)
     goods.drMaxQty || (goods.drMaxQty=0)
     goods.sdMaxQty || (goods.sdMaxQty = 0)
@@ -282,32 +301,48 @@ export const MsAndDrCount = (goods, cartsGoods,openType,auto) => { // 秒杀 单
     const stop = (goods[cartsGoodsNum ? 'supplySpec' : 'minSupplyQty'] || 1)
     const isMs = (cartsGoodsNum > goods.msMaxQty) && (cartsGoodsNum <= goods.msMaxQty + stop )
     const isDr = goods.drMaxQty > goods.msMaxQty
-    const isSd = goods.sdMaxQty > goods.msMaxQty
-    if (goods.MS && cartsGoodsNum <= goods.msMaxQty) {
+    const isSd = goods.sdMaxQty > goods.sdMaxQty
+    const maxRSDQty = ('todayPromotion' in goods ? goods.todayPromotion['limitedQty'] : goods['drMaxQty'])
+    console.log(goods, cartsGoodsNum)
+    // console.log(273,deepCopy(goods))
+    if (ty.includes('MS') && cartsGoodsNum <= goods.msMaxQty) {
       goods.price = goods.msPrice
-    } else if (goods.SD && cartsGoodsNum <= goods.drMaxQty) {
+    } else if (ty.includes('SD') && cartsGoodsNum <= goods.drMaxQty) {
       goods.price = goods.drPrice
-      if (warn && goods.MS && isDr && isMs ) {
-        alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
+      if (warn && ty.includes('MS') && isDr && isMs ) {
+        alert('商品购买数量已超上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
-    } else if (goods.ZK && cartsGoodsNum <= goods.zkMaxQty) {
+    } else if (ty.includes('ZK') && cartsGoodsNum <= goods.zkMaxQty) {
       goods.price = goods.zkPrice
       if (warn && goods.MS  && isMs) {
-        alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
+        alert('商品购买数量已超上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
-    } else if (goods.FS && cartsGoodsNum <= goods.sdMaxQty) {
+    } else if (isRSD && cartsGoodsNum <= maxRSDQty) {
+      console.log(goods, cartsGoodsNum)
+      goods.price = goods.todayPromotion.price
+      // if (warn && 'todayPromotion' in goods) {
+      //   alert('商品购买数量已超上限[' + maxRSDQty + '],商品将恢复促销价')
+      // }
+    } else if (ty.includes('FS') && cartsGoodsNum <= goods.sdMaxQty) {
       goods.price = goods.sdPrice
       if (warn && goods.MS && isSd && isMs) {
-        alert('商品购买数量已超秒杀上限[' + goods.msMaxQty + '],商品将恢复促销价')
+        alert('商品购买数量已超上限[' + goods.msMaxQty + '],商品将恢复促销价')
       }
     } else {
       goods.price = goods.orgiPrice
       if (warn&&(
-        (goods.MS && isMs)
-        || (goods.SD && (cartsGoodsNum > goods.drMaxQty) && (cartsGoodsNum <= goods.drMaxQty + stop))
-        || (goods.FS && (cartsGoodsNum > goods.sdMaxQty) && (cartsGoodsNum <= goods.sdMaxQty + stop))
+        (ty.includes('MS') && isMs)
+        || (ty.includes('SD') && (cartsGoodsNum > goods.drMaxQty) && (cartsGoodsNum <= goods.drMaxQty + stop))
+        || (ty.includes('FS') && (cartsGoodsNum > goods.sdMaxQty) && (cartsGoodsNum <= goods.sdMaxQty + stop))
+        || (isRSD && cartsGoodsNum > maxRSDQty && cartsGoodsNum <= maxRSDQty + stop)
         )) {
-        alert('商品购买数量已超' + ((isDr || isSd) ? '促销' : '秒杀') + '上限[' + goods[isDr ? 'drMaxQty' : (isSd ? 'sdMaxQty' :'msMaxQty')] + '],商品将恢复原价')
+          if(isRSD) {
+            alert('商品购买数量已超上限[' +  maxRSDQty + '],商品将恢复促销价')
+          } else {
+            const DR = isDr && ty.includes('SD')
+            const SD = isSd && ty.includes('FS')
+            alert('商品购买数量已超' + ((DR || SD) ? '促销' : '秒杀') + '上限[' + goods[DR ? 'drMaxQty' : (SD ? 'sdMaxQty' :'msMaxQty')] + '],商品将恢复原价')
+          }
       }
     }
     return goods
@@ -342,3 +377,142 @@ export const getIP = (param) => {
     }
   });
 } 
+// 删除数组中重复的值(对象)
+export const filterArr = (arr) => {
+  const map = {};
+  // 1、把数组元素作为对象的键存起来（这样就算有重复的元素，也会相互替换掉）
+  arr.forEach(item => map[JSON.stringify(item)] = item);
+  // 2、再把对象的值抽成一个数组返回即为不重复的集合
+  return Object.keys(map).map(key => map[key])
+}
+
+// 直配促销处理
+export const HANDLE_SUP_PROMOTION = function(param) {
+  console.log(43, param)
+  let obj = {
+    RMJ: { reachVal: '', subMoney: '', memo: '', promotionNo: '' },
+    RBF: { reachVal: '', memo: '', promotionNo: ''  },
+    RSD: { itemNo: [], memo: '', endDate: '' }
+  }
+  const { branchNo, token, username, platform, dbBranchNo: dbranchNo } = getApp().data['userObj'] || wx.getStorageSync('userObj')
+  API.Public.getSupplierAllPromotion({
+    data: { branchNo, token, platform, username, supplierNo: param.data.sourceNo },
+    success: res => {
+      console.log(75421,res)
+      let data = res.data
+      for(let key in data) {
+        if (key.includes('RMJ') && data[key].length) {
+          console.log( data[key])
+          data[key].forEach(item => { 
+            console.log(item)
+            if (item.filterType == '3') { // 按条件 (商品)
+              const filterArr = item.filterValue.split(',')
+              filterArr.forEach((itemNo, index) => {
+                if(itemNo in obj.RMJ) return
+                obj.RMJ[itemNo] = {}
+                obj.RMJ[itemNo].reachVal = item.reachVal
+                obj.RMJ[itemNo].subMoney = item.subMoney
+                obj.RMJ[itemNo].promotionNo = item.sheetNo
+                obj.RMJ[itemNo].memo = item.memo
+              })
+            } else if (item.filterType == '0') { // 全场
+              param.data.data.forEach(goodItem => {
+                if(goodItem.itemNo in obj.RMJ) return
+                obj.RMJ[goodItem.itemNo] = {}
+                obj.RMJ[goodItem.itemNo].type = 1 // 全场
+                obj.RMJ[goodItem.itemNo].reachVal = item.reachVal
+                obj.RMJ[goodItem.itemNo].subMoney = item.subMoney
+                obj.RMJ[goodItem.itemNo].promotionNo = item.sheetNo
+                obj.RMJ[goodItem.itemNo].memo = item.memo
+              })
+            }
+          })
+          console.log( obj.RMJ)
+        } else if (key.includes('RBF') && data[key].length) {
+          data[key].forEach(item => {
+            if (item.filterType == '3') {
+              const filterArr = item.filterValue.split(',')
+              filterArr.forEach((itemNo, index) => {
+                if(itemNo in obj.RBF) return
+                obj.RBF[itemNo] = {}
+                obj.RBF[itemNo].reachVal = item.reachVal
+                obj.RBF[itemNo].subMoney = item.subMoney
+                obj.RBF[itemNo].promotionNo = item.sheetNo
+                obj.RBF[itemNo].memo = item.memo
+              })
+            } else if (item.filterType == '0') {
+              param.data.data.forEach(goodItem => {
+                if(goodItem.itemNo in obj.RBF) return
+                obj.RBF[goodItem.itemNo] = {}
+                obj.RBF[goodItem.itemNo].type = 1
+                obj.RBF[goodItem.itemNo].reachVal = item.reachVal
+                obj.RBF[goodItem.itemNo].subMoney = item.subMoney
+                obj.RBF[goodItem.itemNo].promotionNo = item.sheetNo
+                obj.RBF[goodItem.itemNo].memo = item.memo
+              })
+            }
+          })
+          // obj.RBF.reachVal = data[key][0].reachVal
+          // obj.RBF.memo = data[key][0].memo
+        } else if (key.includes('RSD')) {
+          for(let rsdKey in data[key]) {
+            const goodsData = param.data.data
+            obj.RSD.itemNo.push(rsdKey)
+            obj.RSD.endDate = data[key][rsdKey].endDate.slice(0, 10)
+            goodsData.forEach(item => {
+              if (item.itemNo == rsdKey) {
+                item.drMaxQty = data[key][rsdKey].limitedQty
+                item.drPrice = data[key][rsdKey].price
+              }
+            })
+          }
+        }
+      }
+      param.success(obj)
+    }
+  })
+}
+// 商品促销数组的排序
+export const promoArrSort = (promoArr, sourceType) => {
+  let rArr = []  // 排序完的数组
+  if (sourceType === 0) {
+    const pSortArr = ['MS', 'FS', 'SD', 'ZK', 'SZ', 'BF', 'BG', 'MJ', 'MQ'] // 排序
+    pSortArr.forEach(type => {
+      promoArr.forEach(promoNo => {
+        if (promoNo.includes(type)) rArr.push(promoNo)
+      })
+    })
+  } else if (sourceType === 1) {
+    const pSortArr = ['RSD', 'RMJ', 'RBF'] // 排序let rArr = []  // 排序完的数组
+    pSortArr.forEach(type => {
+      promoArr.forEach(promoNo => {
+        if (promoNo.includes(type)) rArr.push(promoNo)
+      })
+    })
+  }
+  console.log(rArr, sourceType, promoArr)
+  return rArr
+}
+
+export const addedPromotionHandle = (cPromotionNo) => { // // 已参与了其它促销的购物车商品处理
+  let text
+  if (cPromotionNo.includes('MJ')) {
+    text = '金额满减'
+  } else if (cPromotionNo.includes('BF')) {
+    text = '买满赠'
+  } else if (cPromotionNo.includes('MQ')) {
+    text = '数量满减'
+  } else if (cPromotionNo.includes('BG')) {
+    text = '买赠'
+  } else if (cPromotionNo.includes('SD')) {
+    text = '特价促销'
+  } else if (cPromotionNo.includes('SZ')) {
+    text = '首单赠送'
+  } else if (cPromotionNo.includes('MS')) {
+    text = '秒杀'
+  } else if (cPromotionNo.includes('ZK')) {
+    text = '折扣'
+  }
+  return text
+}
+

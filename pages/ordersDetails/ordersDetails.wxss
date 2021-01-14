@@ -18,22 +18,30 @@
 .block>.p .content{display: block;float: right;}
 .block>.p .b{font-size: 1.3em}
 .block>.p .t-red{color: red}
-.goodsList{padding-left: 30rpx;}
-.goodsList>.li{position: relative;padding: 15rpx 30rpx 15rpx 0;min-height: 130rpx;border-bottom: 2rpx solid #e4e4e4;}
-.li>.checkbox{width:37rpx;height:37rpx;position:absolute;top:35%;left:-20rpx;border:1px solid #d7d7d7;border-radius:100%;text-align:center;background-color:#fff;}
+.goodsList{padding-left: 20rpx;}
+.goodsList>.li{position: relative;padding: 15rpx 8rpx 15rpx 0;min-height: 130rpx;border-bottom: 2rpx solid #e4e4e4;}
+.li>.checkbox{width:37rpx;height:37rpx;position:absolute;top:36%;left:-18rpx;border:1px solid #d7d7d7;border-radius:100%;text-align:center;background-color:#fff;}
 .li>.checkbox .icon{width: 100%;height: 100%;}
 .li>.checkbox.act{background-color:#ff9c01;border-color:#ff9c01}
 .goodsList>.li:last-child{border: none}
 .goodsList>.li .num {padding: 2rpx 0;flex: 1;}
-.goodsList>.li .img{position: absolute;top: 15rpx;left: 35rpx;width: 110rpx;height: 110rpx;border-radius: 20rpx;background-color: #f2f2f2;}
+.goodsList>.li .img{position: absolute;top: 15rpx;left: 37rpx;width: 110rpx;height: 110rpx;border-radius: 20rpx;background-color: #f2f2f2;}
 .goodsList>.li .img>.icon{width: 100%;height: 100%;}
+<<<<<<< HEAD
 .goodsList>.li .info, .goodsList>.li .out{margin-left: 150rpx;color: #777}
 .goodsList>.li .out { font-size: 23rpx;display: flex;justify-content: space-between;flex-wrap: wrap;flex-direction: column;margin-top: 5rpx;}
 .goodsList>.li .info>.name{font-size: 26rpx;margin-bottom: 5rpx;width: 65%;display: -webkit-box; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp:2; overflow: hidden; text-overflow:ellipsis;color:#444}
 .goodsList>.li .info>.name .red{color: #ff9c01;margin-right: 5rpx;}
+=======
+.goodsList>.li .info, .goodsList>.li .out{margin-left: 160rpx;color: #777}
+.goodsList>.li .out { font-size: 24rpx;display: flex;justify-content: space-between;flex-wrap: wrap;flex-direction: column;margin-top: 2rpx;}
+.goodsList>.li .info>.name{font-size: 27rpx;font-weight: bold;margin-bottom: 5rpx;width: 100%;display: -webkit-box; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp:2; overflow: hidden; text-overflow:ellipsis;color:#222222}
+.goodsList>.li .info>.name .red{color: #d40000;margin-right: 5rpx;}
+>>>>>>> mergeNewCarts
 .goodsList>.li .info>.size{font-size: 24rpx;}
-.goodsList>.li .total{position: absolute;top: 15rpx;right: 30rpx;text-align: right;font-size: 23rpx;color: #555}
+.goodsList>.li .total{position: absolute;bottom: 15rpx;right: 8rpx;text-align: right;font-size: 24rpx;color: #555}
 .goodsList>.li .total>.price{color: #000;font-size: 1.3em}
+.i-content{color: #333333;}
 .outInfo {display: flex;justify-content: flex-end;}
 .buttom{display: flex;position: fixed;bottom: 0;left: 0;width: 100%;justify-content: center;padding: 20rpx 0;}
 .buttom>text{width: 0;display: block;flex-grow: 1;text-align: center;margin: 0 15rpx;background-color: #ff9c01;color: #fff;line-height: 80rpx;border-radius: 40rpx;}
@@ -48,5 +56,24 @@
 .flow_li>.right{width:56%;border-bottom:1px solid #ddd;margin-left:6%}
 .flow_li .title{font-size:28rpx;}
 .flow_li .cont{font-size:26rpx;}
+<<<<<<< HEAD
 .c_red {margin-right:20rpx;color: #ff9c01;font-size: 24rpx;}
 .b_red {color: #ff9c01;font-size: 24rpx;}
+=======
+.c_red {margin-right:20rpx;color: red;font-size: 24rpx;}
+.b_red {color: red;font-size: 24rpx;}
+
+.prop {
+  width: 100%;
+}
+.prop .props1 {
+  display: inline-block;
+  min-width: 50%;
+  font-size: 24rpx;
+}
+.props2 {
+  display: inline-block;
+  min-width: 45%;
+  font-size: 24rpx;
+}
+>>>>>>> mergeNewCarts
