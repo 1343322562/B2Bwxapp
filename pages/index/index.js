@@ -43,31 +43,33 @@ Page({
       }
     })
   },
+  // 加载更多商品
+  loadMoreGoods(cpnIndex, goodsCpnDetail) {
+    const _this = this
+    if (this.loadingMoreTimer2) return
+    this.loadingMoreTimer2 = setTimeout(() => {
+      const newDetails = [..._this.data.pageObj[cpnIndex].details, ...goodsCpnDetail[0].items.splice(0, 8)]
+      _this.data.pageObj[cpnIndex].details = newDetails
+      _this.data.goodsCpnDetail = goodsCpnDetail
+      _this.setData({ [`pageObj[${cpnIndex}].details`]: newDetails })
+      _this.loadingMoreTimer2 = false
+    }, 1000)
+  },
   onPageScroll() {
     if (this.loadingMoreTimer) return
+    this.loadingMoreTimer1 = setTimeout(() => { this.loadingMoreTimer = false }, 100)
     const _this = this
-    const { goodsCpnDetail, pageObj } = _this.data
+    const { goodsCpnDetail } = _this.data
     if (!goodsCpnDetail.length || !goodsCpnDetail[0].items.length) return _this.setData({ isShowAniLoadingMore: false })
     const query = wx.createSelectorQuery();
     query.select('.ind-goodsList').boundingClientRect()
     query.exec(function (res) {
       const cpnIndex = goodsCpnDetail[0].index
       const { height, top } = res[0]
-      const pageDetail = pageObj[cpnIndex].details
       const loadingDistence = 0 - height + (wx.getSystemInfoSync().windowHeight * 2.5) // 触发加载的距离
-      _this.loadingMoreTimer = setTimeout(() => { _this.loadingMoreTimer = false }, 50)
       if (top < loadingDistence) {
-        setTimeout(() => {
-          const newDetails = [...pageDetail, ...goodsCpnDetail[0].items.splice(0, 8)]
-          _this.data.pageObj[cpnIndex].details = newDetails
-          _this.data.goodsCpnDetail = goodsCpnDetail
-          _this.setData({
-            [`pageObj[${cpnIndex}].details`]: newDetails,
-            goodsCpnDetail
-          })
-        }, pageDetail.length*10)
+        _this.loadMoreGoods(cpnIndex, goodsCpnDetail) // 加载更多商品
       }
-      console.log(top, loadingDistence, wx.getSystemInfoSync().windowHeight)
     })
   },
   toSearchPageClick() { goPage('searchGoods') }, // 跳转搜索页

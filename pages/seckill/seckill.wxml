@@ -29,7 +29,7 @@
     <view class="li"  wx:for="{{list[nowSelectDate].item}}" wx:key="index">
       <view class="goods_img" >
         <image class='icon' src="{{item.itemImgUrls}}" />
-        <text class='text' wx:if="{{partnerCode != 1053}}">商品剩余{{item.buyQty+item.unit}}</text>
+        <!-- <text class='text' wx:if="{{partnerCode != 1053}}">商品剩余{{item.buyQty+item.unit}}</text> -->
       </view>
       <view class="goods_info">
         <view class="goods_info_name">{{item.itemName}}</view>

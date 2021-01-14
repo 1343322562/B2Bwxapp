@@ -55,9 +55,17 @@ Page({
               cartsObj[type].data.push(goods)
             })
           })
+          // for (let key in cartsObj) {
+          //   const allData = cartsObj[key].data
+          //   if (allData.length > 30) {
+          //     cartsObj[key].data = allData.slice(0, 30)
+          //     cartsObj[key].viewData = allData.slice(0, 30)
+          //   }
+          // }
           obj.cartsList = cartsList
           obj.cartsObj = cartsObj
         }
+        console.log(564564654, obj)
         this.setData(obj)
       }
     })

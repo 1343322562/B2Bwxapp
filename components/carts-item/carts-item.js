@@ -132,11 +132,13 @@ Component({
       return (rex / 750) * this.ww
     },
     touchstart(e) {
+      console.log(1)
       const clientX = e.changedTouches[0].clientX
       this.startPoint = clientX
       this.setData({ leftAnimation: false })
     },
     touchend(e) {
+      console.log(2)
       const index = e.currentTarget.dataset.index
       const leftAnimation = true
       let goods = this.data.goods
@@ -146,6 +148,9 @@ Component({
       this.setData({ goods, leftAnimation })
     },
     touchmove(e) {
+      console.log(this.touchmoveTimer)
+      if (this.touchmoveTimer) return
+      this.touchmoveTimer = setTimeout(() => { this.touchmoveTimer = false }, 120)
       const clientX = e.changedTouches[0].clientX
       const index = e.currentTarget.dataset.index
       let goods = this.data.goods
@@ -315,12 +320,13 @@ Component({
       this.countMoney()
     },
     selectGoods(e) {
+      showLoading()
       const index = e.currentTarget.dataset.index
       let { goods, isSelectAll } = this.data
       const is = !goods.data[index].cancelSelected
       goods.data[index].cancelSelected = is
       if (is) isSelectAll = false
-      this.setData({ goods, isSelectAll })
+      this.setData({ [`goods.data[${index}].cancelSelected`]: is, isSelectAll }, () => { hideLoading() })
       this.countMoney()
     },
     changeGoodsNum(e) {
@@ -406,7 +412,18 @@ Component({
     this.getCommonSetting() // 获取送货开始和结束时间
     const { ww } = getApp().data
     this.ww = ww
+    const _this = this
     let goodsData = this.data.goods
+    // if ('viewData' in goodsData) {
+    //   goodsData = _this.data.goods
+    //   _this.loadingMore = setInterval(() => {
+    //     const newGoodsData = goodsData['data'].slice(0, goodsData['viewData'].length + 30)
+    //     _this.data.goods['viewData'] = newGoodsData
+    //     _this.setData({ [`goods.viewData`]: newGoodsData })
+    //     console.log(goodsData)
+    //     if (goodsData['data'].length === goodsData['viewData'].length) clearInterval(_this.loadingMore)
+    //   }, 6000)
+    // }
     if (goodsData.sourceType == 1) {
       let supplierPromotion = wx.getStorageSync('supplierPromotion')
       // 缓存中无直配促销信息，请求促销接口。有促销信息则直接使用

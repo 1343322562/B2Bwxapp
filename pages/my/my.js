@@ -111,7 +111,7 @@ Page({
     }
     this.getOrderNum()
     this.getSalesman()
-    this.getOrderData()
+    if (partnerCode == '1029') this.getOrderData()
     this.setData({ partnerCode })
   },
   getOrderNum () {

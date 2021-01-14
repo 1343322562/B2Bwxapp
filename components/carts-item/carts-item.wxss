@@ -2,7 +2,7 @@
 .box{margin: 20rpx 0}
 .box .li{position:relative;left:0;width:100%;overflow:hidden;border-bottom:1px solid #f4f4f4;}
 .box .li:last-child{border:none}
-.goods{position:relative;padding-top:15rpx;min-height:170rpx;left:0;background-color:#fff;}
+.goods{position:relative;padding-top:15rpx;min-height:170rpx;left:0;background-color:#fff;transition: left .1s linear;}
 .goods.act{transition: left .2s ease-in-out;}
 .goods>.checkbox{width: 40rpx;height: 40rpx;position:absolute;top:50%;margin-top:-20rpx;left:20rpx;border:1px solid #eeeeee;border-radius:100%;text-align:center;background-color:#fff;}
 .goods>.checkbox.act{background-color:#ff9c01;border-color:#ff9c01}
