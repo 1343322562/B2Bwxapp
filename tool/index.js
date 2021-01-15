@@ -274,7 +274,6 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     obj.msMaxQty = limitedQty > buyQty ? buyQty : limitedQty
     type || (obj.price = price)
   }
-  console.log(promotionObj.SD[itemNo], itemNo)
   return obj
 }
 export const setParentGoodsCartsObj = (cartsObj) => { // 计算多规格主商品数量

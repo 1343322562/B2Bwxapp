@@ -33,14 +33,8 @@
     <view class='img'>
     <!-- 获取商品编号，根据商品编号再根据 goodsObj 中的数据渲染页面 -->
       <image class='icon' src="{{goodsObj[itemNo].goodsImgUrl}}" />
-<<<<<<< HEAD
-      <!-- <image wx:if="{{goodsObj[itemNo].isProhibit=='1'}}" class='noReturnAllowed'  src="../../images/noReturnAllowed.png" /> -->
-      <view wx:if="{{goodsObj[itemNo].isProhibit=='1'}}" class="noReturn">不可退</view>
-      <image wx:if="{{!!goodsObj[itemNo].todayPromotion}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image>
-=======
       <view wx:if="{{goodsObj[itemNo].isProhibit=='1'}}" class='noReturnAllowed'>不可退</view>
       <!-- <image wx:if="{{!!goodsObj[itemNo].todayPromotion}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image> -->
->>>>>>> mergeNewCarts
     </view>
     <view class='info'>
       <view class='name'>{{goodsObj[itemNo].itemName}}</view>

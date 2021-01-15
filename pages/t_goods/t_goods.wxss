@@ -22,11 +22,7 @@ z-index:100}
 .goodsList{margin-left: 159rpx;background-color: #fff;padding-left: 20rpx;position: relative;padding-top: 80rpx;}
 .goodsList>.li{padding: 20rpx 20rpx 20rpx 0;position: relative;border-bottom: 1px solid #e8e8e8;}
 .goodsList>.li .img{position: absolute;top: 20rpx;left:0;overflow: hidden;width: 162rpx;height: 162rpx;background-color: #f2f2f2}
-<<<<<<< HEAD
 .goodsList>.li .img>.goodsType{color: #fff;background-color: #ff9c01;position: absolute;top: 0;left: 26%;width: 50%;text-align: center;line-height: 33rpx;font-size: 21rpx;border-radius: 0 0 10rpx 10rpx;}
-=======
-.goodsList>.li .img>.goodsType{color: #fff;background-color: #dd4242;position: absolute;top: 0;left: 26%;width: 50%;text-align: center;line-height: 33rpx;font-size: 21rpx;border-radius: 0 0 10rpx 10rpx;}
->>>>>>> mergeNewCarts
 .goodsList>.li .img>.noReturnAllowed{width: 50rpx;height: 50rpx;position: absolute;bottom: 5rpx;right: 5rpx;}
 .goodsList>.li .img>.icon{width: 100%;height: 100%}
 .goodsList>.li .info{min-height: 170rpx;margin-left: 190rpx}
@@ -43,15 +39,9 @@ z-index:100}
 .goodsList>.li .goCarts>.type{text-align: right;font-size: 24rpx;margin-bottom: 4rpx;}
 .goodsList>.li .goCarts>.type.cw{color: #ffb400}
 .goodsList>.li .goCarts>.type.dw{color:#04a1ff;}
-<<<<<<< HEAD
 .goodsList>.li .goCarts>.btn{position: relative;text-align: center;float: right;min-width: 135rpx;display: flex;justify-content: flex-end;align-items: center;}
 /* .goodsList>.li .goCarts>.btn .item{height: 100%;position: absolute;top: 0} */
 .goodsList>.li .goCarts>.btn .item>.icon{width: 42rpx;height: 42rpx;background-color:#fff;}
-=======
-.goodsList>.li .goCarts>.btn{width: 140rpx;position: relative;text-align: center;float: right;min-width: 135rpx;display: flex;justify-content: flex-end;align-items: center;}
-/* .goodsList>.li .goCarts>.btn .item{height: 100%;position: absolute;top: 0} */
-.goodsList>.li .goCarts>.btn .item>.icon{width: 46rpx;height: 46rpx;background-color:#fff;}
->>>>>>> mergeNewCarts
 .goodsList>.li .goCarts>.btn .minus{left: 0}
 .goodsList>.li .goCarts>.btn .num{display: inline-block;margin: 0 14rpx 8rpx;}
 .goodsList>.li .goCarts>.btn .add{right: 0}
@@ -72,11 +62,7 @@ z-index:100}
 .alert>.btn text:last-child{background-color: #29323c;color: #fff;}
 .alert .scrollBox{height: 500rpx;}
 
-<<<<<<< HEAD
 .minSupplyQty{position: absolute;bottom: 6rpx;right: 81rpx;font-size: 24rpx;background-color: #fff;color:#04a1ff }
-=======
-.minSupplyQty{position: absolute;bottom: 7rpx;right: 88rpx;font-size: 24rpx;background-color: #fff;color:#04a1ff }
->>>>>>> mergeNewCarts
 .loadingGoods{line-height: 80rpx;color: #fff;background-color: rgba(0, 0,0, .6);text-align: center;}
 
 .toTopIcon {position: fixed;height: 50rpx;width: 50rpx;bottom: 25px;right: 25rpx;z-index: 100;background-color: #059656;border-radius: 50%;padding: 16rpx;opacity: .8;display: flex;justify-content: center;}

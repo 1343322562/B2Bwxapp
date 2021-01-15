@@ -3,7 +3,6 @@ import { setTabBarNum } from '../tool/index.js'
 const mutations = {
   [types.SAVE_OPEN_ID](data) {
     getApp().data.openId = data
-    console.log('openid' ,data)
     wx.setStorage({key: 'openId',data: data})
   },
   [types.GET_CARTS](data) {
@@ -12,7 +11,7 @@ const mutations = {
     return obj
   },
   [types.SAVE_CARTS](data) {
-    console.log(data)
+    console.log(321)
     setTabBarNum(data.num)
     wx.setStorageSync('cartsObj', data)
     // wx.setStorage({ key: 'cartsObj', data: data })

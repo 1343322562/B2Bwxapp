@@ -66,7 +66,7 @@ swiper{overflow:hidden;}
 .left>image{transform: rotate(-90deg)}
 .right>image{transform: rotate(90deg)}
 .goodsSwiper .opy{opacity:.4}
-.ind-goodsList{display: flex;flex-wrap: wrap;}
+.ind-goodsList{display: flex;flex-wrap: wrap;width: 100vw;}
 .ind-goodsList>.li{width:49%;background-color:#fff;position:relative;padding-bottom:20rpx;height:445rpx;overflow:hidden;margin: 0 .5% .8%;}
 #li-three {width: 32.2%;height: 365rpx;}
 #li-three .name{font-size: 26rpx;}

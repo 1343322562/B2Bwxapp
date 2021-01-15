@@ -100,6 +100,7 @@
           <!-- <view class='add item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'':'Null')+'.png'}}" /></view> -->
           <view class='add item' catchtap='changeGoodsNum' data-currentPromotionNo="{{item.currentPromotionNo}}" data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'Null':'')+'.png'}}" /></view>
         </view>
+        <view class="delete" data-index="{{index}}" data-type="delete" data-currentPromotionNo="{{item.currentPromotionNo}}" catchtap="changeGoodsNum">删除</view>
       </view>
       <!-- <view class='btn'> -->
         <!-- <view class='minus item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="minus"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_sub.png':'../../images/goodsList_minus_carts.png'}}" /></view> -->
@@ -109,7 +110,7 @@
         <!-- <view class='add item' catchtap='changeGoodsNum' data-index="{{index}}" data-type="add"><image class='icon' src="{{partnerCode == 1052 ?'../../images/yz_add.png':'../../images/goodsList_add_carts'+(goodsObj[itemNo].isStock?'Null':'')+'.png'}}" /></view>
       </view> -->
 
-        <view class="delete" data-index="{{index}}" data-type="delete" data-currentPromotionNo="{{item.currentPromotionNo}}" catchtap="changeGoodsNum">删除</view>
+        
       </view>
     </view>
   </view>
@@ -145,6 +146,6 @@
     </view>
   </view>
 
-</view>
+<!-- </view> -->
 
 <select-promotion class="spDialog" bind:switchPromotiom='onParentEvent' />

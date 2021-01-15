@@ -59,11 +59,11 @@ Page({
               console.log(type)
               if (type != 'cw' && type != 'dw' && !('orgiPrice' in goods)) {
                 goods.orgiPrice = goods.price
-                console.log(deepCopy(goods))
+                // console.log(deepCopy(goods))
               }
               const cartsItem = oldCartsObj[goods.itemNo]
-              console.log(cartsItem)
-              console.log(oldCartsObj, goods.itemNo)
+              // console.log(cartsItem)
+              // console.log(oldCartsObj, goods.itemNo)
               if (cartsItem && 'cancelSelected' in cartsItem && (cartsItem['cancelSelected'] === true || cartsItem['cancelSelected'] === false)) {
                 goods.cancelSelected = oldCartsObj[goods.itemNo].cancelSelected
               } else {

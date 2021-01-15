@@ -27,17 +27,10 @@
 .goodsList>.li .num {padding: 2rpx 0;flex: 1;}
 .goodsList>.li .img{position: absolute;top: 15rpx;left: 37rpx;width: 110rpx;height: 110rpx;border-radius: 20rpx;background-color: #f2f2f2;}
 .goodsList>.li .img>.icon{width: 100%;height: 100%;}
-<<<<<<< HEAD
 .goodsList>.li .info, .goodsList>.li .out{margin-left: 150rpx;color: #777}
 .goodsList>.li .out { font-size: 23rpx;display: flex;justify-content: space-between;flex-wrap: wrap;flex-direction: column;margin-top: 5rpx;}
-.goodsList>.li .info>.name{font-size: 26rpx;margin-bottom: 5rpx;width: 65%;display: -webkit-box; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp:2; overflow: hidden; text-overflow:ellipsis;color:#444}
+.goodsList>.li .info>.name{font-size: 25rpx;font-weight: bold;margin-bottom: 5rpx;width: 72%;display: -webkit-box; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp:2; overflow: hidden; text-overflow:ellipsis;color:#444}
 .goodsList>.li .info>.name .red{color: #ff9c01;margin-right: 5rpx;}
-=======
-.goodsList>.li .info, .goodsList>.li .out{margin-left: 160rpx;color: #777}
-.goodsList>.li .out { font-size: 24rpx;display: flex;justify-content: space-between;flex-wrap: wrap;flex-direction: column;margin-top: 2rpx;}
-.goodsList>.li .info>.name{font-size: 27rpx;font-weight: bold;margin-bottom: 5rpx;width: 100%;display: -webkit-box; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp:2; overflow: hidden; text-overflow:ellipsis;color:#222222}
-.goodsList>.li .info>.name .red{color: #d40000;margin-right: 5rpx;}
->>>>>>> mergeNewCarts
 .goodsList>.li .info>.size{font-size: 24rpx;}
 .goodsList>.li .total{position: absolute;bottom: 15rpx;right: 8rpx;text-align: right;font-size: 24rpx;color: #555}
 .goodsList>.li .total>.price{color: #000;font-size: 1.3em}
@@ -56,24 +49,6 @@
 .flow_li>.right{width:56%;border-bottom:1px solid #ddd;margin-left:6%}
 .flow_li .title{font-size:28rpx;}
 .flow_li .cont{font-size:26rpx;}
-<<<<<<< HEAD
+.info .prop .props1, .info .prop .props2 {width: 50%;display: inline-block;font-size: 22rpx;}
 .c_red {margin-right:20rpx;color: #ff9c01;font-size: 24rpx;}
 .b_red {color: #ff9c01;font-size: 24rpx;}
-=======
-.c_red {margin-right:20rpx;color: red;font-size: 24rpx;}
-.b_red {color: red;font-size: 24rpx;}
-
-.prop {
-  width: 100%;
-}
-.prop .props1 {
-  display: inline-block;
-  min-width: 50%;
-  font-size: 24rpx;
-}
-.props2 {
-  display: inline-block;
-  min-width: 45%;
-  font-size: 24rpx;
-}
->>>>>>> mergeNewCarts
