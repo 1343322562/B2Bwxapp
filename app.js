@@ -4,14 +4,14 @@ App({
     // 13337212848 123456
     // partnerCode: '1027',
     // baseImgUrl:'http://39.98.78.85:8080/',
-    partnerCode: '1029',
-    baseImgUrl:'http://39.98.164.194:8081/',
+    // partnerCode: '1029',
+    // baseImgUrl:'http://39.98.164.194:8081/',
     // partnerCode: '1013',
     // baseImgUrl:'http://erp.365wdyp.com/',
     // partnerCode: '1012',
     // baseImgUrl:'http://erp.hnhlgyl.net/',
     // partnerCode: '00',
-    // partnerCode: '05', 
+    partnerCode: '05', 
     // partnerCode: '1000', 
     // baseImgUrl: 'http://mmj.zksr.cn:8888/',
     // 15576615400 

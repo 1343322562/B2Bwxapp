@@ -24,16 +24,9 @@ Page({
     })
   },
   getCouponsExplain () {
-    API.GetCoupons.getCouponsExplain({
-      data: this.reuqestData,
-      success: res => {
-        console.log(res)
-        if (res.code == 0&& res.data) {
-          const cupInfo = res.data.split('<br/>')
-          this.setData({ cupInfo })
-        }
-      }
-    })
+    const { couponsUseRule } = wx.getStorageSync('configObj')
+    const cupInfo = couponsUseRule.split('<br/>')
+    this.setData({ cupInfo })
   },
   getCoupons (e) {
     const index = e.currentTarget.dataset.index
@@ -63,7 +56,7 @@ Page({
   },
   onLoad (opt) {
     const { branchNo, token, platform, username} = wx.getStorageSync('userObj')
-    this.reuqestData = { branchNo, token, platform, username}
+    this.reuqestData = { branchNo, token, platform, username }
     this.getPageData()
     this.getCouponsExplain()
   },
