@@ -393,7 +393,7 @@ Page({
             } else {
               (goods.stockQty > 0 || goods.deliveryType == '3' || goods.specType =='2') ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
             }
-            goods.isStock = (goods.stockQty > 0 || goods.deliveryType == '3' || goods.specType == '2' && goods.fillState != 1) ? true : false
+            goods.isStock = (goods.stockQty > 0 || goods.deliveryType == '3' || goods.specType == '2') && goods.fillState != 1 ? true : false
             if (this.productionDateFlag != '0' && goods.isStock) {
               let dateArr = []
               if ((this.productionDateFlag == '1' || this.productionDateFlag == '3') && goods.productionDate) dateArr.push(goods.productionDate.replace(new RegExp(/(-)/g), '.'))

@@ -34,6 +34,7 @@
     <!-- 获取商品编号，根据商品编号再根据 goodsObj 中的数据渲染页面 -->
       <image class='icon' src="{{goodsObj[itemNo].goodsImgUrl}}" />
       <view wx:if="{{goodsObj[itemNo].isProhibit=='1'}}" class='noReturnAllowed'>不可退</view>
+      <view class='c-stock_null' wx:if="{{!goodsObj[itemNo].isStock && goodsObj[itemNo].validateStock != 1}}">补货中</view>
       <!-- <image wx:if="{{!!goodsObj[itemNo].todayPromotion}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image> -->
     </view>
     <view class='info'>

@@ -212,7 +212,7 @@ Page({
             const itemNo = goods.itemNo
             goods.goodsImgUrl = this.zcGoodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
             goods.stockQty > 0 ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
-            goods.isStock = goods.stockQty > 0 ? true : false
+            goods.isStock = goods.stockQty > 0 || goods.minSupplyQty > goods.stockQty ? true : false
             if (promotionNo && cartsObj[itemNo] && cartsObj[itemNo].currentPromotionNo && cartsObj[itemNo].currentPromotionNo !== promotionNo) {
               console.log(564564564)
               goods.addedText = addedPromotionHandle(cartsObj[itemNo].currentPromotionNo)

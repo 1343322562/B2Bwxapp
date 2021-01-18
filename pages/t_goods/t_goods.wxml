@@ -55,7 +55,7 @@
       <image class='icon' src="{{goodsObj[itemNo].goodsImgUrl}}" />
       <view class='goodsType' wx:if="{{goodsObj[itemNo].specType=='2'}}">多规格</view>
       <view class='goodsType' wx:if="{{goodsObj[itemNo].isBind=='1'}}">组合</view>
-      <view class='c-stock_null' wx:if="{{!goodsObj[itemNo].isStock}}">补货中</view>
+      <view class='c-stock_null' wx:if="{{!goodsObj[itemNo].isStock && goodsObj[itemNo].validateStock != 1}}">补货中</view>
       <!-- 之前的不可退货图标 -->
       <!-- <image class='noReturnAllowed' wx:if="{{goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1'}}" src="../../images/noReturnAllowed.png" /> -->
       <view wx:if="{{goodsObj[itemNo].isBind!='1' && (goodsObj[itemNo].enReturnGoods=='0'||goodsObj[itemNo].isProhibit=='1')}}" class="noReturn">不可退</view>
