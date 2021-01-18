@@ -24,6 +24,7 @@
       <!-- <image wx:if="{{goodsObj[itemNo].isProhibit=='1'}}" class='noReturnAllowed'  src="../../images/noReturnAllowed.png" /> -->
       <view wx:if="{{goodsObj[itemNo].isProhibit=='1'}}" class="noReturn">不可退</view>
       <image wx:if="{{!!goodsObj[itemNo].todayPromotion}}" class="timeLimitSales" src="../../images/goodsClsTopIcon.png"></image>
+      <view class='c-stock_null' wx:if="{{!goodsObj[itemNo].isStock && goodsObj[itemNo].validateStock != 1}}">补货中</view>
     </view>
     <view class='info'>
       <view class='name'>{{goodsObj[itemNo].itemName}}</view>
