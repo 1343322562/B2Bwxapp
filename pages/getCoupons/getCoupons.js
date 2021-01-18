@@ -24,9 +24,19 @@ Page({
     })
   },
   getCouponsExplain () {
-    const { couponsUseRule } = wx.getStorageSync('configObj')
-    const cupInfo = couponsUseRule.split('<br/>')
-    this.setData({ cupInfo })
+    // const { couponsUseRule } = wx.getStorageSync('configObj')
+    // const cupInfo = couponsUseRule.split('<br/>')
+    // this.setData({ cupInfo })
+    API.GetCoupons.getCouponsExplain({
+      data: this.reuqestData,
+      success: res => {
+        console.log(res)
+        if (res.code == 0&& res.data) {
+          const cupInfo = res.data.split('<br/>')
+          this.setData({ cupInfo })
+        }
+      }
+    })
   },
   getCoupons (e) {
     const index = e.currentTarget.dataset.index
