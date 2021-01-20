@@ -18,10 +18,10 @@ Page({
   goGoodsList (e) {
     const no = e.currentTarget.dataset.no
     const supplierObj = this.data.supplierObj
-    const { goodsImgUrl, supplierName, itemClsName, supplierTel, minDeliveryMomey, supplierNo} = supplierObj[no]
+    const { goodsImgUrl, supplierName, itemClsName, supplierTel, minDeliveryMomey, supplierNo, validateStock} = supplierObj[no]
     // 跳转页面传参
     goPage('supplierGoods',{
-      config: { goodsImgUrl, supplierName, itemClsName, supplierTel, minDeliveryMomey, supplierNo}
+      config: { goodsImgUrl, supplierName, itemClsName, supplierTel, minDeliveryMomey, supplierNo, validateStock }
     })
   },
   getList () {

@@ -174,7 +174,7 @@ Page({
             const itemNo = goods.itemNo
             goods.goodsImgUrl = this.zcGoodsUrl + goods.itemNo + '/' + getGoodsImgSize(goods.picUrl)
             goods.stockQty > 0 ? goodsList.push(itemNo) : fineGoodsList.push(itemNo)
-            goods.isStock = goods.stockQty > 0 ? true : false
+            goods.isStock = goods.stockQty > 0 && goods.stockQty >= goods.minSupplyQty ? true : false
             goodsObj[itemNo] = goods
             
           })
