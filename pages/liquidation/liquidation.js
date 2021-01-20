@@ -67,7 +67,7 @@ Page({
 
   // 设置备注
   getMemo (e) {
-    this.setData({ memo: e.detail.value.trim()})
+    this.setData({ memo: e.detail.value.replace(/\t|\n|\v|\r|\s*|\f/g,'')})
   },
   checkboxChange (e) {
     console.log(e)

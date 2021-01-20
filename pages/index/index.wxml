@@ -79,7 +79,7 @@
 		<view id="{{list.moduleId}}" wx:if="{{list.templetType=='2'}}" class="btns" style="{{'margin:'+list.marginTop+'px 0 '+list.marginBottom+'px 0;'}}">
 			<view wx:for="{{list.details}}" wx:for-index="annIndex" wx:for-item="zItem" wx:key="annIndex" class="{{list.templetStyle == 3 ? 'lis' : 'li'}} " bindtap="goPage" data-type="{{zItem.connectionType}}" data-supplier="{{zItem.supplierNo}}" data-val="{{zItem.connectionNo}}" data-title="{{zItem.btnName}}">
 				<image style="{{partnerCode == 1053 ? 'margin: 12rpx;height: 90rpx;' : ''}}" mode="widthFix" alt="无法显示" src="{{indexImgUrl+zItem.picUrl}}" />
-				<view wx:if="{{list.showName=='0'}}" class="text">{{zItem.btnName}}</view>
+				<view wx:if="{{list.showName=='0' || partnerCode == '1063'}}" class="text">{{zItem.btnName}}</view>
 			</view>
 
 		</view>

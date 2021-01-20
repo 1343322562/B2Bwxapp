@@ -250,7 +250,7 @@ const actions = {
     let cartsObj = commit[types.GET_CARTS]()
     if (currentPromotionNo === cartsObj[itemNo].currentPromotionNo) return
     'currentPromotionNo' in cartsObj[itemNo] && (cartsObj[itemNo].currentPromotionNo = currentPromotionNo)
-    wx.setStorage({ key: 'cartsObj', data: data }) // 缓存 cartsObj
+    wx.setStorage({ key: 'cartsObj', data: cartsObj }) // 缓存 cartsObj
   },
 
   [types.CHANGE_CARTS](param, cartsObjs = 0) { // add delete minus； cartsObj 为促销信息，主要用来实现直配的限时促销，达到限购值，停止加购
