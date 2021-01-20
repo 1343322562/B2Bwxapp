@@ -390,7 +390,7 @@ Page({
       console.log(1)
       showLoading()
       let request = {
-        url: 'https://mmj.zksr.cn/zksrb2b-web/asdss.json',
+        url: 'https://xcx.tianhenglg.cn/zksrb2b-web/asd.json',
         method: 'POST',
         header: {
           'content-type': 'application/json'
