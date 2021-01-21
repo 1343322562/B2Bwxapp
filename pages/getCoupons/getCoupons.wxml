@@ -21,10 +21,11 @@
     <view class="infoBox">
       <view class="cnt" wx:for="{{cupInfo}}" wx:key="index">{{item}}</view>
     </view>
-    <view class="{{'li'+((item.isGet||item.couldReceive=='1')?' act':'')}}" data-index="{{index}}"  bindtap="getCoupons">
+    <view class="{{'li'+((item.isGet||item.couldReceive=='1')?' act':'')}}" data-index="{{index}}" hover-class="btn-hover" hover-stay-time="80" bindtap="getCoupons">
       <view class="cnt">
         <view class="money">{{item.subAmt}}元</view>
         <view>满{{item.limitAmt}}元减{{item.subAmt}}元</view>
+        <text>{{(item.limitQty || item.limitQty == '0') && item.limitQty != 9999 ? '剩余 ' + item.limitQty : (item.limitQty == 9999 ? '不限张数' : '待领取')}}</text> 
       </view>
     </view>
   </view>

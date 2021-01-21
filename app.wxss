@@ -17,6 +17,7 @@ Page{background-color: #f1f1f1;font-size:28rpx;}
 .noReturnAllowed{width: 50rpx;height: 50rpx;position: absolute;bottom: 5rpx;right: 5rpx;}
 /*商品可退*/
 .yesReturn{position: absolute;top: 10rpx;right: 10rpx;color: #fff;font-size: 24rpx;background-color: red;padding: 0 10rpx;border-radius: 10rpx;}
+.btn-hover { opacity: .8; transform: translate(2rpx, 2rpx);}
 
 /* 商品 image 默认图 */
 .btns image,            /* 首页 */

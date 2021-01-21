@@ -2,15 +2,16 @@ Page{background: #fff}
 .headImg{width:100%;padding-top:78%;background:url("http://zksrimg.oss-cn-beijing.aliyuncs.com/images/wxmini/getCupHeadImg.png")no-repeat center top;background-size:100%;}
 .title{color:#df002c;padding:0 20rpx;font-size:28rpx;}
 .list{text-align:center;margin-top:30rpx;}
-.bottom .li{width:43%;padding-top:18%;background:url("http://zksrimg.oss-cn-beijing.aliyuncs.com/images/wxmini/getCupBox.png")no-repeat center top;background-size:100%;display:inline-block;margin: 8px 30rpx 8rpx 10rpx;position:relative;}
-.list .cnt, .bottom .li .cnt{position:absolute;top:20rpx;left:30rpx;text-align:left;color:#df002c;font-size:24rpx;}
-.list .cnt>.money,  .bottom .li .cnt>.money{font-size:1.5em;}
+.bottom .li{width:46%;padding-top:18%;background:url("http://zksrimg.oss-cn-beijing.aliyuncs.com/images/wxmini/getCupBox.png")no-repeat center top;background-size:100%;display:inline-block;margin: 8px 30rpx 8rpx 10rpx;position:relative;}
+.list .cnt, .bottom .li .cnt{position:absolute;top:20rpx;left:30rpx;text-align:left;color:#df002c;font-size:24rpx;line-height: 35rpx;}
+.list .cnt>.money,  .bottom .li .cnt>.money{font-size:1.4em;}
+.bottom .li .cnt text {    font-size: 20rpx;line-height: 24rpx;display: block;color: #333333;}
 .bottom{background-color:#df002c;border-radius:20rpx;padding-top:20rpx;margin:20rpx auto;min-height:400rpx;width:95%;color:#fff;padding-bottom:20rpx;}
 
 /* .bottom>.couponBox>.infoBox>.cnt{margin:20rpx auto 0 auto;width:92%;} */
 .topTitle{width:400rpx;height:75rpx;margin:0 auto;text-align:center;color:#f11212;font-weight: bold;background:url('http://zksrimg.oss-cn-beijing.aliyuncs.com/images/wxmini/getCupInfoTitle.png')no-repeat center top;background-size:100%;font-size:34rpx;line-height:62rpx;letter-spacing: 1rpx;
 }
 .data-null{text-align:center;color:#df002c;font-size:28rpx;margin:40rpx 0;}
-.list>.li.act, .bottom .li .act {filter: gray;filter: grayscale(100%);}
+.list .li.act, .bottom .li.act {filter: gray;filter: grayscale(100%);}
 .couponBox {display: flex;width: 96%;padding: 0 2%;margin: 20rpx 0;}
 .infoBox{flex: 1; font-size: 22rpx;color: #f2f2f2;margin: 10rpx;}

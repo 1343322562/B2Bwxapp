@@ -14,7 +14,7 @@ Page({
         console.log(res)
         if (res.code == 0) {
           const list = res.data || []
-          this.setData({ list})
+          this.setData({ list })
         }
       },
       complete: ()=> {
@@ -41,6 +41,7 @@ Page({
   getCoupons (e) {
     const index = e.currentTarget.dataset.index
     const list = this.data.list
+    const _this = this
     if (list[index].isGet || list[index].couldReceive == '1') return
     showLoading('领取中...')
     let data = deepCopy(this.reuqestData)
@@ -51,6 +52,7 @@ Page({
       success: res => {
         console.log(res)
         alert(res.msg)
+        _this.getPageData()
         if (res.code!=0) {
           list[index].isGet = true
           this.setData({ list })
