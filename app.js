@@ -40,11 +40,11 @@ App({
     // baseImgUrl:'http://erp.sljsp.com/',
 
     // partnerCode: '1039',
-    // partnerCode: '1061',
-    // baseImgUrl:'http://139.9.102.226:8080',
+    partnerCode: '1061',
+    baseImgUrl:'http://139.9.102.226:8080',
 
     //  partnerCode: '1056', 
-     partnerCode: '1057',
+    //  partnerCode: '1057',
 
     // partnerCode: '1050',
     // baseImgUrl:'http://erp.wgjnh.com',

@@ -1,8 +1,8 @@
 <view class="search">
   <view class='item form'>
-    <image class='icon' src="../../images/search_page_icon.png" />
+    <image class='icon' style="{{partnerCode == 1061 ? 'height: 48rpx; width: 48rpx;' : ''}}" src="../../images/{{partnerCode == 1061 ? 'openCode': 'search_page_icon'}}.png" />
     <input class='input' value="{{searchText}}" bindconfirm='confirmSearch' bindblur='searchInputBlur'  confirm-type="search" maxlength='15' placeholder='请输入你想要搜索的商品信息' />
-    <view class="openCode" catchtap='openCode' ><image class='code' src="../../images/openCode.png" /></view>
+    <view class="openCode" catchtap='openCode'><image class='code' style="{{partnerCode == 1061 ? 'height: 38rpx; width: 38rpx;top:4rpx;' : ''}}" src="../../images/{{partnerCode == 1061 ? 'search_page_icon': 'openCode'}}.png" /></view>
   </view>
   <view class='item quit' catchtap='backPage'>取消</view> 
 </view>
