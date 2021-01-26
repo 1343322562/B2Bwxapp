@@ -69,6 +69,7 @@ Page({
   onLoad (opt) {
     const { branchNo, token, platform, username} = wx.getStorageSync('userObj')
     this.reuqestData = { branchNo, token, platform, username }
+    this.data.couponsUseRule = wx.getStorageSync('configObj').couponsUseRule ? wx.getStorageSync('configObj').couponsUseRule.split('<br/>') : '' 
     this.getPageData()
     this.getCouponsExplain()
   },

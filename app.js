@@ -2,10 +2,10 @@
 App({
   data: { 
     // 13337212848 123456
-    // partnerCode: '1027',
-    // baseImgUrl:'http://39.98.78.85:8080/',
-    partnerCode: '1029',
-    baseImgUrl:'http://39.98.164.194:8081/',
+    partnerCode: '1037',
+    baseImgUrl:'http://erp.gapin24.cn/',
+    // partnerCode: '1029',
+    // baseImgUrl:'http://39.98.164.194:8081/',
     // partnerCode: '1013',
     // baseImgUrl:'http://erp.365wdyp.com/',
     // partnerCode: '1012',

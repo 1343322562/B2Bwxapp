@@ -19,8 +19,8 @@
   <view class="topTitle">领取优惠券</view>
   <view class="couponBox" wx:for="{{list}}" wx:key="index">
     <view class="infoBox">
-      <!-- <view class="cnt" wx:if="{{item.}}" >{{item.}}</view> -->
-      <view class="cnt" wx:for="{{cupInfo}}" wx:key="index">{{item}}</view>
+      <view class="cnt" wx:if="{{item.instructions}}" >{{item.instructions}}</view>
+      <view class="cnt" wx:if="{{!item.instructions}}" wx:for="{{couponsUseRule || cupInfo}}" wx:key="index">{{item}}</view>
     </view>
     <view class="{{'li'+((item.isGet||item.couldReceive=='1')?' act':'')}}" data-index="{{index}}" hover-class="btn-hover" hover-stay-time="80" bindtap="getCoupons">
       <view class="cnt">
