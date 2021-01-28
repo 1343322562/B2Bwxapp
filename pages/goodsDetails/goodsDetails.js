@@ -290,6 +290,7 @@ Page({
     console.log('zhItemNo', zhItemNo)
     let nowGoods = this.data.goods
     let promotionList = []
+    const partnerCode = this.data.partnerCode
     dispatch[types.GET_ALL_PROMOTION]({
       success: (res) => {
         console.log('res', res)
@@ -362,6 +363,9 @@ Page({
             for (let i in arr) {
               const giftInfo = res.BG.giftGoods[arr[i]][i]
               msg.msg.push(giftInfo.explain ||  '满' + giftInfo.buyQty + nowGoods.unit + '送' + giftInfo.giftQty + nowGoods.unit + '\n[' + giftInfo.giftName +']')
+              if (partnerCode == 1063) {
+                msg.msg.push(giftInfo.explain ||  '满' + giftInfo.buyQty + nowGoods.unit + '有赠品')
+              }
             }
             promotionList.push(msg)
           }
