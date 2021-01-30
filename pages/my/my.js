@@ -21,10 +21,10 @@ Page({
     wx.scanCode({
       success: res => {
         console.log(res)
+        const data = res.result
+        if (!data.includes('payWay') || !data.includes('type') || !data.includes('payAmt') || !data.includes('sheetNo')) return alert('二维码有误, 二维码信息如下' + data)
         const { branchNo, token, username, platform, dbBranchNo } = wx.getStorageSync('userObj')
-        let { payWay, type, payAmt, sheetNo: orderNo } = JSON.parse(res.result)
-        orderNo = 'YH2101301644545908'
-        if (!payWay || !type || !payAmt || !orderNo) return toast('二维码有误, 二维码信息如下' + res.result)
+        let { payWay, type, payAmt, sheetNo: orderNo } = JSON.parse(data)
         goPage('wxMiniPay', { branchNo, token, username, platform, dbBranchNo, payWay, type, payAmt, orderNo, paymentType: '1' })
       }
     })
