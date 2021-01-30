@@ -100,6 +100,7 @@ Page({
   onLoad (opt) {
     const _this = this
     console.log(80, opt)
+    if (opt.paymentType === '1') this.setData({ paymentType: 1 }) // 1: 由小程序我的界面扫码进入
     if (!opt.payType&&!opt.orderNo) {
       this.result('获取订单失败', 3)
       return
