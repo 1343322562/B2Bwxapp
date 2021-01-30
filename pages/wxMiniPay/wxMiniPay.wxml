@@ -4,4 +4,4 @@
   <view class='money' wx:if="{{payMoney}}"><text>支付金额:</text><text class='red'>￥{{payMoney}}</text></view>
 </view>
 <view class='result'>{{pageLoading?(error==1?'支付已取消':(error==2)?'获取支付配置失败:openId':(error==3?'获取微信支付配置失败':'支付成功')):'正在微信支付'}}</view>
-<button wx:if="{{pageLoading}}" class='button' open-type="launchApp" app-parameter="{{error?(error==1?'2':'3'):'1'}}" binderror="launchAppError">返回APP</button>
+<button wx:if="{{pageLoading && paymentType !== 1}}" class='button' open-type="launchApp" app-parameter="{{error?(error==1?'2':'3'):'1'}}" binderror="launchAppError">返回APP {{paymentType}}</button>

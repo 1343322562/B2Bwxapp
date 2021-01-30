@@ -1,14 +1,17 @@
 image{width: 40rpx;height: 40rpx}
 .head{background-color: #d40000;color: #fff;position: relative;padding: 50rpx  0 140rpx 0 ;}
-.head>.img{position: absolute;top: 40rpx;left: 60rpx;overflow: hidden;background-color: #fff;border-radius:100%;width: 120rpx;height: 120rpx;}
+.head>.img{position: absolute;top: 40rpx;left: 34rpx;overflow: hidden;background-color: #fff;border-radius:100%;width: 110rpx;height: 110rpx;}
 .head>.img .icon{width: 100%;height: 100%;margin-top: 10rpx}
-.head>.info{margin-left:210rpx;font-size: 26rpx;}
-.head>.info .name{font-size: 34rpx}
+.head>.info{margin-left:168rpx;font-size: 26rpx;width: 420rpx;}
+.head>.info .name{font-size: 31rpx;font-weight: bold;}
 .head>.btn{width: 100%;position: absolute;left: 0;bottom: 0;display: flex;padding: 10rpx 0;background-color: rgba(255, 255, 255, .25)}
 .head>.btn .item{flex-grow: 1;width: 0;height: 80rpx;text-align: center;}
 .head>.btn .item:first-child, .item:nth-child(2){border-right: 1px solid #fff}
 .head>.btn .item>.text{display: block;font-size: 25rpx;margin-top:-5rpx}
 .head>.btn .item>.icon{width: 40rpx;height: 40rpx}
+.address {font-size: 25rpx;}
+.scanCode{color: #f1f1f1;position: absolute;top: 40rpx;right: 26rpx;font-size: 21rpx;display: flex;flex-direction: column;align-items: center;    box-shadow: 0 0 10rpx #eee;border-radius: 20rpx;padding: 5rpx 6rpx 7rpx;}
+.scanCode image {height: 44rpx;width: 44rpx;margin-top: 3rpx;}
 .salesman{background-color: #fff;position: relative;overflow: hidden;padding: 30rpx 40rpx;}
 .salesman>.icon{display: block;float: left;width: 75rpx;height: 75rpx;}
 .salesman>.info{float: left;margin-left: 20rpx;border-left: 1px solid #787878;padding-left: 20rpx}

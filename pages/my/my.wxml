@@ -3,10 +3,14 @@
   <view class='info'>
     <view class='name' style="padding-top:30rpx;" catchtap='goLogin' wx:if="{{userObj.isLogin}}">点击登录</view>
     <block wx:else>
-    <view class='name'>{{userObj.branchName}}</view>
-    <view class='tel' wx:if="{{userObj.branchTel}}">电话: {{userObj.branchTel}}</view>
-    <view class="address">地址: {{userObj.address}}</view>
-    <view class="address">编号: {{userObj.dbBranchNo}}-{{userObj.branchNo}}</view>
+      <view class='name'>{{userObj.branchName}}</view>
+      <view class='tel' wx:if="{{userObj.branchTel}}">电话: {{userObj.branchTel}}</view>
+      <view class="address">地址: {{userObj.address}}</view>
+      <view class="address">编号: {{userObj.dbBranchNo}}-{{userObj.branchNo}}</view>
+      <view wx:if="{{partnerCode == 1013}}" class="scanCode" hover-class="btn-hover" hover-stay-time="80">
+        <image bindtap="scanCodePayClick" src="../../images/scanCodePay.png" />
+        <view>扫码付款</view>
+      </view>
     </block>
   </view>
   <view class='btn'>
