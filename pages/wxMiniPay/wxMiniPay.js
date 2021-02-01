@@ -101,6 +101,20 @@ Page({
   onLoad (opt) {
     const _this = this
     console.log(80, opt)
+    if (opt.q && opt.q.includes('code')) { // 微信扫码普通二维码（配付通）
+      let url = decodeURIComponent(opt.q).slice()
+      url = url.slice(url.indexOf('?')+1)
+      const codeObj = setUrlObj(url)
+      console.log(codeObj, url)
+      opt.paymentType = '1'
+      for (let key in codeObj) {
+        if (key === 'sheetNo') {
+          opt['orderNo'] = codeObj[key]
+        } else {
+          opt[key] = codeObj[key]
+        }
+      }
+    }
     if (opt.paymentType === 1) this.setData({ paymentType: 1 }) // 1: 由小程序我的界面扫码进入
     if (!opt.payType&&!opt.orderNo) {
       this.result('获取订单失败', 3)
