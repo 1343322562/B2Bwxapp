@@ -5,8 +5,8 @@ App({
     // baseImgUrl:'http://39.98.78.85:8080/',
     // partnerCode: '1029',
     // baseImgUrl:'http://39.98.164.194:8081/',
-    partnerCode: '1013',
-    baseImgUrl:'http://erp.365wdyp.com/',
+    // partnerCode: '1013',
+    // baseImgUrl:'http://erp.365wdyp.com/',
     // partnerCode: '1012',
     // baseImgUrl:'http://erp.hnhlgyl.net/',
     // partnerCode: '01',
@@ -40,8 +40,8 @@ App({
     // baseImgUrl:'http://erp.sljsp.com/',
 
     // partnerCode: '1039',
-    // partnerCode: '1061',
-    // baseImgUrl:'http://139.9.102.226:8080',
+    partnerCode: '1061',
+    baseImgUrl:'http://139.9.102.226:8080',
 
     //  partnerCode: '1056', 
     //  partnerCode: '1057',
