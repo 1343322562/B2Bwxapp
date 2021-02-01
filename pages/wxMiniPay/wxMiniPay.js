@@ -1,4 +1,4 @@
-import { showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, toast, alert, getTime, goPage, getIP } from '../../tool/index.js'
+import { showLoading, hideLoading, getGoodsImgSize, deepCopy, getGoodsTag, toast, alert, getTime, goPage, getIP, setUrlObj } from '../../tool/index.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
 import * as types from '../../store/types.js'
@@ -28,7 +28,7 @@ Page({
           body: '具体信息请查看小程序订单中心',
           userIp,
           openId,
-          platform,
+          platform: 3,
           merchantTerminalId: wx.getSystemInfoSync().system, // 用户当前设备号
           username
         }
@@ -100,7 +100,22 @@ Page({
   onLoad (opt) {
     const _this = this
     console.log(80, opt)
-    if (opt.paymentType === '1') this.setData({ paymentType: 1 }) // 1: 由小程序我的界面扫码进入
+    if (opt.q && opt.q.includes('code')) { // 微信扫码普通二维码（配付通）
+      let url = decodeURIComponent(opt.q).slice()
+      url = url.slice(url.indexOf('?')+1)
+      const codeObj = setUrlObj(url)
+      console.log(codeObj, url)
+      opt.paymentType = '1'
+      for (let key in codeObj) {
+        if (key === 'sheetNo') {
+          opt['orderNo'] = codeObj[key]
+        } else {
+          opt[key] = codeObj[key]
+        }
+      }
+    }
+    console.log(opt)
+    if (opt.paymentType === '1') this.setData({ paymentType: 1 }) // 1: 配付通扫码进入
     if (!opt.payType&&!opt.orderNo) {
       this.result('获取订单失败', 3)
       return

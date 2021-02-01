@@ -1,7 +1,7 @@
 import * as types from '../../store/types.js'
 import API from '../../api/index.js'
 import dispatch from '../../store/actions.js'
-import { goPage,toast,alert } from '../../tool/index.js'
+import { goPage,toast,alert, setUrlObj } from '../../tool/index.js'
 import { tim, timCurrentDay } from '../../tool/date-format.js'
 const app = getApp()
 Page({
@@ -20,12 +20,18 @@ Page({
   scanCodePayClick() {
     wx.scanCode({
       success: res => {
-        console.log(res)
         const data = res.result
+        console.log(data)
         if (!data.includes('payWay') || !data.includes('type') || !data.includes('payAmt') || !data.includes('sheetNo')) return alert('二维码有误, 二维码信息如下' + data)
+        if (data.includes('code')) {
+          const codeObj = setUrlObj(data.slice(data.indexOf('?')+1))
+          let { payWay, type, payAmt, sheetNo: orderNo } = codeObj
+          goPage('wxMiniPay', { payWay, type, payAmt, orderNo, paymentType: '1' })
+          return 
+        }
         const { branchNo, token, username, platform, dbBranchNo } = wx.getStorageSync('userObj')
         let { payWay, type, payAmt, sheetNo: orderNo } = JSON.parse(data)
-        goPage('wxMiniPay', { branchNo, token, username, platform, dbBranchNo, payWay, type, payAmt, orderNo, paymentType: '1' })
+        goPage('wxMiniPay', { payWay, type, payAmt, orderNo, paymentType: '1' })
       }
     })
   },
