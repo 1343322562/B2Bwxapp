@@ -66,7 +66,7 @@ export default {
   // 样式配置：1. app.wxss配置 2. app.js配置tabbar 3. 结算页 json 配置 导航栏颜色
   '1053': 'https://xcx.lelsc.com/',  // 乐尔乐 wx78d2ac1098a5c9d4  18932487553 12345678  需要直配
   '1054': 'https://xcx.xzkj.ltd/',  //  武汉酒业 wxd473e65be033c5ee http://47.92.86.135:8080 123456  123456  !!不要直配
-  '1055': 'http://xcx.ugou360.com/', // 客诚  wxf23abc012b304264  http://39.100.70.234:8080/  17775767355 123546
+  '1055': 'https://xcx.ugou360.com/', // 客诚  wxf23abc012b304264  http://39.100.70.234:8080/  17775767355 123546
   '1056': 'https://wx.qshygyl.com/', // 承德 wx60319370721265b9  http://wx.qshygyl.com  15233484260 123456  统配改分类,隐藏直配
   '1057': 'https://xcx.lszx888.com/zksrb2b-web/', // 零食甄选 wxff89d54fc5013ad5  zksr 123456  
   '1058': 'https://wx.yygyt.cn/zksrb2b-web/', // 益阳云商通 wx.yygyt.cn/zksrb2b-web wxb4ff1e1646959e36  15101512488 123456 

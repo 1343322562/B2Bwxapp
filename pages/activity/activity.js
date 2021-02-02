@@ -4,6 +4,7 @@ import dispatch from '../../store/actions.js'
 import { showLoading, hideLoading, alert, toast, getGoodsImgSize, getGoodsTag, deepCopy, setParentGoodsCartsObj, goPage, MsAndDrCount } from '../../tool/index.js'
 const maxNum = 20
 let baseGoodsList
+const app = getApp()
 Page({
   data: {
     pageLoading: false,
@@ -176,6 +177,7 @@ Page({
     const promotionFineGoodsList = []
     let goodsObj = {}
     const promotionObj = this.promotionObj
+    console.log(179, data)
     data.forEach(goods => {
       const itemNo = goods.itemNo
       this.supplierNo && (goods.stockQty = 9999)
@@ -203,8 +205,12 @@ Page({
       }
       goodsObj[itemNo] = goods
     })
-    let newArr = (promotionGoodsList.concat(goodsList)).concat(promotionFineGoodsList.concat(fineGoodsList))
+    // let newArr = (promotionGoodsList.concat(goodsList)).concat(promotionFineGoodsList.concat(fineGoodsList))
+    
+    let newArr = app.data.partnerCode == '1063' ? [...goodsList, ...promotionGoodsList, ...promotionFineGoodsList, ...fineGoodsList ]
+    : (promotionGoodsList.concat(goodsList)).concat(promotionFineGoodsList.concat(fineGoodsList))
     const totalLength = newArr.length
+    console.log(209, goodsObj, goodsList)
     this.setData({
       goodsObj: goodsObj
     })

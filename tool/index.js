@@ -243,7 +243,7 @@ export const getGoodsTag = (goods, promotionObj,type) => { // 获取促销标签
     obj['MQ'].subMoney = promotionObj.MQ[itemNo].subMoney
     obj['MQ'].explain = promotionObj.MQ[itemNo].explain
   } else if (promotionObj.SD[itemNo]) {
-    console.log('promotionObj', promotionObj)
+    // console.log('promotionObj', promotionObj)
     obj.SD = true
     obj.promotionSheetNo = promotionObj.SD[itemNo].sheetNo
     const limitedQty = promotionObj.SD[itemNo].limitedQty
