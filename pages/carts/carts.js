@@ -81,7 +81,7 @@ Page({
     })
   },
   onLoad (opt) {
-    const { replenishFlag, replenishSheet } = wx.getStorageSync('configObj')
+    const { replenishFlag, replenishSheet } = wx.getStorageSync('')
     this.replenishFlag = replenishFlag||'0'
     this.replenishSheet = replenishSheet||'0'
   },

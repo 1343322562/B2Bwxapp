@@ -28,7 +28,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -45,7 +45,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.13.1",
-  "appid": "wx6101bca4c7523c80",
+  "appid": "wx78d2ac1098a5c9d4",
   "projectname": "%E5%AE%9C%E6%98%8C%E9%87%91%E8%B4%9D%E6%BA%90n",
   "scripts": {},
   "simulatorType": "wechat",

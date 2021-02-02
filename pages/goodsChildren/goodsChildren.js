@@ -130,7 +130,7 @@ Page({
   onLoad (opt) {
     this.itemNo = opt.itemNo
     this.userObj = wx.getStorageSync('userObj')
-    this.productionDateFlag = wx.getStorageSync('configObj').productionDateFlag
+    this.productionDateFlag = wx.getStorageSync('').productionDateFlag
     this.goodsUrl = getApp().data.goodsUrl
     this.getAllPromotion()
   },

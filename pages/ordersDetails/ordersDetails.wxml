@@ -22,9 +22,9 @@
     <view class='p'><text class='name'>代金卷</text><text class='content'>￥{{order.vouchersAmt}}</text></view>
     <view class='p' wx:if="{{order.doAmt}}"><text class='name' >缺货金额</text><text class='content'>￥{{order.stockoutAmt}}</text></view>
     <view class='p' wx:if="{{order.transportFeeAmt}}"><text class='name'>配送费</text><text class='content'>￥{{order.transportFee}}</text></view>
-    <view class='p' wx:if="{{!order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{order.realPayAmt}}</text></view>
-    <view class='p' wx:if="{{order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{filters.toFixed(order.realPayAmt - order.stockoutAmt)}}</text></view>
-    <view class='p'><text class='name'>已付金额</text><text class='content b t-red'>￥{{order.paymentAmtStr}}</text></view>
+    <view class='p' wx:if="{{!order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{order.payWay == 2 ? order.realPayAmt - order.czPayAmt : order.realPayAmt}}</text></view>
+    <view class='p' wx:if="{{order.doAmt}}"><text class='name'>应付金额</text><text class='content'>￥{{filters.toFixed(order.payWay == 2 ? order.realPayAmt - order.czPayAmt : order.realPayAmt - order.stockoutAmt)}}</text></view>
+    <view class='p'><text class='name'>已付金额</text><text class='content b t-red'>￥{{order.payWay == 2 ? order.czPayAmt : order.paymentAmtStr}}</text></view>
     
   </view>
   <view class='block'>
